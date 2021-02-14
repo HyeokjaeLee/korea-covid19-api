@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { object2array } from "../modules/base_modules";
 const options = (props: any) => {
   const RegionData = props.total_info;
   const new_recovered = [];
