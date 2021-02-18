@@ -3,14 +3,27 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 const options = (props: any) => {
   const RegionData = props.total_info;
-  const new_recovered = [];
-  /*RegionData.map((data: any) => {
-    new_recovered.push({
-      x: data.date,
-      y: data.confirmed.recovered.new,
+  const infected_data = [];
+  const recovered_data = [];
+  const death_data = [];
+  RegionData.map((data: any) => {
+    const date = new Date(data.date);
+    const death = data.confirmed.death.total;
+    const recovered = data.confirmed.recovered.total;
+    const infected = data.confirmed.infected.total;
+    recovered_data.push({
+      x: date,
+      y: recovered,
     });
-  });*/
-  console.log(new_recovered);
+    infected_data.push({
+      x: date,
+      y: infected,
+    });
+    death_data.push({
+      x: date,
+      y: death,
+    });
+  });
   return {
     chart: {
       type: "area", // bar차트. 아무 설정이 없으면 line chart가 된다.
@@ -24,7 +37,13 @@ const options = (props: any) => {
       enabled: false,
     },
     xAxis: {
-      type: "category",
+      margin: 15,
+      type: "datetime",
+      labels: {
+        format: "{value:%Y-%m-%d}",
+      },
+      showFirstLabel: true,
+      showLastLabel: true,
     },
     legend: {
       reversed: true,
@@ -42,18 +61,12 @@ const options = (props: any) => {
       },
     },
     series: [
-      // { name: "Recovered", data: total_recovered_info, color: "green" },
-      //{ name: "Infected", data: total_infected_info, color: "red" },
+      { name: "퇴원", data: recovered_data, color: "#7FBA00" },
+      { name: "격리", data: infected_data, color: "#F25022" },
       {
-        name: "Deaths",
-        data: [
-          { x: 1, y: 2 },
-          { x: 3, y: 2 },
-          { x: 4, y: 2 },
-          { x: 5, y: 2 },
-          { x: 6, y: 2 },
-        ],
-        color: "black",
+        name: "사망",
+        data: death_data,
+        color: "#424242",
       },
     ],
   };
