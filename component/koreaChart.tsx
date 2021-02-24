@@ -1,6 +1,12 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment } from "react";
 import Highcharts from "highcharts";
+import HighchartsExporting from "highcharts/modules/exporting";
 import HighchartsReact from "highcharts-react-official";
+
+if (typeof Highcharts === "object") {
+  HighchartsExporting(Highcharts);
+}
+
 const options = (props: any) => {
   const RegionData = props.total_info;
   const infected_data = [];
@@ -28,7 +34,7 @@ const options = (props: any) => {
     chart: {
       type: "area", // bar차트. 아무 설정이 없으면 line chart가 된다.
       inverted: false,
-      height: "2000px",
+      height: "50%",
     },
     title: {
       text: "title",
