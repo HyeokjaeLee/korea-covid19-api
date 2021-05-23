@@ -53,6 +53,7 @@ exp.listen(process.env.PORT || port, function () {
       exp.get("/", (req, res) => {
         res.json(path_list);
       });
+      console.log(`Information has been updated : ( ${new Date()} )`);
     };
   setTimer_loop(ms2hour(1), updateCovid19API);
 }

@@ -83,6 +83,7 @@ exp.listen(process.env.PORT || port, function () {
                     exp.get("/", function (req, res) {
                         res.json(path_list);
                     });
+                    console.log("Information has been updated : ( " + new Date() + " )");
                     return [2 /*return*/];
             }
         });
