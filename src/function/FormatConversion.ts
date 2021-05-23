@@ -1,6 +1,4 @@
 export const ms2hour = (hour: number) => hour * 3600000;
-export const ms2minute = (minute: number) => minute * 60000;
-export const ms2second = (second: number) => second * 1000;
 export const setTimer_loop = (sec_num: number, fn: any) => {
   fn();
   setInterval(() => {
