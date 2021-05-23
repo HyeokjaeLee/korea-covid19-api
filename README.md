@@ -10,11 +10,13 @@
 
 - [Korea Public Data Portal (XML)](https://www.data.go.kr/data/15043378/openapi.do)<br>
 
-#### :syringe: [Korea-Covid19-API](https://korea-covid19-api.herokuapp.com/total)
+#### :syringe: Korea-Covid19-API
 
 If you do not give the query string value, load the entire.
 
 ##### URL
+
+https://korea-covid19-api.herokuapp.com/total
 
 ```
 https://korea-covid19-api.herokuapp.com/{Region}?from={FromDate}&to={ToDate}
