@@ -44,6 +44,7 @@ var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
 var worker_threads_1 = require("worker_threads");
 var FormatConversion_1 = require("./function/FormatConversion");
+var region_list_1 = require("./data/region_list");
 var exp = express_1.default(), dateForm = function (date) { return Number(FormatConversion_1.convertDateFormat(date, "")); }, //queryString으로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
 getData_from_Worker = function (dir) {
     return new Promise(function (resolve, reject) {
@@ -55,6 +56,9 @@ exp.use(cors_1.default());
 var port = 8080;
 exp.listen(process.env.PORT || port, function () {
     console.log("API hosting started on port " + port);
+});
+exp.get("/", function (req, res) {
+    res.json(region_list_1.regionListData);
 });
 {
     var covid19Worker_1 = path_1.default.join(__dirname, "./worker.covid19.js"), updateCovid19API = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -80,9 +84,6 @@ exp.listen(process.env.PORT || port, function () {
                         });
                     });
                     //Region path list
-                    exp.get("/", function (req, res) {
-                        res.json(path_list);
-                    });
                     console.log("Information has been updated : ( " + new Date() + " )");
                     return [2 /*return*/];
             }

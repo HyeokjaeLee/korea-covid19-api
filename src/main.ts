@@ -8,6 +8,7 @@ import {
   ms2hour,
 } from "./function/FormatConversion";
 import type * as Covid19 from "./type/type.covid19";
+import { regionListData } from "./data/region_list";
 
 const exp = express(),
   dateForm = (date: Date) => Number(convertDateFormat(date, "")), //queryString으로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
@@ -21,6 +22,9 @@ exp.use(cors());
 const port = 8080;
 exp.listen(process.env.PORT || port, function () {
   console.log(`API hosting started on port ${port}`);
+});
+exp.get("/", (req, res) => {
+  res.json(regionListData);
 });
 {
   const covid19Worker = path.join(__dirname, "./worker.covid19.js"),
@@ -50,9 +54,6 @@ exp.listen(process.env.PORT || port, function () {
         });
       });
       //Region path list
-      exp.get("/", (req, res) => {
-        res.json(path_list);
-      });
       console.log(`Information has been updated : ( ${new Date()} )`);
     };
   setTimer_loop(ms2hour(1), updateCovid19API);
