@@ -2,7 +2,7 @@
 
 ![VERSION](https://img.shields.io/badge/version-1.0.3-blue.svg?cacheSeconds=2592000)
 
-> I made it because there was a problem with the covid19 api value of the public data portal. <br>
+> This API is the cleansing and addition of some information from COVID-19 API in the Korea Public Data Portal. <br>
 
 ![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![JAVASCRIPT](https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=black) ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node-dot-js&logoColor=white) ![EXPRESS](https://img.shields.io/badge/Express-4C4C4C?style=flat-square&logo=Express&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
 
