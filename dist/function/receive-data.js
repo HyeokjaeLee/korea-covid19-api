@@ -19,10 +19,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getXmlAPI2JSON = void 0;
+exports.get_data_from_worker = exports.get_XML2JSON = void 0;
 var convert = __importStar(require("xml-js"));
 var request = __importStar(require("request"));
-var getXmlAPI2JSON = function (url) {
+var worker_threads_1 = require("worker_threads");
+var get_XML2JSON = function (url) {
     return new Promise(function (resolve, reject) {
         request.get(url, function (err, res, body) {
             if (err) {
@@ -36,5 +37,13 @@ var getXmlAPI2JSON = function (url) {
             }
         });
     });
+}, get_data_from_worker = function (dir) {
+    return new Promise(function (resolve, reject) {
+        var worker = new worker_threads_1.Worker(dir);
+        worker.on("message", function (data) {
+            resolve(data);
+            console.log("Information has been updated : ( " + new Date() + " )");
+        });
+    });
 };
-exports.getXmlAPI2JSON = getXmlAPI2JSON;
+exports.get_XML2JSON = get_XML2JSON, exports.get_data_from_worker = get_data_from_worker;

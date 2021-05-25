@@ -42,52 +42,53 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
-var worker_threads_1 = require("worker_threads");
-var FormatConversion_1 = require("./function/FormatConversion");
+var format_conversion_1 = require("./function/format-conversion");
 var region_list_1 = require("./data/region_list");
-var exp = express_1.default(), dateForm = function (date) { return Number(FormatConversion_1.convertDateFormat(date, "")); }, //queryString으로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
-getData_from_Worker = function (dir) {
-    return new Promise(function (resolve, reject) {
-        var worker = new worker_threads_1.Worker(dir);
-        worker.on("message", function (data) { return resolve(data); });
-    });
-};
-exp.use(cors_1.default());
-var port = 8080;
-exp.listen(process.env.PORT || port, function () {
-    console.log("API hosting started on port " + port);
-});
-exp.get("/", function (req, res) {
-    res.json(region_list_1.regionListData);
-});
-{
-    var covid19Worker_1 = path_1.default.join(__dirname, "./worker.covid19.js"), updateCovid19API = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var wokrer_data, path_list;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, getData_from_Worker(covid19Worker_1)];
-                case 1:
-                    wokrer_data = _a.sent(), path_list = [];
-                    wokrer_data.forEach(function (aRegionData) {
-                        var path = "/" + aRegionData.region;
-                        path_list.push(path);
-                        exp.get(path, function (req, res) {
-                            var covidInfo = aRegionData.data;
-                            var from = req.query.from, to = req.query.to;
-                            if (from != undefined) {
-                                covidInfo = covidInfo.filter(function (data) { return dateForm(data.date) >= Number(from); });
-                            }
-                            if (to != undefined) {
-                                covidInfo = covidInfo.filter(function (data) { return dateForm(data.date) <= Number(to); });
-                            }
-                            res.json(covidInfo);
-                        });
+var receive_data_1 = require("./function/receive-data");
+var exp = express_1.default(), covid19Worker = path_1.default.join(__dirname, "./worker.covid19.js"), port = 8080;
+(function () { return __awaiter(void 0, void 0, void 0, function () {
+    var worker_data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, receive_data_1.get_data_from_worker(covid19Worker)];
+            case 1:
+                worker_data = _a.sent();
+                //서버 시작
+                exp.use(cors_1.default());
+                exp.listen(process.env.PORT || port, function () {
+                    console.log("API hosting started on port " + port);
+                });
+                //Regions List 라우팅
+                exp.get("/", function (req, res) {
+                    res.json(region_list_1.regionListData);
+                });
+                //COVID19 API 라우팅
+                worker_data.forEach(function (aRegionData) {
+                    var path = "/" + aRegionData.region;
+                    exp.get(path, function (req, res) {
+                        var covidInfo = aRegionData.data;
+                        var from = req.query.from, to = req.query.to;
+                        if (from != undefined) {
+                            covidInfo = covidInfo.filter(function (data) { return format_conversion_1.date2query_form(data.date) >= Number(from); });
+                        }
+                        if (to != undefined) {
+                            covidInfo = covidInfo.filter(function (data) { return format_conversion_1.date2query_form(data.date) <= Number(to); });
+                        }
+                        res.json(covidInfo);
                     });
-                    //Region path list
-                    console.log("Information has been updated : ( " + new Date() + " )");
-                    return [2 /*return*/];
-            }
-        });
-    }); };
-    FormatConversion_1.setTimer_loop(FormatConversion_1.ms2hour(1), updateCovid19API);
-}
+                });
+                //10분 마다 COVID19 정보 갱신
+                setInterval(function () { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, receive_data_1.get_data_from_worker(covid19Worker)];
+                            case 1:
+                                worker_data = _a.sent();
+                                return [2 /*return*/];
+                        }
+                    });
+                }); }, 600000);
+                return [2 /*return*/];
+        }
+    });
+}); })();

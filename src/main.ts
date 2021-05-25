@@ -1,60 +1,47 @@
 import path from "path";
 import express from "express";
 import cors from "cors";
-import { Worker } from "worker_threads";
-import {
-  convertDateFormat,
-  setTimer_loop,
-  ms2hour,
-} from "./function/FormatConversion";
+import { date2query_form } from "./function/format-conversion";
 import type * as Covid19 from "./type/type.covid19";
 import { regionListData } from "./data/region_list";
-
+import { get_data_from_worker } from "./function/receive-data";
 const exp = express(),
-  dateForm = (date: Date) => Number(convertDateFormat(date, "")), //queryString으로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
-  getData_from_Worker = (dir: string): any => {
-    return new Promise(function (resolve, reject) {
-      const worker = new Worker(dir);
-      worker.on("message", (data) => resolve(data));
+  covid19Worker = path.join(__dirname, "./worker.covid19.js"),
+  port = 8080;
+
+(async () => {
+  let worker_data: Covid19.Final[] = await get_data_from_worker(covid19Worker);
+  //서버 시작
+  exp.use(cors());
+  exp.listen(process.env.PORT || port, function () {
+    console.log(`API hosting started on port ${port}`);
+  });
+  //Regions List 라우팅
+  exp.get("/", (req, res) => {
+    res.json(regionListData);
+  });
+  //COVID19 API 라우팅
+  worker_data.forEach((aRegionData) => {
+    const path = "/" + aRegionData.region;
+    exp.get(path, (req, res) => {
+      let covidInfo = aRegionData.data;
+      const from = req.query.from,
+        to = req.query.to;
+      if (from != undefined) {
+        covidInfo = covidInfo.filter(
+          (data) => date2query_form(data.date) >= Number(from)
+        );
+      }
+      if (to != undefined) {
+        covidInfo = covidInfo.filter(
+          (data) => date2query_form(data.date) <= Number(to)
+        );
+      }
+      res.json(covidInfo);
     });
-  };
-exp.use(cors());
-const port = 8080;
-exp.listen(process.env.PORT || port, function () {
-  console.log(`API hosting started on port ${port}`);
-});
-exp.get("/", (req, res) => {
-  res.json(regionListData);
-});
-{
-  const covid19Worker = path.join(__dirname, "./worker.covid19.js"),
-    updateCovid19API = async () => {
-      const wokrer_data: Covid19.Final[] = await getData_from_Worker(
-          covid19Worker
-        ),
-        path_list: string[] = [];
-      wokrer_data.forEach((aRegionData) => {
-        const path = "/" + aRegionData.region;
-        path_list.push(path);
-        exp.get(path, (req, res) => {
-          let covidInfo = aRegionData.data;
-          const from = req.query.from,
-            to = req.query.to;
-          if (from != undefined) {
-            covidInfo = covidInfo.filter(
-              (data) => dateForm(data.date) >= Number(from)
-            );
-          }
-          if (to != undefined) {
-            covidInfo = covidInfo.filter(
-              (data) => dateForm(data.date) <= Number(to)
-            );
-          }
-          res.json(covidInfo);
-        });
-      });
-      //Region path list
-      console.log(`Information has been updated : ( ${new Date()} )`);
-    };
-  setTimer_loop(ms2hour(1), updateCovid19API);
-}
+  });
+  //10분 마다 COVID19 정보 갱신
+  setInterval(async () => {
+    worker_data = await get_data_from_worker(covid19Worker);
+  }, 600000);
+})();

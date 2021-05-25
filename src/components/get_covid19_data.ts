@@ -1,5 +1,5 @@
-import { convertDateFormat } from "../function/FormatConversion";
-import { getXmlAPI2JSON } from "../function/external-data";
+import { convertDateFormat } from "../function/format-conversion";
+import { get_XML2JSON } from "../function/receive-data";
 import { regionListData } from "../data/region_list";
 import * as Covid19 from "../type/type.covid19";
 
@@ -12,7 +12,7 @@ const regionArr: string[] = regionListData.map((data) => data.eng),
   url = `http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=${service_key}&pageNo=1&numOfRows=1&startCreateDt=${from}&endCreateDt=${to}`;
 
 export const getCovid19Data = async () => {
-  const originalCovid19API: any = await getXmlAPI2JSON(url),
+  const originalCovid19API: any = await get_XML2JSON(url),
     RequiredInfo = originalCovid19API.response.body.items.item,
     region_separated_Info = ((): Covid19.OriginalAPI[][] => {
       const result: Covid19.OriginalAPI[][] = Array.from(

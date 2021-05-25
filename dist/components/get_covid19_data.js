@@ -37,15 +37,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCovid19Data = void 0;
-var FormatConversion_1 = require("../function/FormatConversion");
-var external_data_1 = require("../function/external-data");
+var format_conversion_1 = require("../function/format-conversion");
+var receive_data_1 = require("../function/receive-data");
 var region_list_1 = require("../data/region_list");
-var regionArr = region_list_1.regionListData.map(function (data) { return data.eng; }), regionCount = regionArr.length, service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D", from = 20200409, to = Number(FormatConversion_1.convertDateFormat(new Date(), "")), url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=" + service_key + "&pageNo=1&numOfRows=1&startCreateDt=" + from + "&endCreateDt=" + to;
+var regionArr = region_list_1.regionListData.map(function (data) { return data.eng; }), regionCount = regionArr.length, service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D", from = 20200409, to = Number(format_conversion_1.convertDateFormat(new Date(), "")), url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=" + service_key + "&pageNo=1&numOfRows=1&startCreateDt=" + from + "&endCreateDt=" + to;
 var getCovid19Data = function () { return __awaiter(void 0, void 0, void 0, function () {
     var originalCovid19API, RequiredInfo, region_separated_Info, steady_covid19_data;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, external_data_1.getXmlAPI2JSON(url)];
+            case 0: return [4 /*yield*/, receive_data_1.get_XML2JSON(url)];
             case 1:
                 originalCovid19API = _a.sent(), RequiredInfo = originalCovid19API.response.body.items.item, region_separated_Info = (function () {
                     var result = Array.from(Array(regionCount), function () { return new Array(); });
