@@ -71,7 +71,7 @@ exports.regionListData = [
         eng: "Busan",
     },
     {
-        kor: "검역",
+        kor: "서울",
         eng: "Seoul",
     },
     {
