@@ -10,7 +10,7 @@ const exp = express(),
   port = 8080;
 
 (async () => {
-  let worker_data: Covid19.Final[] = await get_data_from_worker(covid19Worker);
+  let covid19Data: Covid19.Final[] = await get_data_from_worker(covid19Worker);
   //서버 시작
   exp.use(cors());
   exp.listen(process.env.PORT || port, function () {
@@ -21,27 +21,37 @@ const exp = express(),
     res.json(regionListData);
   });
   //COVID19 API 라우팅
-  worker_data.forEach((aRegionData) => {
-    const path = "/" + aRegionData.region;
+  const recentData = covid19Data.map((aRegionData) => {
+    let confirmedData = aRegionData.data;
+    const regionName = aRegionData.region,
+      recentDataIndex = aRegionData.data.length - 1,
+      path = "/" + regionName;
     exp.get(path, (req, res) => {
-      let covidInfo = aRegionData.data;
       const from = req.query.from,
         to = req.query.to;
       if (from != undefined) {
-        covidInfo = covidInfo.filter(
+        confirmedData = confirmedData.filter(
           (data) => date2query_form(data.date) >= Number(from)
         );
       }
       if (to != undefined) {
-        covidInfo = covidInfo.filter(
+        confirmedData = confirmedData.filter(
           (data) => date2query_form(data.date) <= Number(to)
         );
       }
-      res.json(covidInfo);
+      res.json(confirmedData);
     });
+    return {
+      region: regionName,
+      data: confirmedData[recentDataIndex],
+    };
+  });
+  //전 지역 가장 최근 API 제공
+  exp.get("/recent", (req, res) => {
+    res.json(recentData);
   });
   //10분 마다 COVID19 정보 갱신
   setInterval(async () => {
-    worker_data = await get_data_from_worker(covid19Worker);
+    covid19Data = await get_data_from_worker(covid19Worker);
   }, 600000);
 })();

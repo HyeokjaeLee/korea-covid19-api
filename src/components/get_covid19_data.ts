@@ -63,24 +63,24 @@ export const getCovid19Data = async () => {
             confirmed: {
               infected: {
                 new: {
-                  local: data.new_local_infection, //새로운 지역감염으로 인한 확진자
-                  overseas: data.new_overseas_infection, //새로운 해외감염으로 인한 확진자
-                  total: data.new_infected, //새로운 확진자_getAI,
+                  local: data.new_local_infection, //새로운 지역감염으로 인한 감염(격리)
+                  overseas: data.new_overseas_infection, //새로운 해외감염으로 인한 감염(격리)
+                  total: data.new_infected, //전체 감염(격리)
                 },
-                existing: data.infected - data.new_infected, //기존 확진자
-                total: data.infected, //전체 확진자 수
+                existing: data.infected - data.new_infected, //기존 감염(격리)
+                total: data.infected, //전체 감염(격리)
               },
               recovered: {
-                new: data.recovered - aRegionInfo[index - 1].recovered,
-                existing: aRegionInfo[index - 1].recovered,
-                total: data.recovered, //회복_getAI
+                new: data.recovered - aRegionInfo[index - 1].recovered, //신규 격리해제
+                existing: aRegionInfo[index - 1].recovered, //기존 격리해제
+                total: data.recovered, //전체 격리해제
               },
               death: {
-                new: data.death - aRegionInfo[index - 1].death,
-                existing: aRegionInfo[index - 1].death,
-                total: data.death, //사망자_getAI,
+                new: data.death - aRegionInfo[index - 1].death, //신규 사망
+                existing: aRegionInfo[index - 1].death, //기존 사망
+                total: data.death, //사망
               },
-              total: data.confirmed,
+              total: data.confirmed, // 전체 확진
             },
           });
       });

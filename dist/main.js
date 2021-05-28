@@ -47,12 +47,12 @@ var region_list_1 = require("./data/region_list");
 var receive_data_1 = require("./function/receive-data");
 var exp = express_1.default(), covid19Worker = path_1.default.join(__dirname, "./worker.covid19.js"), port = 8080;
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var worker_data;
+    var covid19Data, recentData;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, receive_data_1.get_data_from_worker(covid19Worker)];
             case 1:
-                worker_data = _a.sent();
+                covid19Data = _a.sent();
                 //서버 시작
                 exp.use(cors_1.default());
                 exp.listen(process.env.PORT || port, function () {
@@ -62,20 +62,27 @@ var exp = express_1.default(), covid19Worker = path_1.default.join(__dirname, ".
                 exp.get("/", function (req, res) {
                     res.json(region_list_1.regionListData);
                 });
-                //COVID19 API 라우팅
-                worker_data.forEach(function (aRegionData) {
-                    var path = "/" + aRegionData.region;
+                recentData = covid19Data.map(function (aRegionData) {
+                    var confirmedData = aRegionData.data;
+                    var regionName = aRegionData.region, recentDataIndex = aRegionData.data.length - 1, path = "/" + regionName;
                     exp.get(path, function (req, res) {
-                        var covidInfo = aRegionData.data;
                         var from = req.query.from, to = req.query.to;
                         if (from != undefined) {
-                            covidInfo = covidInfo.filter(function (data) { return format_conversion_1.date2query_form(data.date) >= Number(from); });
+                            confirmedData = confirmedData.filter(function (data) { return format_conversion_1.date2query_form(data.date) >= Number(from); });
                         }
                         if (to != undefined) {
-                            covidInfo = covidInfo.filter(function (data) { return format_conversion_1.date2query_form(data.date) <= Number(to); });
+                            confirmedData = confirmedData.filter(function (data) { return format_conversion_1.date2query_form(data.date) <= Number(to); });
                         }
-                        res.json(covidInfo);
+                        res.json(confirmedData);
                     });
+                    return {
+                        region: regionName,
+                        data: confirmedData[recentDataIndex],
+                    };
+                });
+                //전 지역 가장 최근 API 제공
+                exp.get("/recent", function (req, res) {
+                    res.json(recentData);
                 });
                 //10분 마다 COVID19 정보 갱신
                 setInterval(function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -83,7 +90,7 @@ var exp = express_1.default(), covid19Worker = path_1.default.join(__dirname, ".
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, receive_data_1.get_data_from_worker(covid19Worker)];
                             case 1:
-                                worker_data = _a.sent();
+                                covid19Data = _a.sent();
                                 return [2 /*return*/];
                         }
                     });
