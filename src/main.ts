@@ -21,7 +21,7 @@ const exp = express(),
     res.json(regionListData);
   });
   //COVID19 API 라우팅
-  const recentData = covid19Data.map((aRegionData) => {
+  const recentData = covid19Data.map((aRegionData, index) => {
     let confirmedData = aRegionData.data;
     const regionName = aRegionData.region,
       recentDataIndex = aRegionData.data.length - 1,
@@ -42,7 +42,8 @@ const exp = express(),
       res.json(confirmedData);
     });
     return {
-      region: regionName,
+      region_eng: regionName,
+      region_kor: regionListData[index].kor,
       data: confirmedData[recentDataIndex],
     };
   });

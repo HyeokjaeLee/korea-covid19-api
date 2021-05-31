@@ -1,6 +1,6 @@
 ![header](https://capsule-render.vercel.app/api?type=rect&color=gradient&height=100&section=header&text=COVID-19%20API&fontSize=30&fontAlign=50&fontAlignY=50)
 
-![VERSION](https://img.shields.io/badge/version-1.1.2-blue.svg?cacheSeconds=2592000)
+![VERSION](https://img.shields.io/badge/version-1.1.3-blue.svg?cacheSeconds=2592000)
 
 > This API is the cleansing and addition of some information from COVID-19 API in the Korea Public Data Portal. <br>
 

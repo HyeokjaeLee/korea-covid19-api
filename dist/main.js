@@ -62,7 +62,7 @@ var exp = express_1.default(), covid19Worker = path_1.default.join(__dirname, ".
                 exp.get("/", function (req, res) {
                     res.json(region_list_1.regionListData);
                 });
-                recentData = covid19Data.map(function (aRegionData) {
+                recentData = covid19Data.map(function (aRegionData, index) {
                     var confirmedData = aRegionData.data;
                     var regionName = aRegionData.region, recentDataIndex = aRegionData.data.length - 1, path = "/" + regionName;
                     exp.get(path, function (req, res) {
@@ -76,7 +76,8 @@ var exp = express_1.default(), covid19Worker = path_1.default.join(__dirname, ".
                         res.json(confirmedData);
                     });
                     return {
-                        region: regionName,
+                        region_eng: regionName,
+                        region_kor: region_list_1.regionListData[index].kor,
                         data: confirmedData[recentDataIndex],
                     };
                 });
