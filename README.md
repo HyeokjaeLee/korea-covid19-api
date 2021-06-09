@@ -16,7 +16,13 @@ If you do not give the query string value, load the entire.
 
 ##### URL
 
-https://korea-covid19-api.herokuapp.com/total
+- https://korea-covid19-api.herokuapp.com/
+  - RegionList
+- https://korea-covid19-api.herokuapp.com/recent
+  - Recent data for all regions
+- https://korea-covid19-api.herokuapp.com/total
+  - Data by region
+  - If you want a different region, you can modify the string query to the format below.
 
 ```
 https://korea-covid19-api.herokuapp.com/{Region}?from={FromDate}&to={ToDate}
