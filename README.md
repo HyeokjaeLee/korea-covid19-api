@@ -76,7 +76,7 @@ https://korea-covid19-api.herokuapp.com/{Region}?from={FromDate}&to={ToDate}
         },
         "total": 590
       }
-    }
+    }...
   ]
 }
 ```
