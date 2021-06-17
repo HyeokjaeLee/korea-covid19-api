@@ -73,11 +73,11 @@
   }
   ```
 
-- ## :books: Used Data
+- ## :books:Used Data
 
   - [Korea Public Data Portal (XML)](https://www.data.go.kr/data/15043378/openapi.do)<br>
 
-- ## :bookmark: To-Do
+- ## :memo:To-Do
   - [x] Convert xml data to json format and complete appropriate data form<br>
   - [x] Add Junk Value Filter<br>
   - [ ] Add AI Data (modification)<br>
