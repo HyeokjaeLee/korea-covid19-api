@@ -12,9 +12,15 @@
     https://korea-covid19-api.herokuapp.com/recent
   - **Data by region**
     https://korea-covid19-api.herokuapp.com/total
+
     ```
     https://korea-covid19-api.herokuapp.com/{Region}?from={FromDate}&to={ToDate}
+
+    ex) https://korea-covid19-api.herokuapp.com/total?from=20201220&to=20210209
+        https://korea-covid19-api.herokuapp.com/total?to=20210209
+        https://korea-covid19-api.herokuapp.com/total?from=20201220
     ```
+
     - If you do not give date value, load the entire.
     - **RegionList**
       - Lazaretto
