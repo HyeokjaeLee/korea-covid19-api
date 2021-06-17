@@ -22,24 +22,25 @@ const exp = express(),
   });
   //COVID19 API 라우팅
   const recentData = covid19Data.map((aRegionData, index) => {
-    let confirmedData = aRegionData.data;
-    const regionName = aRegionData.region,
+    const confirmedData = aRegionData.data,
+      regionName = aRegionData.region,
       recentDataIndex = aRegionData.data.length - 1,
       path = "/" + regionName;
     exp.get(path, (req, res) => {
+      let result = confirmedData;
       const from = req.query.from,
         to = req.query.to;
       if (from != undefined) {
-        confirmedData = confirmedData.filter(
+        result = confirmedData.filter(
           (data) => date2query_form(data.date) >= Number(from)
         );
       }
       if (to != undefined) {
-        confirmedData = confirmedData.filter(
+        result = confirmedData.filter(
           (data) => date2query_form(data.date) <= Number(to)
         );
       }
-      res.json(confirmedData);
+      res.json(result);
     });
     return {
       region_eng: regionName,

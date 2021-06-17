@@ -63,17 +63,17 @@ var exp = express_1.default(), covid19Worker = path_1.default.join(__dirname, ".
                     res.json(region_list_1.regionListData);
                 });
                 recentData = covid19Data.map(function (aRegionData, index) {
-                    var confirmedData = aRegionData.data;
-                    var regionName = aRegionData.region, recentDataIndex = aRegionData.data.length - 1, path = "/" + regionName;
+                    var confirmedData = aRegionData.data, regionName = aRegionData.region, recentDataIndex = aRegionData.data.length - 1, path = "/" + regionName;
                     exp.get(path, function (req, res) {
+                        var result = confirmedData;
                         var from = req.query.from, to = req.query.to;
                         if (from != undefined) {
-                            confirmedData = confirmedData.filter(function (data) { return format_conversion_1.date2query_form(data.date) >= Number(from); });
+                            result = confirmedData.filter(function (data) { return format_conversion_1.date2query_form(data.date) >= Number(from); });
                         }
                         if (to != undefined) {
-                            confirmedData = confirmedData.filter(function (data) { return format_conversion_1.date2query_form(data.date) <= Number(to); });
+                            result = confirmedData.filter(function (data) { return format_conversion_1.date2query_form(data.date) <= Number(to); });
                         }
-                        res.json(confirmedData);
+                        res.json(result);
                     });
                     return {
                         region_eng: regionName,
