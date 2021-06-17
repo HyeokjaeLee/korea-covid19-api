@@ -36,8 +36,9 @@
       - Daegu
       - Seoul
       - **Total**
-        <br>
-    - **DateForm :** 20210503
+        <br><br>
+    - **DateForm :** {Year}{Month}{Day}
+      - ex) 20210209
 - ## :lock:Data form
 
   ```json
