@@ -1,6 +1,6 @@
 {
-  "name": "express-qraphql-typescript",
-  "version": "0.0.1",
+  "name": "covid19-api",
+  "version": "1.2.0",
   "description": "",
   "main": "./src/app.ts",
   "scripts": {
