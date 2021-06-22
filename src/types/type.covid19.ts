@@ -31,6 +31,7 @@ export interface Final {
 }
 
 export interface OriginalAPI {
+  region: string;
   date: Date;
   infected: number;
   new_local_infection: number;
