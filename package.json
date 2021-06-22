@@ -2,10 +2,10 @@
   "name": "covid19-api",
   "version": "1.2.0",
   "description": "",
-  "main": "./src/app.ts",
+  "main": "./dist/app.ts",
   "scripts": {
     "dev": "nodemon --exec ts-node src/app.ts",
-    "start": "ts-node src/app.ts"
+    "start": "node dist/app.js"
   },
   "repository": {
     "type": "git",

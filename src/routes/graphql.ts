@@ -26,10 +26,16 @@ const router = Router(),
     existing_death: Int
     
   }
+
   type Person {
     name: String
     age: Int
-    test: Int
+    test: Test
+  }
+
+    type Test{
+    test3:Int
+    test4:Int
   }
 `),
   root = {
@@ -43,9 +49,9 @@ const router = Router(),
       console.log(name);
       console.log(age);
       return [
-        { name: "kim", age: 20, test: 32 },
-        { name: "lee", age: 30, test: 42 },
-        { name: "park", age: 40, test: 55 },
+        { name: "kim", age: 20, test: { test4: 3, test3: 2 } },
+        { name: "lee", age: 30, test: { test4: 2, test3: 1 } },
+        { name: "park", age: 40, test: { test4: 1, test3: 5 } },
       ];
     },
   };
