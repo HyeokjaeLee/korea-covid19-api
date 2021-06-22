@@ -1,4 +1,3 @@
-import { resolve } from "path/posix";
 import request from "request";
 const apiCreatedDate = new Date("2021-3-11"),
   today = new Date(),
