@@ -6,8 +6,16 @@
   "scripts": {
     "start": "nodemon --exec ts-node src/app.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HyeokjaeLee/covid19-api.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HyeokjaeLee/covid19-api/issues"
+  },
+  "homepage": "https://github.com/HyeokjaeLee/covid19-api#readme",
   "dependencies": {
     "@types/node": "^15.12.4",
     "express": "^4.17.1",
