@@ -1,5 +1,5 @@
 import type { RegionList } from "../types/type.covid19";
-export const regionListData: RegionList[] = [
+export const regionInfo: RegionList[] = [
   {
     kor: "전국",
     eng: "Total",

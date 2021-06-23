@@ -1,12 +1,11 @@
-import type { RegionList } from "../types/type.covid19";
-export const regionListData = [
+export const regionInfo = [
   {
     region_kor: "전국",
     region_eng: "Total",
     population: 51781000,
   },
   {
-    region_kor: "서울",
+    region_kor: "서울특별시",
     region_eng: "Seoul",
     population: 9602000,
   },
@@ -16,38 +15,38 @@ export const regionListData = [
     population: 13405000,
   },
   {
-    region_kor: "대구",
+    region_kor: "대구광역시",
     region_eng: "Daegu",
     population: 2753000,
   },
   {
-    region_kor: "인천",
+    region_kor: "인천광역시",
     region_eng: "Incheon",
     population: 2951000,
   },
 
   {
-    region_kor: "부산",
+    region_kor: "부산광역시",
     region_eng: "Busan",
     population: 3344000,
   },
   {
-    region_kor: "울산",
+    region_kor: "울산광역시",
     region_eng: "Ulsan",
     population: 1140000,
   },
   {
-    region_kor: "대전",
+    region_kor: "대전광역시",
     region_eng: "Daejeon",
     population: 1500000,
   },
   {
-    region_kor: "광주",
+    region_kor: "광주광역시",
     region_eng: "Gwangju",
     population: 1488000,
   },
   {
-    region_kor: "세종",
+    region_kor: "세종특별자치시",
     region_eng: "Sejong",
     population: 349000,
   },
@@ -87,7 +86,7 @@ export const regionListData = [
     population: 1515000,
   },
   {
-    region_kor: "제주",
+    region_kor: "제주특별자치도",
     region_eng: "Jeju",
     population: 670000,
   },
