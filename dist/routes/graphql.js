@@ -11,49 +11,64 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const express_graphql_1 = require("express-graphql");
 const graphql_1 = require("graphql");
 const express_1 = require("express");
-const get_covid19_data_1 = require("../components/get_covid19_data");
+const combine_data_1 = require("../components/combine_data");
 const router = express_1.Router(), schema = graphql_1.buildSchema(`
   scalar Date
   type Query {
     hello: String
     persons(name: String, age: Int): [Person]
-    confirmed(region: String, date: Int): [Confirmed]
+    covid19(region: String, date: Int): [Covid19]
   }
-  type Confirmed {
-    region: String
-    date: Date
-    confirmed: Int
-    new_quaranti: Int
-    new_local_quarantined: Int
-    new_overseas_quaratined: Int
-    existing_quarantined: Int
-    recovered: Int
-    new_recovered: Int
-    existing_recovered: Int
-    death: Int
-    new_death: Int
-    existing_death: Int
-    
+  type Covid19 {
+    region_kor: String
+    region_eng: String
+    date: String
+    confirmed_total: Int
+    confirmed_accumlated: Int
+    quarantine_total: Int
+    quarantine_new: Int
+    quarantine_new_overseas: Int
+    quarantine_new_domestic: Int
+    recovered_total: Int
+    recovered_new: Int
+    recovered_accumlated: Int
+    dead_total: Int
+    dead_new: Int
+    dead_accumlated: Int
+    inoculation_1st_total: Int
+    inoculation_1st_new: Int
+    inoculation_1st_accumulated: Int
+    inoculation_2st_total: Int
+    inoculation_2st_new: Int
+    inoculation_2st_accumulated: Int
+    per100000rate: Int
   }
+
   type Person {
     name: String
     age: Int
-    test: Int
+    test: Test
+  }
+
+    type Test{
+    test3:Int
+    test4:Int
   }
 `), root = {
     hello: () => "Hello world!",
-    confirmed: (args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
+    covid19: (args, context, info) => __awaiter(void 0, void 0, void 0, function* () {
         const { region, date } = args;
-        return yield get_covid19_data_1.getCovid19Data();
+        const test = yield combine_data_1.combine_data();
+        return test;
     }),
     persons: (args, context, info) => {
         const { name, age } = args;
         console.log(name);
         console.log(age);
         return [
-            { name: "kim", age: 20, test: 32 },
-            { name: "lee", age: 30, test: 42 },
-            { name: "park", age: 40, test: 55 },
+            { name: "kim", age: 20, test: { test4: 3, test3: 2 } },
+            { name: "lee", age: 30, test: { test4: 2, test3: 1 } },
+            { name: "park", age: 40, test: { test4: 1, test3: 5 } },
         ];
     },
 };

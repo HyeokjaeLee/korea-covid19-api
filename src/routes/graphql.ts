@@ -1,30 +1,38 @@
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
 import { Router } from "express";
-import { getCovid19Data } from "../components/get_covid19_data";
+import { combine_data } from "../components/combine_data";
 const router = Router(),
   schema = buildSchema(`
   scalar Date
   type Query {
     hello: String
     persons(name: String, age: Int): [Person]
-    confirmed(region: String, date: Int): [Confirmed]
+    covid19(region: String, date: Int): [Covid19]
   }
-  type Confirmed {
-    region: String
-    date: Date
-    confirmed: Int
-    new_quaranti: Int
-    new_local_quarantined: Int
-    new_overseas_quaratined: Int
-    existing_quarantined: Int
-    recovered: Int
-    new_recovered: Int
-    existing_recovered: Int
-    death: Int
-    new_death: Int
-    existing_death: Int
-    
+  type Covid19 {
+    region_kor: String
+    region_eng: String
+    date: String
+    confirmed_total: Int
+    confirmed_accumlated: Int
+    quarantine_total: Int
+    quarantine_new: Int
+    quarantine_new_overseas: Int
+    quarantine_new_domestic: Int
+    recovered_total: Int
+    recovered_new: Int
+    recovered_accumlated: Int
+    dead_total: Int
+    dead_new: Int
+    dead_accumlated: Int
+    inoculation_1st_total: Int
+    inoculation_1st_new: Int
+    inoculation_1st_accumulated: Int
+    inoculation_2st_total: Int
+    inoculation_2st_new: Int
+    inoculation_2st_accumulated: Int
+    per100000rate: Int
   }
 
   type Person {
@@ -40,9 +48,10 @@ const router = Router(),
 `),
   root = {
     hello: () => "Hello world!",
-    confirmed: async (args: any, context: any, info: any) => {
+    covid19: async (args: any, context: any, info: any) => {
       const { region, date } = args;
-      return await getCovid19Data();
+      const test = await combine_data();
+      return test;
     },
     persons: (args: any, context: any, info: any) => {
       const { name, age } = args;

@@ -2,7 +2,7 @@ import { get_confirmed_data } from "./get_confirmed_data";
 import { get_vaccine_data } from "./get_vaccine_data";
 import { convertDateFormat } from "../function/format-conversion";
 import { regionInfo } from "../data/region_info";
-const combine_data = async () => {
+export const combine_data = async () => {
   const combineData = await Promise.all([
     get_confirmed_data(),
     get_vaccine_data(),
@@ -56,6 +56,6 @@ const combine_data = async () => {
       return combinedData;
     })
   );
-  console.log(combineData);
+  return combineData;
 };
 combine_data();
