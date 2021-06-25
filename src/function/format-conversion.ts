@@ -1,4 +1,4 @@
-export const convertDateFormat = (input_date: Date, form: string) => {
+export const convertDateFormat = (input_date: Date | string, form: string) => {
     const date = new Date(input_date);
     const num2str = (num: number) => {
       let result;

@@ -1,5 +1,6 @@
 import { convertDateFormat } from "../function/format-conversion";
 import { get_XML2JSON } from "../function/get_external_data";
+import { ConfirmedSourceData } from "../types/data_type";
 
 export const get_confirmed_data = async () => {
   const service_key: string =
@@ -8,5 +9,6 @@ export const get_confirmed_data = async () => {
     to = Number(convertDateFormat(new Date(), "")),
     url = `http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=${service_key}&startCreateDt=${from}&endCreateDt=${to}`,
     sourceData: any = await get_XML2JSON(url);
-  return sourceData.response.body.items.item;
+  const result: ConfirmedSourceData[] = sourceData.response.body.items.item;
+  return result;
 };

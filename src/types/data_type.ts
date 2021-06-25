@@ -12,14 +12,17 @@ interface QuarantineStructure extends Structure {
   };
 }
 
-export interface COVID19DataSet {
+export interface RegionInfo {
   regionEng: string;
   regionKor: string;
   population: number | null;
+}
+
+export interface COVID19DataSet extends RegionInfo {
   covid19: COVID19Data[];
 }
 
-interface COVID19Data {
+export interface COVID19Data {
   date: string;
   confirmed: Structure;
   quarantine: QuarantineStructure;
@@ -29,5 +32,26 @@ interface COVID19Data {
     first: Structure;
     second: Structure;
   };
-  per100kConfirmed: number;
+  per100kConfirmed: number | null;
+}
+
+interface SourceText {
+  _text: string;
+}
+export interface ConfirmedSourceData {
+  createDt: SourceText;
+  deathCnt: SourceText;
+  defCnt: SourceText;
+  gubun: SourceText;
+  gubunCn: SourceText;
+  gubunEn: SourceText;
+  incDec: SourceText;
+  isolClearCnt: SourceText;
+  isolIngCnt: SourceText;
+  localOccCnt: SourceText;
+  overFlowCnt: SourceText;
+  qurRate: SourceText;
+  seq: SourceText;
+  stdDay: SourceText;
+  updateDt: SourceText;
 }
