@@ -47,7 +47,7 @@ const createDataFrame = (sourceData: ConfirmedSourceData) => {
   return {
     date: convertDateFormat(date, "-"),
     confirmed: {
-      total: Number(sourceData.defCnt._text),
+      total: Number(sourceData.defCnt._text) - 1, //왜인지 모르겠으나 신규 확진자와 전일 확진자의 수를 합치면 항상 1명 많음
       accumlated: null,
     },
     quarantine: {
