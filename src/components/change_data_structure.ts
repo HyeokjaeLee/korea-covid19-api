@@ -7,7 +7,6 @@ import { get_confirmed_data } from "./get_confirmed_data";
 import { get_vaccine_data } from "./get_vaccine_data";
 import { regionInfo } from "../data/region_info";
 import { convertDateFormat } from "../function/format-conversion";
-import { KeyObject } from "crypto";
 
 const main = async () => {
   const sourceData = await getSourcData();
@@ -17,11 +16,14 @@ const main = async () => {
     population: regionInfo.population,
     covid19: [],
   }));
-  sourceData.confirmed.forEach((sc_element: any) => {
+  sourceData.confirmed.forEach((_confirmedSourceData: ConfirmedSourceData) => {
     const regionIndex = FinalDataFrame.findIndex(
-      (f_element) => f_element.regionEng == sc_element.gubunEn._text
+      (_FinalDataFrame) =>
+        _FinalDataFrame.regionEng == _confirmedSourceData.gubunEn._text
     );
-    FinalDataFrame[regionIndex].covid19.push(createDataFrame(sc_element));
+    FinalDataFrame[regionIndex].covid19.push(
+      createDataFrame(_confirmedSourceData)
+    );
   });
   console.log(FinalDataFrame[1].regionKor);
   console.log(FinalDataFrame[1].covid19[1]);
@@ -41,30 +43,30 @@ const getSourcData = () =>
     })
   );
 
-const createDataFrame = (sourceData: ConfirmedSourceData) => {
-  let date = new Date(sourceData.createDt._text);
+const createDataFrame = (confirmedSourceData: ConfirmedSourceData) => {
+  let date = new Date(confirmedSourceData.createDt._text);
   date.setDate(date.getDate() - 1);
   return {
     date: convertDateFormat(date, "-"),
     confirmed: {
-      total: Number(sourceData.defCnt._text) - 1, //왜인지 모르겠으나 신규 확진자와 전일 확진자의 수를 합치면 항상 1명 많음
+      total: Number(confirmedSourceData.defCnt._text) - 1, //왜인지 모르겠으나 신규 확진자와 전일 확진자의 수를 합치면 항상 1명 많음
       accumlated: null,
     },
     quarantine: {
-      total: Number(sourceData.isolIngCnt._text),
+      total: Number(confirmedSourceData.isolIngCnt._text),
       new: {
-        total: Number(sourceData.incDec._text),
-        domestic: Number(sourceData.localOccCnt._text),
-        overseas: Number(sourceData.overFlowCnt._text),
+        total: Number(confirmedSourceData.incDec._text),
+        domestic: Number(confirmedSourceData.localOccCnt._text),
+        overseas: Number(confirmedSourceData.overFlowCnt._text),
       },
     },
     recovered: {
-      total: Number(sourceData.isolClearCnt._text),
+      total: Number(confirmedSourceData.isolClearCnt._text),
       new: null,
       accumlated: null,
     },
     dead: {
-      total: Number(sourceData.deathCnt._text),
+      total: Number(confirmedSourceData.deathCnt._text),
       new: null,
       accumlated: null,
     },
@@ -81,7 +83,9 @@ const createDataFrame = (sourceData: ConfirmedSourceData) => {
       },
     },
     per100kConfirmed:
-      sourceData.qurRate._text != "-" ? Number(sourceData.qurRate._text) : null,
+      confirmedSourceData.qurRate._text != "-"
+        ? Number(confirmedSourceData.qurRate._text)
+        : null,
   };
 };
 
