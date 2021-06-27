@@ -22,7 +22,7 @@ export interface COVID19DataSet extends RegionInfo {
   covid19: COVID19Data[];
 }
 
-export interface COVID19Data {
+interface COVID19Data {
   date: string;
   confirmed: Structure;
   quarantine: QuarantineStructure;
@@ -54,4 +54,15 @@ export interface ConfirmedSourceData {
   seq: SourceText;
   stdDay: SourceText;
   updateDt: SourceText;
+}
+
+export interface VaccineSourceData {
+  accumulatedFirstCnt: number;
+  accumulatedSecondCnt: number;
+  baseDate: string;
+  firstCnt: number;
+  secondCnt: number;
+  sido: string;
+  totalFirstCnt: number;
+  totalSecondCnt: number;
 }
