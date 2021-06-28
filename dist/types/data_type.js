@@ -1,3 +1,3 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=type.covid19.js.map
+//# sourceMappingURL=data_type.js.map
