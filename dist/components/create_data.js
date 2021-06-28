@@ -1,22 +1,13 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const get_confirmed_data_1 = require("./get_confirmed_data");
 const get_vaccine_data_1 = require("./get_vaccine_data");
 const region_info_1 = require("../data/region_info");
 const format_conversion_1 = require("../function/format-conversion");
-const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    const sourceData = yield getSourcData();
+const main = async () => {
+    const sourceData = await getSourcData();
     return create_additional_data(combine_vaccine_data(sourceData.vaccine, create_basic_data_set(sourceData.confirmed, create_data_frame(region_info_1.regionInfo))));
-});
+};
 //---------------------------------------------------------
 const getSourcData = () => Promise.all([get_confirmed_data_1.get_confirmed_data(), get_vaccine_data_1.get_vaccine_data()]).then((sourceData) => ({
     confirmed: sourceData[0],
