@@ -1,5 +1,5 @@
-import { get_JSON } from "../function/get_external_data";
-import type { VaccineSourceData } from "../types/data_type";
+import { get_JSON } from "../function/get-external-data";
+import type { VaccineSourceData } from "../types/data-type";
 
 export const get_vaccine_data = async () => {
   const APIcreatedDate = new Date("2021-3-11"),

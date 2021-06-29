@@ -1,6 +1,6 @@
-import { convertDateFormat } from "../function/format-conversion";
-import { get_XML2JSON } from "../function/get_external_data";
-import { ConfirmedSourceData } from "../types/data_type";
+import { convertDateFormat } from "../function/convert-format";
+import { get_XML2JSON } from "../function/get-external-data";
+import { ConfirmedSourceData } from "../types/data-type";
 
 export const get_confirmed_data = async () => {
   const service_key: string =

@@ -2,11 +2,11 @@ import type {
   COVID19DataSet,
   ConfirmedSourceData,
   VaccineSourceData,
-} from "../types/data_type";
-import { get_confirmed_data } from "./get_confirmed_data";
-import { get_vaccine_data } from "./get_vaccine_data";
-import { regionInfo } from "../data/region_info";
-import { convertDateFormat } from "../function/format-conversion";
+} from "../types/data-type";
+import { get_confirmed_data } from "./get-confirmed-data";
+import { get_vaccine_data } from "./get-vaccine-data";
+import { regionInfo } from "../data/region-info";
+import { convertDateFormat } from "../function/convert-format";
 
 const main = async () => {
   const sourceData = await getSourcData();
@@ -98,17 +98,22 @@ const combine_vaccine_data = (
       if (regionIndex != -1) {
         //백신 데이터데이는 '기타' 지역구분이 들어가있음
         const DateIndex = basicData[regionIndex].covid19.findIndex(
-            (_covid19) =>
-              _covid19.date == date_formatter(_vaccineSourceData.baseDate)
-          ),
-          targetData = basicData[regionIndex].covid19[DateIndex].vaccination;
-        targetData.first.total = _vaccineSourceData.totalFirstCnt;
-        targetData.first.new = _vaccineSourceData.firstCnt;
-        targetData.first.accumlated = _vaccineSourceData.accumulatedFirstCnt;
-        targetData.second.total = _vaccineSourceData.totalSecondCnt;
-        targetData.second.new = _vaccineSourceData.secondCnt;
-        targetData.second.accumlated = _vaccineSourceData.accumulatedSecondCnt;
-        basicData[regionIndex].covid19[DateIndex].vaccination = targetData;
+          (_covid19) =>
+            _covid19.date == date_formatter(_vaccineSourceData.baseDate)
+        );
+        if (DateIndex != -1) {
+          const targetData =
+            basicData[regionIndex].covid19[DateIndex].vaccination;
+          targetData.first.total = _vaccineSourceData.totalFirstCnt;
+          targetData.first.new = _vaccineSourceData.firstCnt;
+          targetData.first.accumlated = _vaccineSourceData.accumulatedFirstCnt;
+          targetData.second.total = _vaccineSourceData.totalSecondCnt;
+          targetData.second.new = _vaccineSourceData.secondCnt;
+          targetData.second.accumlated =
+            _vaccineSourceData.accumulatedSecondCnt;
+
+          basicData[regionIndex].covid19[DateIndex].vaccination = targetData;
+        }
       }
     } catch (error) {
       console.log("combine_vaccine_data : " + error);
