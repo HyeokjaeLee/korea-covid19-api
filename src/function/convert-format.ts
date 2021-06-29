@@ -19,4 +19,5 @@ export const convert_date_format = (
     return date;
   },
   //queryString으로 받은 값과 비교하기 위한 형식으로변환 ex:20210326
-  date2query_form = (date: Date) => Number(convert_date_format(date, ""));
+  date2query_form = (date: Date | string) =>
+    Number(convert_date_format(date, ""));
