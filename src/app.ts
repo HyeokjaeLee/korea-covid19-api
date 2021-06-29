@@ -1,69 +1,54 @@
 import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
-import create_data from "./components/create_data";
-const port = process.env.PORT || 8080;
-const main = async () => {
-  let covid19Data = await create_data();
-  const schema = buildSchema(`
+import create_data from "./components/create-data";
+import { covid19Schema } from "./schema/covid19-schema";
+import { date2query_form } from "./function/convert-format";
+const port = process.env.PORT || 8080,
+  schema = buildSchema(`
     type Query {
-      covid19Info(region: String, from: Int, to: Int): [DataSet]
+      covid19Info(region: String, startDate: Int, endDate: Int): [DataSet]
+      covid19(startDate: Int, endDate: Int): [Covid19]
     }
-
-    type DataSet {
-      regionEng: String
-      regionKor: String
-      population: Int
-      covid19: [Covid19]
-    }
-
-    type Covid19 {
-      date: String
-      confirmed: Confirmed
-      quarantine: Quarantine
-      recovered: BasicStructure
-      dead: BasicStructure
-      vaccination: Vaccination
-      per100kConfirmed: Int
-    }
-
-    type BasicStructure {
-      total: Int
-      new: Int
-      accumlated: Int
-    }
-
-    type Confirmed {
-      total: Int
-      accumlated: Int
-    }
-
-    type Quarantine {
-      total: Int
-      new: QuarantineNew
-    }
-
-    type QuarantineNew {
-      total: Int
-      domestic: Int
-      overseas: Int
-    }
-
-    type Vaccination   {
-      first: BasicStructure
-      second: BasicStructure
-    }
+    ${covid19Schema}
   `);
-
-  const root = {
-    covid19Info: (args: any, context: any, info: any) => {
-      const data = covid19Data;
-      const { region, from, to } = args;
-      return data;
+create_data().then((data) => {
+  const update_data = (second: number) => {
+      setInterval(() => {
+        try {
+          console.log(new Date());
+          create_data().then((_data) => {
+            data = _data;
+          });
+          console.log("Data Update Successful");
+        } catch (e) {
+          console.log(`Data update failed : ${e}`);
+        }
+      }, second * 1000);
     },
-  };
-
-  const exp = express();
+    root = {
+      covid19Info: (args: any, context: any, info: any) => {
+        let { region, startDate, endDate } = args;
+        startDate = startDate! ? startDate : 0;
+        endDate = endDate! ? endDate : date2query_form(new Date());
+        const covid19Info = region!
+          ? [data.find((value) => value.regionEng === region)]
+          : data;
+        covid19Info.forEach((_covid19Info) => {
+          if (_covid19Info != undefined) {
+            _covid19Info.covid19 = _covid19Info.covid19.filter((_covid19) => {
+              const dateNum = date2query_form(_covid19.date);
+              return dateNum >= startDate && dateNum <= endDate;
+            });
+          }
+        });
+        return covid19Info;
+      },
+      covid19: (args: any, context: any, info: any) => {
+        console.log(args);
+      },
+    },
+    exp = express();
   exp.listen(port, () => {
     console.log(`Server listening on port ${port}`);
   });
@@ -76,17 +61,5 @@ const main = async () => {
       graphiql: true,
     })
   );
-};
-
-/*function update_data(second: number): void {
-  setInterval(() => {
-    try {
-      console.log(new Date());
-      covid19Data = create_data();
-      console.log("Data Update Successful");
-    } catch (e) {
-      console.log(`Data update failed : ${e}`);
-    }
-  }, second * 1000);
-}*/
-main();
+  update_data(60);
+});
