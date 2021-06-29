@@ -6,7 +6,7 @@ import type {
 import { get_confirmed_data } from "./get-confirmed-data";
 import { get_vaccine_data } from "./get-vaccine-data";
 import { regionInfo } from "../data/region-info";
-import { convertDateFormat } from "../function/convert-format";
+import { convert_date_format } from "../function/convert-format";
 
 const main = async () => {
   const sourceData = await getSourcData();
@@ -130,7 +130,7 @@ const create_data_frame = (regionInfo: any[]): COVID19DataSet[] => {
 const date_formatter = (originalDate: string) => {
   let date = new Date(originalDate);
   date.setDate(date.getDate() - 1);
-  return convertDateFormat(date, "-");
+  return convert_date_format(date, "-");
 };
 const create_additional_data = (combinedData: COVID19DataSet[]) => {
   combinedData.forEach((_combinedData) => {
