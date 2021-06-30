@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const get_confirmed_data_1 = require("./get_confirmed_data");
-const get_vaccine_data_1 = require("./get_vaccine_data");
-const region_info_1 = require("../data/region_info");
-const format_conversion_1 = require("../function/format-conversion");
-const main = async () => {
+const get_confirmed_data_1 = require("./get-confirmed-data");
+const get_vaccine_data_1 = require("./get-vaccine-data");
+const region_info_1 = require("../data/region-info");
+const convert_format_1 = require("../function/convert-format");
+async function main() {
     const sourceData = await getSourcData();
     return create_additional_data(combine_vaccine_data(sourceData.vaccine, create_basic_data_set(sourceData.confirmed, create_data_frame(region_info_1.regionInfo))));
-};
+}
+exports.default = main;
 //---------------------------------------------------------
 const getSourcData = () => Promise.all([get_confirmed_data_1.get_confirmed_data(), get_vaccine_data_1.get_vaccine_data()]).then((sourceData) => ({
     confirmed: sourceData[0],
     vaccine: sourceData[1],
-}));
-const createBasicData = (confirmedSourceData) => ({
+})), createBasicData = (confirmedSourceData) => ({
     date: date_formatter(confirmedSourceData.createDt._text),
     confirmed: {
         total: Number(confirmedSourceData.defCnt._text) - 1,
@@ -52,8 +52,7 @@ const createBasicData = (confirmedSourceData) => ({
     per100kConfirmed: confirmedSourceData.qurRate._text != "-"
         ? Number(confirmedSourceData.qurRate._text)
         : null,
-});
-const create_basic_data_set = (confirmedSourceData, dataFrame) => {
+}), create_basic_data_set = (confirmedSourceData, dataFrame) => {
     confirmedSourceData.forEach((_confirmedSourceData) => {
         const regionIndex = dataFrame.findIndex((_dataFrame) => _dataFrame.regionEng == _confirmedSourceData.gubunEn._text);
         dataFrame[regionIndex].covid19.push(createBasicData(_confirmedSourceData));
@@ -62,21 +61,25 @@ const create_basic_data_set = (confirmedSourceData, dataFrame) => {
         _dataFrame.covid19 = _dataFrame.covid19.reverse();
     });
     return dataFrame;
-};
-const combine_vaccine_data = (vaccineSourceData, basicData) => {
+}, combine_vaccine_data = (vaccineSourceData, basicData) => {
     vaccineSourceData.forEach((_vaccineSourceData) => {
         try {
             const regionIndex = basicData.findIndex((_basicData) => _basicData.regionKor == _vaccineSourceData.sido);
             if (regionIndex != -1) {
                 //백신 데이터데이는 '기타' 지역구분이 들어가있음
-                const DateIndex = basicData[regionIndex].covid19.findIndex((_covid19) => _covid19.date == date_formatter(_vaccineSourceData.baseDate)), targetData = basicData[regionIndex].covid19[DateIndex].vaccination;
-                targetData.first.total = _vaccineSourceData.totalFirstCnt;
-                targetData.first.new = _vaccineSourceData.firstCnt;
-                targetData.first.accumlated = _vaccineSourceData.accumulatedFirstCnt;
-                targetData.second.total = _vaccineSourceData.totalSecondCnt;
-                targetData.second.new = _vaccineSourceData.secondCnt;
-                targetData.second.accumlated = _vaccineSourceData.accumulatedSecondCnt;
-                basicData[regionIndex].covid19[DateIndex].vaccination = targetData;
+                const DateIndex = basicData[regionIndex].covid19.findIndex((_covid19) => _covid19.date == date_formatter(_vaccineSourceData.baseDate));
+                if (DateIndex != -1) {
+                    const targetData = basicData[regionIndex].covid19[DateIndex].vaccination;
+                    targetData.first.total = _vaccineSourceData.totalFirstCnt;
+                    targetData.first.new = _vaccineSourceData.firstCnt;
+                    targetData.first.accumlated =
+                        _vaccineSourceData.accumulatedFirstCnt;
+                    targetData.second.total = _vaccineSourceData.totalSecondCnt;
+                    targetData.second.new = _vaccineSourceData.secondCnt;
+                    targetData.second.accumlated =
+                        _vaccineSourceData.accumulatedSecondCnt;
+                    basicData[regionIndex].covid19[DateIndex].vaccination = targetData;
+                }
             }
         }
         catch (error) {
@@ -84,19 +87,16 @@ const combine_vaccine_data = (vaccineSourceData, basicData) => {
         }
     });
     return basicData;
-};
-const create_data_frame = (regionInfo) => {
+}, create_data_frame = (regionInfo) => {
     regionInfo.forEach((_regionInfo) => {
         _regionInfo.covid19 = [];
     });
     return regionInfo;
-};
-const date_formatter = (originalDate) => {
+}, date_formatter = (originalDate) => {
     let date = new Date(originalDate);
     date.setDate(date.getDate() - 1);
-    return format_conversion_1.convertDateFormat(date, "-");
-};
-const create_additional_data = (combinedData) => {
+    return convert_format_1.convert_date_format(date, "-");
+}, create_additional_data = (combinedData) => {
     combinedData.forEach((_combinedData) => {
         _combinedData.covid19.forEach((_covid19, index) => {
             if (index != 0) {
@@ -112,5 +112,4 @@ const create_additional_data = (combinedData) => {
     });
     return combinedData;
 };
-exports.default = main;
-//# sourceMappingURL=create_data.js.map
+//# sourceMappingURL=create-data.js.map

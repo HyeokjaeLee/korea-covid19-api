@@ -98,4 +98,4 @@ exports.regionInfo = [
         population: null,
     },
 ];
-//# sourceMappingURL=region_info.js.map
+//# sourceMappingURL=region-info.js.map

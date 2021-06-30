@@ -57,4 +57,4 @@ const get_XML2JSON = (url) => {
     });
 };
 exports.get_XML2JSON = get_XML2JSON, exports.get_data_from_worker = get_data_from_worker, exports.get_JSON = get_JSON;
-//# sourceMappingURL=get_external_data.js.map
+//# sourceMappingURL=get-external-data.js.map
