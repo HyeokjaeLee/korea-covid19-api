@@ -61,5 +61,5 @@ create_data().then((data) => {
       graphiql: true,
     })
   );
-  update_data(60);
+  update_data(600);
 });
