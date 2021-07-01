@@ -38,18 +38,19 @@ create_data_1.default().then((data) => {
             const covid19Info = region
                 ? [data.find((value) => value.regionEng === region)]
                 : data;
-            covid19Info.forEach((_covid19Info) => {
-                if (_covid19Info != undefined) {
-                    _covid19Info.covid19 = _covid19Info.covid19.filter((_covid19) => {
-                        const dateNum = convert_format_1.date2query_form(_covid19.date);
-                        return dateNum >= startDate && dateNum <= endDate;
-                    });
-                }
+            const result = covid19Info.map((_covid19Info) => {
+                const _covid19 = _covid19Info?.covid19.filter((_covid19) => {
+                    const dateNum = convert_format_1.date2query_form(_covid19.date);
+                    return dateNum >= startDate && dateNum <= endDate;
+                });
+                return {
+                    regionKor: _covid19Info?.regionKor,
+                    regionEng: _covid19Info?.regionEng,
+                    population: _covid19Info?.population,
+                    covid19: _covid19,
+                };
             });
-            return covid19Info;
-        },
-        covid19: (args, context, info) => {
-            console.log(args);
+            return result;
         },
     }, exp = express_1.default();
     exp.listen(port, () => {
