@@ -4,6 +4,7 @@ import { buildSchema } from "graphql";
 import create_data from "./components/create-data";
 import { covid19Schema } from "./schema/covid19-schema";
 import { date2query_form } from "./function/convert-format";
+import cors from "cors";
 const port = process.env.PORT || 8080,
   schema = buildSchema(`
     type Query {
@@ -51,7 +52,7 @@ create_data().then((data) => {
   exp.listen(port, () => {
     console.log(`Server listening on port ${port}`);
   });
-
+  exp.use(cors());
   exp.use(
     "/",
     graphqlHTTP({
