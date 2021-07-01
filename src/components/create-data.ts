@@ -75,7 +75,8 @@ const getSourcData = () =>
     confirmedSourceData.forEach((_confirmedSourceData) => {
       const regionIndex = dataFrame.findIndex(
         (_dataFrame) =>
-          _dataFrame.regionEng == _confirmedSourceData.gubunEn._text
+          _dataFrame.regionEng ==
+          _confirmedSourceData.gubunEn._text.replace("-", "")
       );
       dataFrame[regionIndex].covid19.push(
         createBasicData(_confirmedSourceData)
@@ -128,11 +129,8 @@ const getSourcData = () =>
     });
     return regionInfo;
   },
-  date_formatter = (originalDate: string) => {
-    let date = new Date(originalDate);
-    date.setDate(date.getDate() - 1);
-    return convert_date_format(date, "-");
-  },
+  date_formatter = (originalDate: string) =>
+    convert_date_format(new Date(originalDate), "-"),
   create_additional_data = (combinedData: COVID19DataSet[]) => {
     combinedData.forEach((_combinedData) => {
       _combinedData.covid19.forEach((_covid19, index) => {
