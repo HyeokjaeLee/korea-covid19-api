@@ -6,9 +6,9 @@
 
 - ## :bookmark:URL
 
-  **:warning:<U>This project uses heroku, It usually stays sleep and takes a few seconds for the server to turn on the first try</U>.**<br><br>
+  **:warning:<U>This project uses heroku, It usually stays sleep and takes a few seconds for the server to turn on the first try</U>.**<br>
 
-  - **https://korea-covid19-api.herokuapp.com/**
+  - ### https://korea-covid19-api.herokuapp.com/
     - **RegionList**
       - Lazaretto
       - Jeju
