@@ -34,7 +34,63 @@
       - ex) 20210209
 
 - ## :lock:Data form
-  ![screencapture](https://user-images.githubusercontent.com/71566740/124191843-573c0900-daff-11eb-8cc9-5f26471a0056.png)
+
+  - **Preview**
+    ![screencapture](https://user-images.githubusercontent.com/71566740/124191843-573c0900-daff-11eb-8cc9-5f26471a0056.png)
+    <br>
+  - **Request query**
+
+  ```query
+  query{
+    covid19Info(region:Seoul startDate:20210701 endDate:20210701){
+      regionEng
+      regionKor
+      population
+      covid19{
+        date
+        confirmed{
+          total
+          accumlated
+        }
+        quarantine{
+          total
+          new{
+            total
+            domestic
+            overseas
+          }
+        }
+        recovered{
+          total
+          new
+          accumlated
+        }
+        dead{
+          total
+          new
+          accumlated
+        }
+        vaccination{
+          first{
+            total
+            new
+            accumlated
+          }
+          second{
+            total
+            new
+            accumlated
+          }
+        }
+        per100kConfirmed
+      }
+    }
+  }
+  ```
+
+  <br>
+
+- **Response json**
 
 ```json
 {
@@ -86,54 +142,6 @@
         ]
       }
     ]
-  }
-}
-```
-
-```query
-query{
-  covid19Info(region:Seoul startDate:20210701 endDate:20210701){
-    regionEng
-    regionKor
-    population
-    covid19{
-      date
-      confirmed{
-        total
-        accumlated
-      }
-      quarantine{
-        total
-        new{
-          total
-          domestic
-          overseas
-        }
-      }
-      recovered{
-        total
-        new
-        accumlated
-      }
-      dead{
-        total
-        new
-        accumlated
-      }
-      vaccination{
-        first{
-          total
-          new
-          accumlated
-        }
-        second{
-          total
-          new
-          accumlated
-        }
-      }
-      per100kConfirmed
-    }
   }
 }
 ```
