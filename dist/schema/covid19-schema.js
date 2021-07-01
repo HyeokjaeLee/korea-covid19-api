@@ -16,7 +16,7 @@ exports.covid19Schema = `
       recovered: BasicStructure
       dead: BasicStructure
       vaccination: Vaccination
-      per100kConfirmed: Int
+      per100kConfirmed: Float
     }
 
     type BasicStructure {

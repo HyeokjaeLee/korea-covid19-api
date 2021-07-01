@@ -10,9 +10,11 @@ const create_data_1 = __importDefault(require("./components/create-data"));
 const covid19_schema_1 = require("./schema/covid19-schema");
 const convert_format_1 = require("./function/convert-format");
 const cors_1 = __importDefault(require("cors"));
+const region_enum_1 = require("./schema/region-enum");
 const port = process.env.PORT || 8080, schema = graphql_1.buildSchema(`
+    ${region_enum_1.Region}
     type Query {
-      covid19Info(region: String, startDate: Int, endDate: Int): [DataSet]
+      covid19Info(region: Region, startDate: Int, endDate: Int): [DataSet]
     }
     ${covid19_schema_1.covid19Schema}
   `);
@@ -38,6 +40,7 @@ create_data_1.default().then((data) => {
             const covid19Info = region
                 ? [data.find((value) => value.regionEng === region)]
                 : data;
+            //forEach로 covid19Info 객체 수정 시 Deep Copy가 아니기 때문에 상위 Data가 수정됨
             const result = covid19Info.map((_covid19Info) => {
                 const _covid19 = _covid19Info?.covid19.filter((_covid19) => {
                     const dateNum = convert_format_1.date2query_form(_covid19.date);

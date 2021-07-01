@@ -54,7 +54,8 @@ const getSourcData = () => Promise.all([get_confirmed_data_1.get_confirmed_data(
         : null,
 }), create_basic_data_set = (confirmedSourceData, dataFrame) => {
     confirmedSourceData.forEach((_confirmedSourceData) => {
-        const regionIndex = dataFrame.findIndex((_dataFrame) => _dataFrame.regionEng == _confirmedSourceData.gubunEn._text);
+        const regionIndex = dataFrame.findIndex((_dataFrame) => _dataFrame.regionEng ==
+            _confirmedSourceData.gubunEn._text.replace("-", ""));
         dataFrame[regionIndex].covid19.push(createBasicData(_confirmedSourceData));
     });
     dataFrame.forEach((_dataFrame) => {
@@ -92,11 +93,7 @@ const getSourcData = () => Promise.all([get_confirmed_data_1.get_confirmed_data(
         _regionInfo.covid19 = [];
     });
     return regionInfo;
-}, date_formatter = (originalDate) => {
-    let date = new Date(originalDate);
-    date.setDate(date.getDate() - 1);
-    return convert_format_1.convert_date_format(date, "-");
-}, create_additional_data = (combinedData) => {
+}, date_formatter = (originalDate) => convert_format_1.convert_date_format(new Date(originalDate), "-"), create_additional_data = (combinedData) => {
     combinedData.forEach((_combinedData) => {
         _combinedData.covid19.forEach((_covid19, index) => {
             if (index != 0) {
