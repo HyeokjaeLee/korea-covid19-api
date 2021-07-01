@@ -12,7 +12,7 @@ export const regionInfo: RegionInfo[] = [
   },
   {
     regionKor: "경기도",
-    regionEng: "Gyeonggi-do",
+    regionEng: "Gyeonggido",
     population: 13405000,
   },
   {
@@ -53,37 +53,37 @@ export const regionInfo: RegionInfo[] = [
   },
   {
     regionKor: "충청남도",
-    regionEng: "Chungcheongnam-do",
+    regionEng: "Chungcheongnamdo",
     population: 2204000,
   },
   {
     regionKor: "충청북도",
-    regionEng: "Chungcheongbuk-do",
+    regionEng: "Chungcheongbukdo",
     population: 1632000,
   },
   {
     regionKor: "경상남도",
-    regionEng: "Gyeongsangnam-do",
+    regionEng: "Gyeongsangnamdo",
     population: 3350000,
   },
   {
     regionKor: "경상북도",
-    regionEng: "Gyeongsangbuk-do",
+    regionEng: "Gyeongsangbukdo",
     population: 2655000,
   },
   {
     regionKor: "전라남도",
-    regionEng: "Jeollanam-do",
+    regionEng: "Jeollanamdo",
     population: 1764000,
   },
   {
     regionKor: "전라북도",
-    regionEng: "Jeollabuk-do",
+    regionEng: "Jeollabukdo",
     population: 1792000,
   },
   {
     regionKor: "강원도",
-    regionEng: "Gangwon-do",
+    regionEng: "Gangwondo",
     population: 1515000,
   },
   {
