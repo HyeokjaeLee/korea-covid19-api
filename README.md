@@ -43,7 +43,6 @@
   - **Request query**
 
   ```query
-
   query{
     covid19Info(region:Seoul startDate:20210701 endDate:20210701){
       regionEng
