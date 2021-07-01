@@ -9,10 +9,10 @@ const graphql_1 = require("graphql");
 const create_data_1 = __importDefault(require("./components/create-data"));
 const covid19_schema_1 = require("./schema/covid19-schema");
 const convert_format_1 = require("./function/convert-format");
+const cors_1 = __importDefault(require("cors"));
 const port = process.env.PORT || 8080, schema = graphql_1.buildSchema(`
     type Query {
       covid19Info(region: String, startDate: Int, endDate: Int): [DataSet]
-      covid19(startDate: Int, endDate: Int): [Covid19]
     }
     ${covid19_schema_1.covid19Schema}
   `);
@@ -55,6 +55,7 @@ create_data_1.default().then((data) => {
     exp.listen(port, () => {
         console.log(`Server listening on port ${port}`);
     });
+    exp.use(cors_1.default());
     exp.use("/", express_graphql_1.graphqlHTTP({
         schema: schema,
         rootValue: root,
