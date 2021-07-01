@@ -37,7 +37,9 @@
 
   - **Preview**
     ![screencapture](https://user-images.githubusercontent.com/71566740/124191843-573c0900-daff-11eb-8cc9-5f26471a0056.png)
+
     <br>
+
   - **Request query**
 
   ```query
