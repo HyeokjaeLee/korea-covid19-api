@@ -8,7 +8,6 @@ const port = process.env.PORT || 8080,
   schema = buildSchema(`
     type Query {
       covid19Info(region: String, startDate: Int, endDate: Int): [DataSet]
-      covid19(startDate: Int, endDate: Int): [Covid19]
     }
     ${covid19Schema}
   `);
