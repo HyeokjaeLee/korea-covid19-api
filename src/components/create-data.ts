@@ -78,12 +78,12 @@ const getSourcData = () =>
           _dataFrame.regionEng ==
           _confirmedSourceData.gubunEn._text.replace("-", "")
       );
-      dataFrame[regionIndex].covid19.push(
+      dataFrame[regionIndex].covid19DataList.push(
         createBasicData(_confirmedSourceData)
       );
     });
     dataFrame.forEach((_dataFrame) => {
-      _dataFrame.covid19 = _dataFrame.covid19.reverse();
+      _dataFrame.covid19DataList = _dataFrame.covid19DataList.reverse();
     });
     return dataFrame;
   },
@@ -98,13 +98,13 @@ const getSourcData = () =>
         );
         if (regionIndex != -1) {
           //백신 데이터데이는 '기타' 지역구분이 들어가있음
-          const DateIndex = basicData[regionIndex].covid19.findIndex(
+          const DateIndex = basicData[regionIndex].covid19DataList.findIndex(
             (_covid19) =>
               _covid19.date == date_formatter(_vaccineSourceData.baseDate)
           );
           if (DateIndex != -1) {
             const targetData =
-              basicData[regionIndex].covid19[DateIndex].vaccination;
+              basicData[regionIndex].covid19DataList[DateIndex].vaccination;
             targetData.first.total = _vaccineSourceData.totalFirstCnt;
             targetData.first.new = _vaccineSourceData.firstCnt;
             targetData.first.accumlated =
@@ -114,7 +114,8 @@ const getSourcData = () =>
             targetData.second.accumlated =
               _vaccineSourceData.accumulatedSecondCnt;
 
-            basicData[regionIndex].covid19[DateIndex].vaccination = targetData;
+            basicData[regionIndex].covid19DataList[DateIndex].vaccination =
+              targetData;
           }
         }
       } catch (error) {
@@ -125,7 +126,7 @@ const getSourcData = () =>
   },
   create_data_frame = (regionInfo: any[]): COVID19DataSet[] => {
     regionInfo.forEach((_regionInfo: any) => {
-      _regionInfo.covid19 = [];
+      _regionInfo.covid19DataList = [];
     });
     return regionInfo;
   },
@@ -133,9 +134,9 @@ const getSourcData = () =>
     convert_date_format(new Date(originalDate), "-"),
   create_additional_data = (combinedData: COVID19DataSet[]) => {
     combinedData.forEach((_combinedData) => {
-      _combinedData.covid19.forEach((_covid19, index) => {
+      _combinedData.covid19DataList.forEach((_covid19, index) => {
         if (index != 0) {
-          const _covid19_1dayAgo = _combinedData.covid19[index - 1];
+          const _covid19_1dayAgo = _combinedData.covid19DataList[index - 1];
           _covid19.confirmed.accumlated = _covid19_1dayAgo.confirmed.total;
           _covid19.recovered.accumlated = _covid19_1dayAgo.recovered.total;
           _covid19.recovered.new =

@@ -19,7 +19,7 @@ export interface RegionInfo {
 }
 
 export interface COVID19DataSet extends RegionInfo {
-  covid19: COVID19Data[];
+  covid19DataList: COVID19Data[];
 }
 
 interface COVID19Data {
