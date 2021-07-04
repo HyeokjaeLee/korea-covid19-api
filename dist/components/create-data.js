@@ -56,10 +56,10 @@ const getSourcData = () => Promise.all([get_confirmed_data_1.get_confirmed_data(
     confirmedSourceData.forEach((_confirmedSourceData) => {
         const regionIndex = dataFrame.findIndex((_dataFrame) => _dataFrame.regionEng ==
             _confirmedSourceData.gubunEn._text.replace("-", ""));
-        dataFrame[regionIndex].covid19.push(createBasicData(_confirmedSourceData));
+        dataFrame[regionIndex].covid19DataList.push(createBasicData(_confirmedSourceData));
     });
     dataFrame.forEach((_dataFrame) => {
-        _dataFrame.covid19 = _dataFrame.covid19.reverse();
+        _dataFrame.covid19DataList = _dataFrame.covid19DataList.reverse();
     });
     return dataFrame;
 }, combine_vaccine_data = (vaccineSourceData, basicData) => {
@@ -68,9 +68,9 @@ const getSourcData = () => Promise.all([get_confirmed_data_1.get_confirmed_data(
             const regionIndex = basicData.findIndex((_basicData) => _basicData.regionKor == _vaccineSourceData.sido);
             if (regionIndex != -1) {
                 //백신 데이터데이는 '기타' 지역구분이 들어가있음
-                const DateIndex = basicData[regionIndex].covid19.findIndex((_covid19) => _covid19.date == date_formatter(_vaccineSourceData.baseDate));
+                const DateIndex = basicData[regionIndex].covid19DataList.findIndex((_covid19) => _covid19.date == date_formatter(_vaccineSourceData.baseDate));
                 if (DateIndex != -1) {
-                    const targetData = basicData[regionIndex].covid19[DateIndex].vaccination;
+                    const targetData = basicData[regionIndex].covid19DataList[DateIndex].vaccination;
                     targetData.first.total = _vaccineSourceData.totalFirstCnt;
                     targetData.first.new = _vaccineSourceData.firstCnt;
                     targetData.first.accumlated =
@@ -79,7 +79,8 @@ const getSourcData = () => Promise.all([get_confirmed_data_1.get_confirmed_data(
                     targetData.second.new = _vaccineSourceData.secondCnt;
                     targetData.second.accumlated =
                         _vaccineSourceData.accumulatedSecondCnt;
-                    basicData[regionIndex].covid19[DateIndex].vaccination = targetData;
+                    basicData[regionIndex].covid19DataList[DateIndex].vaccination =
+                        targetData;
                 }
             }
         }
@@ -90,14 +91,14 @@ const getSourcData = () => Promise.all([get_confirmed_data_1.get_confirmed_data(
     return basicData;
 }, create_data_frame = (regionInfo) => {
     regionInfo.forEach((_regionInfo) => {
-        _regionInfo.covid19 = [];
+        _regionInfo.covid19DataList = [];
     });
     return regionInfo;
 }, date_formatter = (originalDate) => convert_format_1.convert_date_format(new Date(originalDate), "-"), create_additional_data = (combinedData) => {
     combinedData.forEach((_combinedData) => {
-        _combinedData.covid19.forEach((_covid19, index) => {
+        _combinedData.covid19DataList.forEach((_covid19, index) => {
             if (index != 0) {
-                const _covid19_1dayAgo = _combinedData.covid19[index - 1];
+                const _covid19_1dayAgo = _combinedData.covid19DataList[index - 1];
                 _covid19.confirmed.accumlated = _covid19_1dayAgo.confirmed.total;
                 _covid19.recovered.accumlated = _covid19_1dayAgo.recovered.total;
                 _covid19.recovered.new =

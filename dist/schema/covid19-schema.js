@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.covid19Schema = void 0;
 exports.covid19Schema = `
-    type DataSet {
+    type RegionalData {
       regionEng: String
       regionKor: String
       population: Int
-      covid19: [Covid19]
+      covid19DataList: [Covid19DataList]
     }
 
-    type Covid19 {
+    type Covid19DataList {
       date: String
       confirmed: Confirmed
       quarantine: Quarantine
