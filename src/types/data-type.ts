@@ -15,6 +15,7 @@ interface QuarantineStructure extends Structure {
 export interface RegionInfo {
   regionEng: string;
   regionKor: string;
+  regionKorFull?: string;
   population: number | null;
 }
 

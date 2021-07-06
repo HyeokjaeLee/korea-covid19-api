@@ -94,7 +94,7 @@ const getSourcData = () =>
     vaccineSourceData.forEach((_vaccineSourceData) => {
       try {
         const regionIndex = basicData.findIndex(
-          (_basicData) => _basicData.regionKor == _vaccineSourceData.sido
+          (_basicData) => _basicData.regionKorFull === _vaccineSourceData.sido
         );
         if (regionIndex != -1) {
           //백신 데이터데이는 '기타' 지역구분이 들어가있음
