@@ -76,7 +76,7 @@ const getSourcData = () => Promise.all([get_confirmed_data_1.get_confirmed_data(
 }, combine_vaccine_data = (vaccineSourceData, basicData) => {
     vaccineSourceData.forEach((_vaccineSourceData) => {
         try {
-            const regionIndex = basicData.findIndex((_basicData) => _basicData.regionKor == _vaccineSourceData.sido);
+            const regionIndex = basicData.findIndex((_basicData) => _basicData.regionKorFull === _vaccineSourceData.sido);
             if (regionIndex != -1) {
                 //백신 데이터데이는 '기타' 지역구분이 들어가있음
                 const DateIndex = basicData[regionIndex].covid19DataList.findIndex((_covid19) => _covid19.date == date_formatter(_vaccineSourceData.baseDate));
