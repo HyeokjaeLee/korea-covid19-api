@@ -1,12 +1,23 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const get_confirmed_data_1 = require("./get-confirmed-data");
 const get_vaccine_data_1 = require("./get-vaccine-data");
 const region_info_1 = require("../data/region-info");
 const convert_format_1 = require("../function/convert-format");
-async function main() {
-    const sourceData = await getSourcData();
-    return create_additional_data(combine_vaccine_data(sourceData.vaccine, create_basic_data_set(sourceData.confirmed, create_data_frame(region_info_1.regionInfo))));
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const sourceData = yield getSourcData();
+        return create_additional_data(combine_vaccine_data(sourceData.vaccine, create_basic_data_set(sourceData.confirmed, create_data_frame(region_info_1.regionInfo))));
+    });
 }
 exports.default = main;
 //---------------------------------------------------------
