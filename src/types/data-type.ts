@@ -34,6 +34,7 @@ interface COVID19Data {
     second: Structure;
   };
   per100kConfirmed: number | null;
+  immunityRatio: number | null;
 }
 
 interface SourceText {

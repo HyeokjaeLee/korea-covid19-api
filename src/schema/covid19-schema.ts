@@ -14,6 +14,7 @@ export const covid19Schema = `
       dead: BasicStructure
       vaccination: Vaccination
       per100kConfirmed: Float
+      immunityRatio: Float
     }
 
     type BasicStructure {

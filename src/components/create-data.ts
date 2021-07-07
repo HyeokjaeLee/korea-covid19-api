@@ -67,6 +67,7 @@ const getSourcData = () =>
       confirmedSourceData.qurRate._text != "-"
         ? Number(confirmedSourceData.qurRate._text)
         : null,
+    immunityRatio: null,
   }),
   create_basic_data_set = (
     confirmedSourceData: ConfirmedSourceData[],
@@ -103,19 +104,30 @@ const getSourcData = () =>
               _covid19.date == date_formatter(_vaccineSourceData.baseDate)
           );
           if (DateIndex != -1) {
-            const targetData =
-              basicData[regionIndex].covid19DataList[DateIndex].vaccination;
-            targetData.first.total = _vaccineSourceData.totalFirstCnt;
-            targetData.first.new = _vaccineSourceData.firstCnt;
-            targetData.first.accumlated =
-              _vaccineSourceData.accumulatedFirstCnt;
-            targetData.second.total = _vaccineSourceData.totalSecondCnt;
-            targetData.second.new = _vaccineSourceData.secondCnt;
-            targetData.second.accumlated =
-              _vaccineSourceData.accumulatedSecondCnt;
-
-            basicData[regionIndex].covid19DataList[DateIndex].vaccination =
-              targetData;
+            //shallow copy
+            const targetCovid19DataList =
+                basicData[regionIndex].covid19DataList[DateIndex],
+              targetVaccination = targetCovid19DataList.vaccination;
+            //백신 데이터 추가
+            {
+              targetVaccination.first.total = _vaccineSourceData.totalFirstCnt; //총 1차 백신 접종
+              targetVaccination.first.new = _vaccineSourceData.firstCnt; //신규 1차 백신 접종
+              targetVaccination.first.accumlated =
+                _vaccineSourceData.accumulatedFirstCnt; //누적 1차 백신 접종
+              targetVaccination.second.total =
+                _vaccineSourceData.totalSecondCnt; //총 2차 백신 접종
+              targetVaccination.second.new = _vaccineSourceData.secondCnt; //신규 2차 백신 접종
+              targetVaccination.second.accumlated =
+                _vaccineSourceData.accumulatedSecondCnt; //누적 2차 백신 접종
+            }
+            //면역 비율 데이터 추가
+            targetCovid19DataList.immunityRatio =
+              Math.round(
+                ((targetVaccination.second.total +
+                  <number>targetCovid19DataList.recovered.total) /
+                  <number>basicData[regionIndex].population) *
+                  1000
+              ) / 1000;
           }
         }
       } catch (error) {
