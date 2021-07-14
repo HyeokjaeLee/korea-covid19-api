@@ -12,7 +12,7 @@ export const covid19Schema = `
       quarantine: Quarantine
       recovered: BasicStructure
       dead: BasicStructure
-      vaccination: Vaccination
+      vaccinated: Vaccinated
       per100kConfirmed: Float
       immunityRatio: Float
     }
@@ -39,7 +39,7 @@ export const covid19Schema = `
       overseas: Int
     }
 
-    type Vaccination   {
+    type Vaccinated   {
       first: BasicStructure
       second: BasicStructure
     }

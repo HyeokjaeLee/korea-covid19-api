@@ -19,7 +19,7 @@ export interface RegionInfo {
   population: number | null;
 }
 
-export interface COVID19DataSet extends RegionInfo {
+export interface RegionalData extends RegionInfo {
   covid19DataList: COVID19Data[];
 }
 
@@ -29,7 +29,7 @@ interface COVID19Data {
   quarantine: QuarantineStructure;
   recovered: Structure;
   dead: Structure;
-  vaccination: {
+  vaccinated: {
     first: Structure;
     second: Structure;
   };
