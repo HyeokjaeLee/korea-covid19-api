@@ -15,7 +15,7 @@ exports.covid19Schema = `
       quarantine: Quarantine
       recovered: BasicStructure
       dead: BasicStructure
-      vaccination: Vaccination
+      vaccinated: Vaccinated
       per100kConfirmed: Float
       immunityRatio: Float
     }
@@ -42,7 +42,7 @@ exports.covid19Schema = `
       overseas: Int
     }
 
-    type Vaccination   {
+    type Vaccinated   {
       first: BasicStructure
       second: BasicStructure
     }
