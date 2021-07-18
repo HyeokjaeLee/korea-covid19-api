@@ -20,6 +20,7 @@ export interface RegionInfo {
 }
 
 export interface RegionalData extends RegionInfo {
+  distancingLevel: number | null;
   covid19DataList: COVID19Data[];
 }
 
@@ -67,4 +68,9 @@ export interface VaccineSourceData {
   sido: string;
   totalFirstCnt: number;
   totalSecondCnt: number;
+}
+
+export interface DistancingData {
+  region: string;
+  distancingLevel: number;
 }

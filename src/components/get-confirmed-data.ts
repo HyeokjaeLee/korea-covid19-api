@@ -2,6 +2,10 @@ import { convert_date_format } from "../function/convert-format";
 import { get_XML2JSON } from "../function/get-external-data";
 import { ConfirmedSourceData } from "../types/data-type";
 
+/**
+ * 공공 데이터 포털의 확진 소스 데이터를 불러와 반환
+ * @returns 확진 정보 소스 데이터
+ */
 export const get_confirmed_data = async () => {
   const service_key: string =
       "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D",
