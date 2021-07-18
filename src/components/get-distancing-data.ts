@@ -1,12 +1,12 @@
 import request from "request";
-import type { DistancingData } from "../types/data-type";
+import type { DistancingSourceData } from "../types/data-type";
 
 /**
  * 한국 사회적 거리두기 현황 사이트 원본 소스를 가져와 파싱후 반환
  * @returns 지역명과 거리두기 단계를 가진 Object Array
  * * cheerio로 크롤링 해서 사용하려 했으나 해당 사이트의 작동방식 때문에 사용이 불가능해서 string 형식으로 파싱하여 사용함
  */
-export const get_distancing_level_data = (): Promise<DistancingData[]> =>
+export const get_distancing_data = (): Promise<DistancingSourceData[]> =>
   new Promise((resolve, reject) => {
     request(
       "http://ncov.mohw.go.kr/regSocdisBoardView.do",

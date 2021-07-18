@@ -41,7 +41,7 @@ interface COVID19Data {
 interface SourceText {
   _text: string;
 }
-export interface ConfirmedSourceData {
+export interface InfectionSourceData {
   createDt: SourceText;
   deathCnt: SourceText;
   defCnt: SourceText;
@@ -59,7 +59,7 @@ export interface ConfirmedSourceData {
   updateDt: SourceText;
 }
 
-export interface VaccineSourceData {
+export interface VaccinationSourceData {
   accumulatedFirstCnt: number;
   accumulatedSecondCnt: number;
   baseDate: string;
@@ -70,7 +70,7 @@ export interface VaccineSourceData {
   totalSecondCnt: number;
 }
 
-export interface DistancingData {
+export interface DistancingSourceData {
   region: string;
   distancingLevel: number;
 }
