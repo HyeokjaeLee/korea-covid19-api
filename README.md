@@ -157,3 +157,28 @@
   - [x] Convert xml data to json format and complete appropriate data form<br>
   - [x] Add Junk Value Filter<br>
   - [x] Fix Junk Value Filter Bug<br>
+  * COVID19 관련 지역별 정보 Array
+  * -
+  *
+  * COVID19Data Object Key
+  * - date: 데이터 생성 일자
+  * - confirmed: 확진
+  * - quarantine: 격리
+  * - recovered: 격리해제(회복)
+  * - dead: 사망
+  * - vaccinated: 백신 접종
+  * - per100kConfirmed: 10만명 당 확진자 수
+  * - immunityRatio: 면역자 비율(2차 백신 접종 + 회복)
+  *
+  * 공통 하위 Object Key
+  * - total: 전체(신규+누적)
+  * - new: 신규(당일)
+  * - accumlated: 누적(전일)
+  *
+  * new quarantine(신규 격리자) 하위 Object Key
+  * - domestic: 국내 감염
+  * - overseas: 해외 감염
+  *
+  * vaccinated 하위 Object Key
+  * - first: 1차 접종
+  * - second: 2차 접종
