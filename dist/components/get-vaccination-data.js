@@ -9,11 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_vaccine_data = void 0;
+exports.get_vaccination_data = void 0;
 const get_external_data_1 = require("../function/get-external-data");
-const get_vaccine_data = () => __awaiter(void 0, void 0, void 0, function* () {
+/**
+ * 공공 데이터 포털의 예방접종 소스 데이터를 불러와 반환
+ * @returns 예방접종 소스 데이터
+ */
+const get_vaccination_data = () => __awaiter(void 0, void 0, void 0, function* () {
     const APIcreatedDate = new Date("2021-3-11"), today = new Date(), regionCount = 18, dateDiff = Math.ceil((today.getTime() - APIcreatedDate.getTime()) / 86400000), approximateObjectCount = (dateDiff + 1) * regionCount, serviceKey = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D", url = `https://api.odcloud.kr/api/15077756/v1/vaccine-stat?perPage=${approximateObjectCount}&serviceKey=${serviceKey}`, sourceData = yield get_external_data_1.get_JSON(url), result = sourceData.data;
     return result;
 });
-exports.get_vaccine_data = get_vaccine_data;
-//# sourceMappingURL=get-vaccine-data.js.map
+exports.get_vaccination_data = get_vaccination_data;
+//# sourceMappingURL=get-vaccination-data.js.map

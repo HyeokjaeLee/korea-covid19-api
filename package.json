@@ -1,6 +1,6 @@
 {
   "name": "covid19-api",
-  "version": "1.4.0",
+  "version": "1.6.0",
   "description": "",
   "main": "./dist/app.ts",
   "scripts": {
@@ -22,6 +22,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
+    "fast-copy": "^2.1.1",
     "graphql": "^15.5.1",
     "nodemon": "^2.0.7",
     "request": "^2.88.2",

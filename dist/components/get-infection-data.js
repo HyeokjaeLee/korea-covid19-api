@@ -9,13 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_confirmed_data = void 0;
+exports.get_infection_data = void 0;
 const convert_format_1 = require("../function/convert-format");
 const get_external_data_1 = require("../function/get-external-data");
-const get_confirmed_data = () => __awaiter(void 0, void 0, void 0, function* () {
+/**
+ * 공공 데이터 포털의 확진 소스 데이터를 불러와 반환
+ * @returns 확진 정보 소스 데이터
+ */
+const get_infection_data = () => __awaiter(void 0, void 0, void 0, function* () {
     const service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D", from = 20200409, to = Number(convert_format_1.convert_date_format(new Date(), "")), url = `http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=${service_key}&startCreateDt=${from}&endCreateDt=${to}`, sourceData = yield get_external_data_1.get_XML2JSON(url);
     const result = sourceData.response.body.items.item;
     return result;
 });
-exports.get_confirmed_data = get_confirmed_data;
-//# sourceMappingURL=get-confirmed-data.js.map
+exports.get_infection_data = get_infection_data;
+//# sourceMappingURL=get-infection-data.js.map
