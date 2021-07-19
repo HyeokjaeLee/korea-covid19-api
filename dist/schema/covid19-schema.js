@@ -6,6 +6,7 @@ exports.covid19Schema = `
       regionEng: String
       regionKor: String
       population: Int
+      distancingLevel: Int
       covid19DataList: [Covid19DataList]
     }
 
