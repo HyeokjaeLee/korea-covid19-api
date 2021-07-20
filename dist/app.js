@@ -19,32 +19,29 @@ const create_COVID19_data_1 = require("./components/create-COVID19-data");
 const covid19_schema_1 = require("./schema/covid19-schema");
 const convert_format_1 = require("./function/convert-format");
 const cors_1 = __importDefault(require("cors"));
-const fast_copy_1 = __importDefault(require("fast-copy"));
-const region_enum_1 = require("./schema/region-enum");
+const fast_copy_1 = __importDefault(require("fast-copy")); //Deep copy 성능이 좋다
 function app() {
     return __awaiter(this, void 0, void 0, function* () {
         const covid19 = new create_COVID19_data_1.COVID19(), exp = express_1.default(), port = process.env.PORT || 8080;
         yield covid19.update();
-        const schema = graphql_1.buildSchema(`
-    ${region_enum_1.Region}
-    type Query {
-      regionalDataList(region: Region, startDate: Int, endDate: Int, onlyLastDate: Boolean): [RegionalData]
-    }
-    ${covid19_schema_1.covid19Schema}
-  `);
+        const schema = graphql_1.buildSchema(covid19_schema_1.covid19Schema);
+        /**10분마다 데이터 업데이트*/
         setInterval(() => {
             covid19.update();
         }, 600000);
         const root = {
-            regionalDataList: (args, context, info) => {
+            regionalDataList: (args) => {
                 let { region, startDate, endDate, onlyLastDate } = args;
+                /**요청 조건이 없는 경우를 제외하곤 Deep copy 후 연산*/
                 let regionalDataList;
+                /**args로 들어온 요청데이터에 따른 결과 반환*/
                 {
                     if (!region && !startDate && !endDate && !onlyLastDate) {
                         regionalDataList = covid19.data;
                     }
                     else if (!!region) {
                         regionalDataList = [
+                            //강제 타입 지정(enum에 지역 리스트 추가해둠)
                             (fast_copy_1.default(covid19.data.find((covid19Data) => covid19Data.regionEng === region))),
                         ];
                     }
