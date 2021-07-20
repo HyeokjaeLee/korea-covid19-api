@@ -4,7 +4,7 @@
 
 > 대한민국 코로나 감염, 예방접종, 사회적 거리두기 현황등 종합적인 정보 제공
 
-## :bookmark:Request
+## :bookmark: Request
 
 **:warning:<U>Heroku 서버를 사용하고 있기 때문에 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요됩니다.</U>**
 
@@ -182,7 +182,7 @@
   }
   ```
 
-## :books:Usage Data Source
+## :books: Usage Data Source
 
 - [공공데이터활용지원센터\_보건복지부 코로나19 시·도발생 현황](https://www.data.go.kr/index.do)
 - [공공데이터활용지원센터\_코로나19 예방접종 통계 데이터 조회 서비스](https://www.data.go.kr/index.do)
