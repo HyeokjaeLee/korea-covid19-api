@@ -23,35 +23,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.get_JSON = exports.get_data_from_worker = exports.get_XML2JSON = void 0;
-const convert = __importStar(require("xml-js"));
-const request_1 = __importDefault(require("request"));
-const worker_threads_1 = require("worker_threads");
-const get_XML2JSON = (url) => {
-    return new Promise((resolve, reject) => {
-        request_1.default.get(url, (err, res, body) => {
+var convert = __importStar(require("xml-js"));
+var request_1 = __importDefault(require("request"));
+var worker_threads_1 = require("worker_threads");
+var get_XML2JSON = function (url) {
+    return new Promise(function (resolve, reject) {
+        request_1.default.get(url, function (err, res, body) {
             if (err) {
-                console.log(`err => ${err}`);
+                console.log("err => " + err);
             }
             else {
                 if (res.statusCode == 200) {
-                    const JSON_Data = JSON.parse(convert.xml2json(body, { compact: true, spaces: 4 }));
+                    var JSON_Data = JSON.parse(convert.xml2json(body, { compact: true, spaces: 4 }));
                     resolve(JSON_Data);
                 }
             }
         });
     });
-}, get_data_from_worker = (dir) => {
+}, get_data_from_worker = function (dir) {
     return new Promise(function (resolve, reject) {
-        const worker = new worker_threads_1.Worker(dir);
-        worker.on("message", (data) => {
+        var worker = new worker_threads_1.Worker(dir);
+        worker.on("message", function (data) {
             resolve(data);
-            console.log(`Information has been updated : ( ${new Date()} )`);
+            console.log("Information has been updated : ( " + new Date() + " )");
         });
     });
-}, get_JSON = (URL) => {
-    return new Promise((resolve, reject) => {
+}, get_JSON = function (URL) {
+    return new Promise(function (resolve, reject) {
         request_1.default(URL, function (err, res, body) {
-            const result = !err && res.statusCode == 200 ? JSON.parse(body) : err;
+            var result = !err && res.statusCode == 200 ? JSON.parse(body) : err;
             resolve(result);
         });
     });
