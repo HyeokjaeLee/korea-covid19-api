@@ -6,7 +6,7 @@
 
 ## :bookmark: Request
 
-**:warning:<U>Heroku 서버를 사용하고 있기 때문에 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요됩니다.</U>**
+**<U>:warning: Heroku 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요됩니다.</U>**
 
 - ### **요청 URL:** https://korea-covid19-api.herokuapp.com/
 - ### **요청 형식:**
