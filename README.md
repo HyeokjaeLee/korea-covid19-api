@@ -75,6 +75,8 @@
 
 ## :mag: Example
 
+- ### Example used
+  - [COVID-19 Dashboard](https://github.com/HyeokjaeLee/covid19-dashboard)
 - ### Screenshot
   ![screencapture-localhost-8080-1626721706457](https://user-images.githubusercontent.com/71566740/126214047-90ee5473-294d-4766-9d92-bab8d2e2741c.png)
 - ### Request query
