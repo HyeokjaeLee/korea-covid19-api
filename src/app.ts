@@ -6,33 +6,33 @@ import { covid19Schema } from "./schema/covid19-schema";
 import { date2query_form } from "./function/convert-format";
 import type { RegionalData } from "./types/data-type";
 import cors from "cors";
-import clone from "fast-copy";
-import { Region } from "./schema/region-enum";
+import clone from "fast-copy"; //Deep copy 성능이 좋다
 
 async function app() {
   const covid19 = new COVID19(),
     exp = express(),
     port = process.env.PORT || 8080;
   await covid19.update();
-  const schema = buildSchema(`
-    ${Region}
-    type Query {
-      regionalDataList(region: Region, startDate: Int, endDate: Int, onlyLastDate: Boolean): [RegionalData]
-    }
-    ${covid19Schema}
-  `);
+  const schema = buildSchema(covid19Schema);
+
+  /**10분마다 데이터 업데이트*/
   setInterval(() => {
     covid19.update();
   }, 600000);
+
   const root = {
-    regionalDataList: (args: any, context: any, info: any) => {
+    regionalDataList: (args: any) => {
       let { region, startDate, endDate, onlyLastDate } = args;
+      /**요청 조건이 없는 경우를 제외하곤 Deep copy 후 연산*/
       let regionalDataList: RegionalData[];
+
+      /**args로 들어온 요청데이터에 따른 결과 반환*/
       {
         if (!region && !startDate && !endDate && !onlyLastDate) {
           regionalDataList = covid19.data;
         } else if (!!region) {
           regionalDataList = [
+            //강제 타입 지정(enum에 지역 리스트 추가해둠)
             <RegionalData>(
               clone(
                 covid19.data.find(
