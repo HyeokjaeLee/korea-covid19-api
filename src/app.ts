@@ -1,7 +1,7 @@
 import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
-import { COVID19 } from "./components/create-COVID19-data";
+import { COVID19 } from "./function/create-COVID19-data";
 import { covid19Schema } from "./schema/covid19-schema";
 import { date2query_form } from "./function/convert-format";
 import type { RegionalData } from "./types/data-type";
@@ -34,11 +34,7 @@ async function app() {
           regionalDataList = [
             //강제 타입 지정(enum에 지역 리스트 추가해둠)
             <RegionalData>(
-              clone(
-                covid19.data.find(
-                  (covid19Data) => covid19Data.regionEng === region
-                )
-              )
+              clone(covid19.data.find((covid19Data) => covid19Data.regionEng === region))
             ),
           ];
         } else {
@@ -49,19 +45,16 @@ async function app() {
           startDate = startDate! ? startDate : 0;
           endDate = endDate! ? endDate : date2query_form(new Date());
           regionalDataList.forEach((regionalData) => {
-            regionalData.covid19DataList = regionalData.covid19DataList.filter(
-              (covid19Data) => {
-                const numDate = date2query_form(covid19Data.date);
-                return numDate >= startDate && numDate <= endDate;
-              }
-            );
+            regionalData.covid19DataList = regionalData.covid19DataList.filter((covid19Data) => {
+              const numDate = date2query_form(covid19Data.date);
+              return numDate >= startDate && numDate <= endDate;
+            });
           });
         }
 
         if (onlyLastDate) {
           regionalDataList.forEach((regionalData) => {
-            regionalData.covid19DataList =
-              regionalData.covid19DataList.slice(-1);
+            regionalData.covid19DataList = regionalData.covid19DataList.slice(-1);
           });
         }
       }
