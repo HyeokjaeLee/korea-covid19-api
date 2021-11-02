@@ -84,26 +84,26 @@ export class COVID19 {
      * @returns 감염 소스 데이터 기반 기초 데이터 구조
      */
     const create_basicStructure = (infectionSourceData: InfectionSourceData) => ({
-      date: date_formatter(infectionSourceData.createDt._text),
+      date: date_formatter(infectionSourceData.createDt),
       confirmed: {
-        total: Number(infectionSourceData.defCnt._text) - 1, //왜인지 모르겠으나 신규 확진자와 전일 확진자의 수를 합치면 항상 1명 많음
+        total: infectionSourceData.defCnt - 1, //왜인지 모르겠으나 신규 확진자와 전일 확진자의 수를 합치면 항상 1명 많음
         accumlated: null,
       },
       quarantine: {
-        total: Number(infectionSourceData.isolIngCnt._text),
+        total: infectionSourceData.isolIngCnt,
         new: {
-          total: Number(infectionSourceData.incDec._text),
-          domestic: Number(infectionSourceData.localOccCnt._text),
-          overseas: Number(infectionSourceData.overFlowCnt._text),
+          total: infectionSourceData.incDec,
+          domestic: infectionSourceData.localOccCnt,
+          overseas: infectionSourceData.overFlowCnt,
         },
       },
       recovered: {
-        total: Number(infectionSourceData.isolClearCnt._text),
+        total: infectionSourceData.isolClearCnt,
         new: null,
         accumlated: null,
       },
       dead: {
-        total: Number(infectionSourceData.deathCnt._text),
+        total: infectionSourceData.deathCnt,
         new: null,
         accumlated: null,
       },
@@ -119,15 +119,13 @@ export class COVID19 {
           accumlated: null,
         },
       },
-      per100kConfirmed:
-        infectionSourceData.qurRate._text != "-" ? Number(infectionSourceData.qurRate._text) : null,
+      per100kConfirmed: infectionSourceData.qurRate != "-" ? infectionSourceData.qurRate : null,
       immunityRatio: null,
     });
     /** 확진 정보 소스 데이터를 지정한 데이터 구조에 담아 지역별로 구분*/
     infectionSourceDataList.forEach((infectionSourceData) => {
       const regionIndex = this.temp.findIndex(
-        (regionalData) =>
-          regionalData.regionEng == infectionSourceData.gubunEn._text.replace("-", "")
+        (regionalData) => regionalData.regionEng == infectionSourceData.gubunEn.replace("-", "")
       );
       this.temp[regionIndex].covid19DataList.push(create_basicStructure(infectionSourceData));
     });

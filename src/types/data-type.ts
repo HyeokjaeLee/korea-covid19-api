@@ -38,25 +38,22 @@ interface COVID19Data {
   immunityRatio: number | null;
 }
 
-interface SourceText {
-  _text: string;
-}
 export interface InfectionSourceData {
-  createDt: SourceText;
-  deathCnt: SourceText;
-  defCnt: SourceText;
-  gubun: SourceText;
-  gubunCn: SourceText;
-  gubunEn: SourceText;
-  incDec: SourceText;
-  isolClearCnt: SourceText;
-  isolIngCnt: SourceText;
-  localOccCnt: SourceText;
-  overFlowCnt: SourceText;
-  qurRate: SourceText;
-  seq: SourceText;
-  stdDay: SourceText;
-  updateDt: SourceText;
+  createDt: string;
+  deathCnt: number;
+  defCnt: number;
+  gubun: string;
+  gubunCn: string;
+  gubunEn: string;
+  incDec: number;
+  isolClearCnt: number;
+  isolIngCnt: number;
+  localOccCnt: number;
+  overFlowCnt: number;
+  qurRate: number | "-";
+  seq: number;
+  stdDay: string;
+  updateDt: string;
 }
 
 export interface VaccinationSourceData {
