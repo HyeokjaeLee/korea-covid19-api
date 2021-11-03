@@ -1,9 +1,9 @@
 import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
-import { COVID19 } from "./function/create-COVID19-data";
+import { COVID19 } from "./function/create-covid19-data";
 import { covid19Schema } from "./schema/covid19-schema";
-import { date2query_form } from "./function/convert-format";
+import * as convertDate from "./function/convert-date";
 import type { RegionalData } from "./types/data-type";
 import cors from "cors";
 import clone from "fast-copy"; //Deep copy 성능이 좋다
@@ -43,10 +43,10 @@ async function app() {
 
         if (!!startDate || !!endDate) {
           startDate = startDate! ? startDate : 0;
-          endDate = endDate! ? endDate : date2query_form(new Date());
+          endDate = endDate! ? endDate : convertDate.date2num(new Date());
           regionalDataList.forEach((regionalData) => {
             regionalData.covid19DataList = regionalData.covid19DataList.filter((covid19Data) => {
-              const numDate = date2query_form(covid19Data.date);
+              const numDate = convertDate.string2num(covid19Data.date);
               return numDate >= startDate && numDate <= endDate;
             });
           });

@@ -4,17 +4,13 @@ import type {
   VaccinationSourceData,
   DistancingSourceData,
 } from "../types/data-type";
-import { get_infection_data } from "./get-infection-data";
-import { get_vaccination_data } from "./get-vaccination-data";
 import { regionInfo } from "../data/region-info";
-import { convert_date_format } from "./convert-format";
-import { get_distancing_data } from "./get-distancing-data";
-
+import { date2string } from "./convert-date";
+import * as get from "./get-external-data";
 /**소스 데이터의 날짜 형식을 변환
  * @param originalDate 소스 데이터 날짜
  * @returns 가공된 날짜 ex) 2019-01-01
  */
-const date_formatter = (originalDate: string) => convert_date_format(new Date(originalDate), "-");
 
 /**COVID19 정보 생성을 위한 클래스*/
 export class COVID19 {
@@ -22,14 +18,12 @@ export class COVID19 {
    * - 비동기 함수
    * @returns 감염, 거리두기, 예방접종 데이터를 가지고 있는 Object
    */
-  private static get_source_data = () =>
-    Promise.all([get_infection_data(), get_distancing_data(), get_vaccination_data()]).then(
-      (sourceData) => ({
-        infection: sourceData[0],
-        distancing: sourceData[1],
-        vaccination: sourceData[2],
-      })
-    );
+  private static get_sourceData = () =>
+    Promise.all([get.infection(), get.distancing(), get.vaccination()]).then((sourceData) => ({
+      infection: sourceData[0],
+      distancing: sourceData[1],
+      vaccination: sourceData[2],
+    }));
 
   /**
    * COVID19 관련 지역별 정보 Array
@@ -57,7 +51,7 @@ export class COVID19 {
   public update = async () => {
     try {
       console.log("\n" + new Date());
-      const sourceData = await COVID19.get_source_data();
+      const sourceData = await COVID19.get_sourceData();
       this.init();
       this.classify_by_region(sourceData.infection, sourceData.distancing);
       this.combine_vaccinationData(sourceData.vaccination);
@@ -84,7 +78,7 @@ export class COVID19 {
      * @returns 감염 소스 데이터 기반 기초 데이터 구조
      */
     const create_basicStructure = (infectionSourceData: InfectionSourceData) => ({
-      date: date_formatter(infectionSourceData.createDt),
+      date: date2string(new Date(infectionSourceData.createDt)),
       confirmed: {
         total: infectionSourceData.defCnt - 1, //왜인지 모르겠으나 신규 확진자와 전일 확진자의 수를 합치면 항상 1명 많음
         accumlated: null,
@@ -153,7 +147,7 @@ export class COVID19 {
       //지역 구분 '기타'는 예방접종 소스 데이터에는 있지만 확진 정보 소스 데이터에는 없으므로 제외
       if (regionIndex != -1) {
         const DateIndex = this.temp[regionIndex].covid19DataList.findIndex(
-          (covid19Data) => covid19Data.date == date_formatter(vaccinationSourceData.baseDate)
+          (covid19Data) => covid19Data.date == date2string(new Date(vaccinationSourceData.baseDate))
         );
         if (DateIndex != -1) {
           /** 전체 데이터 구조에서 추가할 값들에 쉽게 접근 하기위한 shallow copy*/
