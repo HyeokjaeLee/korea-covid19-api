@@ -1,18 +1,16 @@
 import * as get from "./get-external-data";
 import { regionInfo } from "../data/region-info";
-import _ from "lodash";
 import {
-  RegionalData,
   InfectionSourceData,
   VaccinationSourceData,
   DistancingSourceData,
-  COVID19Data,
   Covid19,
   RegionInfo,
+  RegionData,
 } from "../types/data-type";
 import { date2string } from "../function/convert-date";
 
-interface tempData extends RegionInfo {
+interface TempData extends RegionInfo {
   distancingLevel: number | undefined;
   tempData: {
     infectionArr: InfectionSourceData[];
@@ -23,19 +21,18 @@ function classify_tempArr(
   distancingArr: DistancingSourceData[],
   infectionArr: InfectionSourceData[],
   vaccinationArr: VaccinationSourceData[]
-): tempData[] {
+): TempData[] {
   let remainInfection = infectionArr;
   let remainVaccination = vaccinationArr;
   return regionInfo.map((region) => {
     const distancingLevel = distancingArr.find(
       (distancing) => distancing.region === region.regionKor
     )?.distancingLevel;
-
     //성능을 위해 이미 분류한 데이터들은 제거
     const _infection: InfectionSourceData[] = [],
       _remainInfection: InfectionSourceData[] = [];
     remainInfection.forEach((infection) => {
-      if (infection.gubunEn === region.regionEng) _infection.push(infection);
+      if (infection.gubunEn.replace("-", "") === region.regionEng) _infection.push(infection);
       else _remainInfection.push(infection);
     });
     remainInfection = _remainInfection;
@@ -58,13 +55,12 @@ function classify_tempArr(
   });
 }
 
-function create_covid19Data(tempData: tempData): Covid19[] {
+function create_covid19Data(tempData: TempData): Covid19[] {
   const { infectionArr, vaccinationArr } = tempData.tempData;
   const targetInfectionArr = infectionArr.slice(1);
   return targetInfectionArr.map((infection, index) => {
     const date = date2string(new Date(infection.createDt));
-    const vaccination = _.find(
-      vaccinationArr,
+    const vaccination = vaccinationArr.find(
       (vaccination) => date2string(new Date(vaccination.baseDate)) === date
     );
     const immunityRatio =
@@ -74,12 +70,12 @@ function create_covid19Data(tempData: tempData): Covid19[] {
           ) / 1000
         : undefined;
 
-    const aDayAgo = infectionArr[index];
+    const aDayAgoInfectionArr = infectionArr[index];
     return {
       date: date,
       confirmed: {
         total: infection.incDec - 1,
-        accumlated: aDayAgo.incDec - 1,
+        accumlated: aDayAgoInfectionArr.incDec - 1,
       },
       quarantine: {
         total: infection.isolIngCnt,
@@ -91,13 +87,13 @@ function create_covid19Data(tempData: tempData): Covid19[] {
       },
       recovered: {
         total: infection.isolClearCnt,
-        new: infection.isolClearCnt - aDayAgo.isolClearCnt,
-        accumlated: aDayAgo.isolClearCnt,
+        new: infection.isolClearCnt - aDayAgoInfectionArr.isolClearCnt,
+        accumlated: aDayAgoInfectionArr.isolClearCnt,
       },
       dead: {
         total: infection.defCnt,
-        new: infection.defCnt - aDayAgo.defCnt,
-        accumlated: aDayAgo.defCnt,
+        new: infection.defCnt - aDayAgoInfectionArr.defCnt,
+        accumlated: aDayAgoInfectionArr.defCnt,
       },
       vaccinated: {
         first: {
@@ -117,7 +113,7 @@ function create_covid19Data(tempData: tempData): Covid19[] {
   });
 }
 
-async function update() {
+export async function update(): Promise<RegionData[]> {
   const sourceData = await Promise.all([get.distancing(), get.infection(), get.vaccination()]).then(
     (sourceArr) => sourceArr
   );
@@ -126,8 +122,13 @@ async function update() {
   const vaccination = sourceData[2];
 
   const tempArr = classify_tempArr(distancing, infection, vaccination);
-  const covid19Data = create_covid19Data(tempArr[1]);
-  console.log(covid19Data[500]);
+  return tempArr.map((temp) => {
+    const _temp: any = temp;
+    const covid19Data = create_covid19Data(_temp);
+    delete _temp.tempData;
+    return {
+      ..._temp,
+      covid19Data,
+    };
+  });
 }
-
-update();

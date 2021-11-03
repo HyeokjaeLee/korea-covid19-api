@@ -30,10 +30,10 @@ export const covid19Schema = `
     regionKor: String
     population: Int
     distancingLevel: Float
-    covid19DataList: [Covid19DataList]
+    covid19Data: [covid19Data]
   }
 
-  type Covid19DataList {
+  type covid19Data {
     date: String
     confirmed: Confirmed
     quarantine: Quarantine
