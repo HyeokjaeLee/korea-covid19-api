@@ -72,20 +72,35 @@ export interface RegionData extends RegionInfo {
 }
 
 export interface InfectionSourceData {
+  /**등록일시분초 */
   createDt: string;
+  /**사망자 수*/
   deathCnt: number;
+  /**확진자 수*/
   defCnt: number;
+  /**시도명(한글)*/
   gubun: string;
+  /**시도명(중국어)*/
   gubunCn: string;
+  /**시도명(영어)*/
   gubunEn: string;
+  /**전일대비 증감 수*/
   incDec: number;
+  /**격리 해제 수*/
   isolClearCnt: number;
+  /**격리중 환자수*/
   isolIngCnt: number;
+  /**지역발생 수 */
   localOccCnt: number;
+  /**해왜유입 수 */
   overFlowCnt: number;
+  /**10만명당 발생률*/
   qurRate: number | "-";
+  /**게시물 번호*/
   seq: number;
+  /**기준일시*/
   stdDay: string;
+  /**수정일시분초*/
   updateDt: string;
 }
 
