@@ -11,7 +11,7 @@ import {
   RegionData,
 } from "../types/data-type";
 import { date2string } from "../function/convert-date";
-
+import * as filter from "./filter-data";
 interface TempData extends RegionInfo {
   distancingLevel: number | undefined;
   tempData: {
@@ -31,13 +31,14 @@ function classify_tempArr(
       (distancing) => distancing.region === region.regionKor
     )?.distancingLevel;
     //성능을 위해 이미 분류한 데이터들은 제거
-    let _infection: InfectionSourceData[] = [],
+    let _infection: InfectionData[] = [],
       _remainInfection: InfectionSourceData[] = [];
     remainInfection.forEach((infection) => {
       if (infection.gubunEn.replace("-", "") === region.regionEng) _infection.push(infection);
       else _remainInfection.push(infection);
     });
     _infection = _infection.reverse(); //source data가 날짜를 역순으로 받아옴
+    _infection = filter.infection(_infection);
     remainInfection = _remainInfection;
     let _vaccination: VaccinationSourceData[] = [],
       _remainvaccination: VaccinationSourceData[] = [];

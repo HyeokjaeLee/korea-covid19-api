@@ -32,6 +32,7 @@ exports.update = void 0;
 const get = __importStar(require("./get-external-data"));
 const region_info_1 = require("../data/region-info");
 const convert_date_1 = require("../function/convert-date");
+const filter = __importStar(require("./filter-data"));
 function classify_tempArr(distancingArr, infectionArr, vaccinationArr) {
     let remainInfection = infectionArr;
     let remainVaccination = vaccinationArr;
@@ -47,6 +48,7 @@ function classify_tempArr(distancingArr, infectionArr, vaccinationArr) {
                 _remainInfection.push(infection);
         });
         _infection = _infection.reverse(); //source data가 날짜를 역순으로 받아옴
+        _infection = filter.infection(_infection);
         remainInfection = _remainInfection;
         let _vaccination = [], _remainvaccination = [];
         remainVaccination.forEach((vaccination) => {
