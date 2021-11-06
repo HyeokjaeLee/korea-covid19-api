@@ -1,4 +1,7 @@
-export const covid19Schema = `
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.covid19Schema = void 0;
+exports.covid19Schema = `
   enum Region {
     Seoul
     Total
@@ -71,3 +74,4 @@ export const covid19Schema = `
     second: BasicStructure
   }
 `;
+//# sourceMappingURL=covid19-schema.js.map

@@ -1,5 +1,5 @@
 import { RegionInfo } from "../types/data-type";
-export const regionInfo: RegionInfo[] = [
+export const regionInfo = [
   {
     regionKor: "전국",
     regionKorFull: "전국",
@@ -113,6 +113,6 @@ export const regionInfo: RegionInfo[] = [
     regionKor: "검역",
     regionKorFull: "검역",
     regionEng: "Lazaretto",
-    population: null,
+    population: undefined,
   },
 ];
