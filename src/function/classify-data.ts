@@ -1,6 +1,8 @@
 import * as get from "./get-external-data";
 import { regionInfo } from "../data/region-info";
 import {
+  InfectionData,
+  VaccinationData,
   InfectionSourceData,
   VaccinationSourceData,
   DistancingSourceData,
@@ -13,8 +15,8 @@ import { date2string } from "../function/convert-date";
 interface TempData extends RegionInfo {
   distancingLevel: number | undefined;
   tempData: {
-    infectionArr: InfectionSourceData[];
-    vaccinationArr: VaccinationSourceData[];
+    infectionArr: InfectionData[];
+    vaccinationArr: VaccinationData[];
   };
 }
 function classify_tempArr(
@@ -29,15 +31,15 @@ function classify_tempArr(
       (distancing) => distancing.region === region.regionKor
     )?.distancingLevel;
     //성능을 위해 이미 분류한 데이터들은 제거
-    const _infection: InfectionSourceData[] = [],
+    let _infection: InfectionSourceData[] = [],
       _remainInfection: InfectionSourceData[] = [];
     remainInfection.forEach((infection) => {
       if (infection.gubunEn.replace("-", "") === region.regionEng) _infection.push(infection);
       else _remainInfection.push(infection);
     });
+    _infection = _infection.reverse(); //source data가 날짜를 역순으로 받아옴
     remainInfection = _remainInfection;
-
-    const _vaccination: VaccinationSourceData[] = [],
+    let _vaccination: VaccinationSourceData[] = [],
       _remainvaccination: VaccinationSourceData[] = [];
     remainVaccination.forEach((vaccination) => {
       if (vaccination.sido === region.regionKorFull) _vaccination.push(vaccination);
@@ -48,7 +50,7 @@ function classify_tempArr(
       ...region,
       distancingLevel,
       tempData: {
-        infectionArr: _infection.reverse(), //source data가 날짜를 역순으로 받아옴
+        infectionArr: _infection,
         vaccinationArr: _vaccination,
       },
     };
@@ -64,36 +66,39 @@ function create_covid19Data(tempData: TempData): Covid19[] {
       (vaccination) => date2string(new Date(vaccination.baseDate)) === date
     );
     const immunityRatio =
-      !!vaccination && !!tempData.population
+      !!vaccination?.totalSecondCnt && !!tempData.population && !!infection.isolClearCnt
         ? Math.round(
-            ((vaccination?.totalSecondCnt + infection.isolClearCnt) / tempData.population) * 1000
+            ((vaccination!.totalSecondCnt + infection.isolClearCnt) / tempData.population) * 1000
           ) / 1000
         : undefined;
+
+    const minus = (num1: number | undefined, num2: number | undefined) =>
+      !!num1 && !!num2 ? num1 - num2 : undefined;
 
     const aDayAgoInfectionArr = infectionArr[index];
     return {
       date: date,
       confirmed: {
-        total: infection.incDec - 1,
-        accumlated: aDayAgoInfectionArr.incDec - 1,
+        total: infection.defCnt,
+        accumlated: aDayAgoInfectionArr.defCnt,
       },
       quarantine: {
         total: infection.isolIngCnt,
         new: {
-          total: infection.isolIngCnt,
+          total: infection.incDec,
           domestic: infection.localOccCnt,
           overseas: infection.overFlowCnt,
         },
       },
       recovered: {
         total: infection.isolClearCnt,
-        new: infection.isolClearCnt - aDayAgoInfectionArr.isolClearCnt,
+        new: minus(infection.isolClearCnt, aDayAgoInfectionArr.isolClearCnt),
         accumlated: aDayAgoInfectionArr.isolClearCnt,
       },
       dead: {
-        total: infection.defCnt,
-        new: infection.defCnt - aDayAgoInfectionArr.defCnt,
-        accumlated: aDayAgoInfectionArr.defCnt,
+        total: infection.deathCnt,
+        new: minus(infection.deathCnt, aDayAgoInfectionArr.deathCnt),
+        accumlated: aDayAgoInfectionArr.deathCnt,
       },
       vaccinated: {
         first: {

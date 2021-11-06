@@ -71,13 +71,13 @@ export interface RegionData extends RegionInfo {
   covid19Data: Covid19[];
 }
 
-export interface InfectionSourceData {
+export interface InfectionData {
   /**등록일시분초 */
   createDt: string;
   /**사망자 수*/
-  deathCnt: number;
+  deathCnt: number | undefined;
   /**확진자 수*/
-  defCnt: number;
+  defCnt: number | undefined;
   /**시도명(한글)*/
   gubun: string;
   /**시도명(중국어)*/
@@ -87,7 +87,7 @@ export interface InfectionSourceData {
   /**전일대비 증감 수*/
   incDec: number;
   /**격리 해제 수*/
-  isolClearCnt: number;
+  isolClearCnt: number | undefined;
   /**격리중 환자수*/
   isolIngCnt: number;
   /**지역발생 수 */
@@ -104,13 +104,26 @@ export interface InfectionSourceData {
   updateDt: string;
 }
 
-export interface VaccinationSourceData {
-  accumulatedFirstCnt: number;
-  accumulatedSecondCnt: number;
+export interface InfectionSourceData extends InfectionData {
+  deathCnt: number;
+  defCnt: number;
+  isolClearCnt: number;
+}
+
+export interface VaccinationData {
+  accumulatedFirstCnt: number | undefined;
+  accumulatedSecondCnt: number | undefined;
   baseDate: string;
   firstCnt: number;
   secondCnt: number;
   sido: string;
+  totalFirstCnt: number | undefined;
+  totalSecondCnt: number | undefined;
+}
+
+export interface VaccinationSourceData extends VaccinationData {
+  accumulatedFirstCnt: number;
+  accumulatedSecondCnt: number;
   totalFirstCnt: number;
   totalSecondCnt: number;
 }
