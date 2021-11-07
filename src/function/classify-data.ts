@@ -50,7 +50,7 @@ function classify_tempArr(
       ...region,
       distancingLevel,
       tempData: {
-        infectionArr: filter_infection(_infection),
+        infectionArr: _infection,
         vaccinationArr: _vaccination,
       },
     };

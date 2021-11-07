@@ -51,10 +51,9 @@ function filter_infection(infectionSources) {
     const filteredData = infectionSources.map((infectionSource) => {
         keys.forEach((key) => {
             const outlierRange = calcu_outlierRange(infectionNumArr[key]);
-            //console.log(key);
-            //console.log(outlierRange);
             if (infectionSource[key] < outlierRange.min || infectionSource[key] > outlierRange.max)
-                infectionSource[key] = undefined;
+                console.log(key, infectionSource[key], outlierRange.min, outlierRange.max);
+            infectionSource[key] = undefined;
         });
         return infectionSource;
     });
