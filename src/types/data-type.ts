@@ -132,3 +132,25 @@ export interface DistancingSourceData {
   region: string;
   distancingLevel: number;
 }
+
+//여기서부터 다시
+
+export interface InfectionNumerical {
+  deathCnt: number[];
+  defCnt: number[];
+  incDec: number[];
+  isolClearCnt: number[];
+  isolIngCnt: number[];
+  localOccCnt: number[];
+  overFlowCnt: number[];
+  qurRate: number[];
+}
+
+export interface VaccinationNumerical {
+  accumulatedFirstCnt: number[];
+  accumulatedSecondCnt: number[];
+  firstCnt: number[];
+  secondCnt: number[];
+  totalFirstCnt: number[];
+  totalSecondCnt: number[];
+}
