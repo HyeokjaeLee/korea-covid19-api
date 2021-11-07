@@ -34,7 +34,7 @@ function make_infectionNumArr(infectionSourceData: InfectionSourceData[]): Infec
     });
   });
   keys.forEach((key) => {
-    infectionNumArr[key].sort();
+    infectionNumArr[key].sort((a: number, b: number) => a - b);
   });
   return infectionNumArr;
 }
@@ -57,10 +57,12 @@ function calcu_outlierRange(numArr: number[]) {
 
 export function filter_infection(infectionSources: InfectionSourceData[]) {
   const infectionNumArr: any = make_infectionNumArr(infectionSources);
+  const keys = Object.keys(infectionNumArr);
   const filteredData: InfectionData[] = infectionSources.map((infectionSource: any) => {
-    const keys = Object.keys(infectionNumArr);
     keys.forEach((key) => {
       const outlierRange = calcu_outlierRange(infectionNumArr[key]);
+      //console.log(key);
+      //console.log(outlierRange);
       if (infectionSource[key] < outlierRange.min || infectionSource[key] > outlierRange.max)
         infectionSource[key] = undefined;
     });
