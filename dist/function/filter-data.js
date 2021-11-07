@@ -28,7 +28,7 @@ function make_infectionNumArr(infectionSourceData) {
         });
     });
     keys.forEach((key) => {
-        infectionNumArr[key].sort();
+        infectionNumArr[key].sort((a, b) => a - b);
     });
     return infectionNumArr;
 }
@@ -47,10 +47,12 @@ function calcu_outlierRange(numArr) {
 }
 function filter_infection(infectionSources) {
     const infectionNumArr = make_infectionNumArr(infectionSources);
+    const keys = Object.keys(infectionNumArr);
     const filteredData = infectionSources.map((infectionSource) => {
-        const keys = Object.keys(infectionNumArr);
         keys.forEach((key) => {
             const outlierRange = calcu_outlierRange(infectionNumArr[key]);
+            //console.log(key);
+            //console.log(outlierRange);
             if (infectionSource[key] < outlierRange.min || infectionSource[key] > outlierRange.max)
                 infectionSource[key] = undefined;
         });
