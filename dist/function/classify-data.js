@@ -32,7 +32,6 @@ exports.update = void 0;
 const get = __importStar(require("./get-external-data"));
 const region_info_1 = require("../data/region-info");
 const convert_date_1 = require("../function/convert-date");
-const filter_data_1 = require("./filter-data");
 function classify_tempArr(distancingArr, infectionArr, vaccinationArr) {
     let remainInfection = infectionArr;
     let remainVaccination = vaccinationArr;
@@ -58,7 +57,7 @@ function classify_tempArr(distancingArr, infectionArr, vaccinationArr) {
         });
         remainVaccination = _remainvaccination;
         return Object.assign(Object.assign({}, region), { distancingLevel, tempData: {
-                infectionArr: (0, filter_data_1.filter_infection)(_infection),
+                infectionArr: _infection,
                 vaccinationArr: _vaccination,
             } });
     });
