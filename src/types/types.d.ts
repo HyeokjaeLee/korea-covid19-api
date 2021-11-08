@@ -1,5 +1,5 @@
-declare namespace Infection {
-  interface Filtered {
+declare namespace Filtered {
+  interface Infection {
     /**등록일시분초 */
     createDt: string;
     /**사망자 수*/
@@ -31,7 +31,21 @@ declare namespace Infection {
     /**수정일시분초*/
     updateDt: string;
   }
-  interface Source extends Filtered {
+
+  interface Vaccination {
+    accumulatedFirstCnt: number | undefined;
+    accumulatedSecondCnt: number | undefined;
+    baseDate: string;
+    firstCnt: number;
+    secondCnt: number;
+    sido: string;
+    totalFirstCnt: number | undefined;
+    totalSecondCnt: number | undefined;
+  }
+}
+
+declare namespace Source {
+  interface Infection extends Filtered.Infection {
     deathCnt: number;
     defCnt: number;
     incDec: number;
@@ -40,4 +54,73 @@ declare namespace Infection {
     localOccCnt: number;
     overFlowCnt: number;
   }
+  interface Vaccination extends Filtered.Vaccination {
+    accumulatedFirstCnt: number;
+    accumulatedSecondCnt: number;
+    totalFirstCnt: number;
+    totalSecondCnt: number;
+  }
+  interface Distancing {
+    region: string;
+    distancingLevel: number;
+  }
+}
+
+declare namespace Region {
+  interface Default {
+    regionEng: string;
+    regionKor: string;
+    regionKorFull?: string;
+    population: number | undefined;
+  }
+
+  interface Temp extends Default {
+    tempData?: {
+      infectionArr: Filtered.Infection[];
+      vaccinationArr: Filtered.Vaccination[];
+    };
+  }
+  interface Covid19 extends Default {
+    covid19Data: Covid19[];
+  }
+}
+
+interface Covid19 {
+  date: string;
+  confirmed: {
+    total: number | undefined;
+    accumlated: number | undefined;
+  };
+  quarantine: {
+    total: number | undefined;
+    new: {
+      total: number | undefined;
+      domestic: number | undefined;
+      overseas: number | undefined;
+    };
+  };
+  recovered: {
+    total: number | undefined;
+    new: number | undefined;
+    accumlated: number | undefined;
+  };
+  dead: {
+    total: number | undefined;
+    new: number | undefined;
+    accumlated: number | undefined;
+  };
+  vaccinated: {
+    first: {
+      total: number | undefined;
+      new: number | undefined;
+      accumlated: number | undefined;
+    };
+    second: {
+      total: number | undefined;
+      new: number | undefined;
+      accumlated: number | undefined;
+    };
+  };
+  per100kConfirmed: number | undefined;
+  immunityRatio: number | undefined;
 }

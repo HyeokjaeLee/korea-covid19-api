@@ -32,8 +32,27 @@ exports.update = void 0;
 const get = __importStar(require("./get-external-data"));
 const region_info_1 = require("../data/region-info");
 const convert_date_1 = require("../function/convert-date");
-const filter_data_1 = require("./filter-data");
-function classify_tempArr(distancingArr, infectionArr, vaccinationArr) {
+const infection_source_filter_1 = require("./infection-source-filter");
+function update() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const sourceData = yield Promise.all([get.distancing(), get.infection(), get.vaccination()]);
+        const source = {
+            distancingArr: sourceData[0],
+            infectionArr: sourceData[1],
+            vaccinationArr: sourceData[2],
+        };
+        const tempArr = classify_tempArr(source);
+        return tempArr.map((temp) => {
+            const covid19Data = create_covid19Data(temp);
+            delete temp.tempData;
+            delete temp.regionKorFull;
+            return Object.assign(Object.assign({}, temp), { covid19Data });
+        });
+    });
+}
+exports.update = update;
+function classify_tempArr(source) {
+    const { distancingArr, infectionArr, vaccinationArr } = source;
     let remainInfection = infectionArr;
     let remainVaccination = vaccinationArr;
     return region_info_1.regionInfo.map((region) => {
@@ -58,7 +77,7 @@ function classify_tempArr(distancingArr, infectionArr, vaccinationArr) {
         });
         remainVaccination = _remainvaccination;
         return Object.assign(Object.assign({}, region), { distancingLevel, tempData: {
-                infectionArr: (0, filter_data_1.filter_infection)(_infection),
+                infectionArr: (0, infection_source_filter_1.filter_infection)(_infection),
                 vaccinationArr: _vaccination,
             } });
     });
@@ -115,20 +134,4 @@ function create_covid19Data(tempData) {
         };
     });
 }
-function update() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const sourceData = yield Promise.all([get.distancing(), get.infection(), get.vaccination()]).then((sourceArr) => sourceArr);
-        const distancing = sourceData[0];
-        const infection = sourceData[1];
-        const vaccination = sourceData[2];
-        const tempArr = classify_tempArr(distancing, infection, vaccination);
-        return tempArr.map((temp) => {
-            const _temp = temp;
-            const covid19Data = create_covid19Data(_temp);
-            delete _temp.tempData;
-            return Object.assign(Object.assign({}, _temp), { covid19Data });
-        });
-    });
-}
-exports.update = update;
 //# sourceMappingURL=classify-data.js.map

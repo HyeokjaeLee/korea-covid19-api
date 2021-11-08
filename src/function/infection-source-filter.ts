@@ -1,4 +1,4 @@
-export function filter_infection(sources: Infection.Source[]) {
+export function filter_infection(sources: Source.Infection[]) {
   const numCollection = {
     incDec: new Array<number>(),
     isolIngCnt: new Array<number>(),
@@ -18,7 +18,7 @@ export function filter_infection(sources: Infection.Source[]) {
     });
   }
   const filteredSources = sources.map((source) => {
-    const filteredSource = source as Infection.Filtered;
+    const filteredSource = source as Filtered.Infection;
     keys.forEach((key) => {
       const numArr: number[] = numCollection[key];
       const max = 5 * numArr[Math.ceil(numArr.length * 0.99) - 1];

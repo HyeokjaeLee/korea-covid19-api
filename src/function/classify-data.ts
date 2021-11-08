@@ -1,28 +1,33 @@
 import * as get from "./get-external-data";
 import { regionInfo } from "../data/region-info";
-import {
-  Infection,
-  InfectionSource,
-  Vaccination,
-  VaccinationSource,
-  DistancingSourceData,
-  RegionInfo,
-  RegionData,
-} from "../types/data-type";
 import { date2string } from "../function/convert-date";
-import { filter_infection } from "./filter-data";
-interface TempData extends RegionInfo {
-  distancingLevel: number | undefined;
-  tempData: {
-    infectionArr: Infection[];
-    vaccinationArr: Vaccination[];
+import { filter_infection } from "./infection-source-filter";
+
+export async function update() {
+  const sourceData = await Promise.all([get.distancing(), get.infection(), get.vaccination()]);
+  const source = {
+    distancingArr: sourceData[0],
+    infectionArr: sourceData[1],
+    vaccinationArr: sourceData[2],
   };
+  const tempArr = classify_tempArr(source);
+  return tempArr.map((temp) => {
+    const covid19Data = create_covid19Data(temp);
+    delete temp.tempData;
+    delete temp.regionKorFull;
+    return {
+      ...temp,
+      covid19Data,
+    };
+  });
 }
-function classify_tempArr(
-  distancingArr: DistancingSourceData[],
-  infectionArr: InfectionSource[],
-  vaccinationArr: VaccinationSource[]
-): TempData[] {
+
+function classify_tempArr(source: {
+  distancingArr: Source.Distancing[];
+  infectionArr: Source.Infection[];
+  vaccinationArr: Source.Vaccination[];
+}): Region.Temp[] {
+  const { distancingArr, infectionArr, vaccinationArr } = source;
   let remainInfection = infectionArr;
   let remainVaccination = vaccinationArr;
   return regionInfo.map((region) => {
@@ -30,16 +35,16 @@ function classify_tempArr(
       (distancing) => distancing.region === region.regionKor
     )?.distancingLevel;
     //성능을 위해 이미 분류한 데이터들은 제거
-    let _infection: InfectionSource[] = [],
-      _remainInfection: InfectionSource[] = [];
+    let _infection: Source.Infection[] = [],
+      _remainInfection: Source.Infection[] = [];
     remainInfection.forEach((infection) => {
       if (infection.gubunEn.replace("-", "") === region.regionEng) _infection.push(infection);
       else _remainInfection.push(infection);
     });
     _infection.reverse(); //source data가 날짜를 역순으로 받아옴
     remainInfection = _remainInfection;
-    let _vaccination: VaccinationSource[] = [],
-      _remainvaccination: VaccinationSource[] = [];
+    let _vaccination: Source.Vaccination[] = [],
+      _remainvaccination: Source.Vaccination[] = [];
     remainVaccination.forEach((vaccination) => {
       if (vaccination.sido === region.regionKorFull) _vaccination.push(vaccination);
       else _remainvaccination.push(vaccination);
@@ -55,8 +60,9 @@ function classify_tempArr(
     };
   });
 }
-function create_covid19Data(tempData: TempData) {
-  const { infectionArr, vaccinationArr } = tempData.tempData;
+
+function create_covid19Data(tempData: Region.Temp) {
+  const { infectionArr, vaccinationArr } = tempData.tempData!;
   const targetInfectionArr = infectionArr.slice(1);
   return targetInfectionArr.map((infection, index) => {
     const date = date2string(new Date(infection.createDt));
@@ -112,26 +118,6 @@ function create_covid19Data(tempData: TempData) {
       },
       per100kConfirmed: infection.qurRate != "-" ? infection.qurRate : undefined,
       immunityRatio: immunityRatio,
-    };
-  });
-}
-
-export async function update(): Promise<RegionData[]> {
-  const sourceData = await Promise.all([get.distancing(), get.infection(), get.vaccination()]).then(
-    (sourceArr) => sourceArr
-  );
-  const distancing = sourceData[0];
-  const infection = sourceData[1];
-  const vaccination = sourceData[2];
-
-  const tempArr = classify_tempArr(distancing, infection, vaccination);
-  return tempArr.map((temp) => {
-    const _temp: any = temp;
-    const covid19Data = create_covid19Data(_temp);
-    delete _temp.tempData;
-    return {
-      ..._temp,
-      covid19Data,
     };
   });
 }
