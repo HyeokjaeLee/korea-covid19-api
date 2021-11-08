@@ -57,7 +57,9 @@ function infection() {
     return __awaiter(this, void 0, void 0, function* () {
         const service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D", from = 20200409, to = (0, convert_date_1.date2num)(new Date()), url = `http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=${service_key}&startCreateDt=${from}&endCreateDt=${to}`;
         const sourceData = yield axios_1.default.get(url);
-        return sourceData.data.response.body.items.item;
+        const data = sourceData.data.response.body.items.item;
+        data.reverse(); //데이터를 역순으로 받아옴
+        return data;
     });
 }
 exports.infection = infection;

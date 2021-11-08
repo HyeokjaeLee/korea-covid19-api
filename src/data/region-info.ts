@@ -1,4 +1,4 @@
-export const regionInfo = [
+export const regionInfos = [
   {
     regionKor: "전국",
     regionKorFull: "전국",

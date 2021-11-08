@@ -45,7 +45,9 @@ export async function infection(): Promise<Source.Infection[]> {
     to = date2num(new Date()),
     url = `http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=${service_key}&startCreateDt=${from}&endCreateDt=${to}`;
   const sourceData: any = await axios.get(url);
-  return sourceData.data.response.body.items.item;
+  const data: Source.Infection[] = sourceData.data.response.body.items.item;
+  data.reverse(); //데이터를 역순으로 받아옴
+  return data;
 }
 
 /**

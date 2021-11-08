@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.regionInfo = void 0;
-exports.regionInfo = [
+exports.regionInfos = void 0;
+exports.regionInfos = [
     {
         regionKor: "전국",
         regionKorFull: "전국",
