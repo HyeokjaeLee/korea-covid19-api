@@ -3,7 +3,6 @@ import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
 import { covid19Schema } from "./schema/covid19-schema";
 import * as convertDate from "./function/convert-date";
-import type { RegionData } from "./types/data-type";
 import cors from "cors";
 import clone from "fast-copy"; //Deep copy 성능이 좋다
 import { update } from "./function/classify-data";
@@ -32,7 +31,7 @@ async function app() {
         } else if (!!region) {
           regionalDataList = [
             //강제 타입 지정(enum에 지역 리스트 추가해둠)
-            <RegionData>clone(regionData.find((data) => data.regionEng === region)),
+            clone(regionData.find((data) => data.regionEng === region)),
           ];
         } else {
           regionalDataList = clone(regionData);
@@ -42,7 +41,7 @@ async function app() {
           startDate = startDate! ? startDate : 0;
           endDate = endDate! ? endDate : convertDate.date2num(new Date());
           regionalDataList.forEach((regionalData) => {
-            regionalData.covid19Data = regionalData.covid19Data.filter((data) => {
+            regionalData!.covid19Data = regionalData!.covid19Data.filter((data) => {
               const numDate = convertDate.string2num(data.date);
               return numDate >= startDate && numDate <= endDate;
             });
@@ -51,7 +50,7 @@ async function app() {
 
         if (onlyLastDate) {
           regionalDataList.forEach((regionalData) => {
-            regionalData.covid19Data = regionalData.covid19Data.slice(-1);
+            regionalData!.covid19Data = regionalData!.covid19Data.slice(-1);
           });
         }
       }

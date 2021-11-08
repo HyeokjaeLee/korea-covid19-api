@@ -1,5 +1,5 @@
-declare namespace Infection {
-  interface Filtered {
+declare namespace Filtered {
+  interface Infection {
     /**등록일시분초 */
     createDt: string;
     /**사망자 수*/
@@ -31,7 +31,21 @@ declare namespace Infection {
     /**수정일시분초*/
     updateDt: string;
   }
-  interface Source extends Filtered {
+
+  interface Vaccination {
+    accumulatedFirstCnt: number | undefined;
+    accumulatedSecondCnt: number | undefined;
+    baseDate: string;
+    firstCnt: number;
+    secondCnt: number;
+    sido: string;
+    totalFirstCnt: number | undefined;
+    totalSecondCnt: number | undefined;
+  }
+}
+
+declare namespace Source {
+  interface Infection extends Filtered.Infection {
     deathCnt: number;
     defCnt: number;
     incDec: number;
@@ -39,5 +53,24 @@ declare namespace Infection {
     isolIngCnt: number;
     localOccCnt: number;
     overFlowCnt: number;
+  }
+  interface Vaccination extends Filtered.Vaccination {
+    accumulatedFirstCnt: number;
+    accumulatedSecondCnt: number;
+    totalFirstCnt: number;
+    totalSecondCnt: number;
+  }
+  interface Distancing {
+    region: string;
+    distancingLevel: number;
+  }
+}
+
+declare namespace Region {
+  interface Default {
+    regionEng: string;
+    regionKor: string;
+    regionKorFull?: string;
+    population: number | undefined;
   }
 }
