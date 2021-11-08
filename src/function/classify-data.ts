@@ -1,12 +1,11 @@
 import * as get from "./get-external-data";
 import { regionInfo } from "../data/region-info";
 import {
-  InfectionData,
-  VaccinationData,
-  InfectionSourceData,
-  VaccinationSourceData,
+  Infection,
+  InfectionSource,
+  Vaccination,
+  VaccinationSource,
   DistancingSourceData,
-  Covid19,
   RegionInfo,
   RegionData,
 } from "../types/data-type";
@@ -15,14 +14,14 @@ import { filter_infection } from "./filter-data";
 interface TempData extends RegionInfo {
   distancingLevel: number | undefined;
   tempData: {
-    infectionArr: InfectionData[];
-    vaccinationArr: VaccinationData[];
+    infectionArr: Infection[];
+    vaccinationArr: Vaccination[];
   };
 }
 function classify_tempArr(
   distancingArr: DistancingSourceData[],
-  infectionArr: InfectionSourceData[],
-  vaccinationArr: VaccinationSourceData[]
+  infectionArr: InfectionSource[],
+  vaccinationArr: VaccinationSource[]
 ): TempData[] {
   let remainInfection = infectionArr;
   let remainVaccination = vaccinationArr;
@@ -31,16 +30,16 @@ function classify_tempArr(
       (distancing) => distancing.region === region.regionKor
     )?.distancingLevel;
     //성능을 위해 이미 분류한 데이터들은 제거
-    let _infection: InfectionSourceData[] = [],
-      _remainInfection: InfectionSourceData[] = [];
+    let _infection: InfectionSource[] = [],
+      _remainInfection: InfectionSource[] = [];
     remainInfection.forEach((infection) => {
       if (infection.gubunEn.replace("-", "") === region.regionEng) _infection.push(infection);
       else _remainInfection.push(infection);
     });
     _infection.reverse(); //source data가 날짜를 역순으로 받아옴
     remainInfection = _remainInfection;
-    let _vaccination: VaccinationSourceData[] = [],
-      _remainvaccination: VaccinationSourceData[] = [];
+    let _vaccination: VaccinationSource[] = [],
+      _remainvaccination: VaccinationSource[] = [];
     remainVaccination.forEach((vaccination) => {
       if (vaccination.sido === region.regionKorFull) _vaccination.push(vaccination);
       else _remainvaccination.push(vaccination);
@@ -50,14 +49,13 @@ function classify_tempArr(
       ...region,
       distancingLevel,
       tempData: {
-        infectionArr: _infection,
+        infectionArr: filter_infection(_infection),
         vaccinationArr: _vaccination,
       },
     };
   });
 }
-
-function create_covid19Data(tempData: TempData): Covid19[] {
+function create_covid19Data(tempData: TempData) {
   const { infectionArr, vaccinationArr } = tempData.tempData;
   const targetInfectionArr = infectionArr.slice(1);
   return targetInfectionArr.map((infection, index) => {

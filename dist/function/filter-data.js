@@ -1,63 +1,47 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filter_infection = exports.infection = void 0;
-function infection(infectionArr) {
-    return infectionArr.map((infection) => {
-        infection.deathCnt === 0 && (infection.deathCnt = undefined);
-        infection.isolClearCnt === 0 && (infection.isolClearCnt = undefined);
-        infection.defCnt === 0 && (infection.defCnt = undefined);
-        return infection;
-    });
-}
-exports.infection = infection;
-function make_infectionNumArr(infectionSourceData) {
-    const infectionNumArr = {
-        deathCnt: [],
-        defCnt: [],
-        incDec: [],
-        isolClearCnt: [],
-        isolIngCnt: [],
-        localOccCnt: [],
-        overFlowCnt: [],
-        qurRate: [],
+exports.filter_infection = void 0;
+function filter_infection(sources) {
+    const numCollection = {
+        incDec: new Array(),
+        isolIngCnt: new Array(),
+        localOccCnt: new Array(),
+        overFlowCnt: new Array(),
     };
-    const keys = Object.keys(infectionNumArr);
-    infectionSourceData.forEach((infection) => {
-        keys.forEach((key) => {
-            typeof infection[key] === "number" && infectionNumArr[key].push(infection[key]);
+    const keys = Object.keys(numCollection);
+    {
+        sources.forEach((source) => {
+            keys.forEach((key) => {
+                numCollection[key].push(source[key]);
+            });
         });
-    });
-    keys.forEach((key) => {
-        infectionNumArr[key].sort((a, b) => a - b);
-    });
-    return infectionNumArr;
-}
-function calcu_outlierRange(numArr) {
-    const calc_quartile = (index) => {
-        const realNum = index * ((numArr.length + 1) / 4);
-        return ((numArr[Math.floor(realNum)] / 4) * index + (numArr[Math.ceil(realNum)] / 4) * (4 - index));
-    };
-    const quartile_1st = calc_quartile(1);
-    const quartile_3rd = calc_quartile(3);
-    const quartileRange = quartile_3rd - quartile_1st;
-    return {
-        min: quartile_1st - quartileRange * 1.5,
-        max: quartile_3rd + quartileRange * 1.5,
-    };
-}
-function filter_infection(infectionSources) {
-    const infectionNumArr = make_infectionNumArr(infectionSources);
-    const keys = Object.keys(infectionNumArr);
-    const filteredData = infectionSources.map((infectionSource) => {
         keys.forEach((key) => {
-            const outlierRange = calcu_outlierRange(infectionNumArr[key]);
-            if (infectionSource[key] < outlierRange.min || infectionSource[key] > outlierRange.max)
-                console.log(key, infectionSource[key], outlierRange.min, outlierRange.max);
-            infectionSource[key] = undefined;
+            numCollection[key].sort((a, b) => a - b);
         });
-        return infectionSource;
+    }
+    const filteredSources = sources.map((source) => {
+        const filteredSource = source;
+        keys.forEach((key) => {
+            const numArr = numCollection[key];
+            const max = 5 * numArr[Math.ceil(numArr.length * 0.99) - 1];
+            if ((max !== 0 && source[key] > max) || source[key] < 0)
+                filteredSource[key] = undefined;
+        });
+        if (filteredSource.deathCnt === 0)
+            filteredSource.deathCnt = undefined;
+        if (filteredSource.defCnt === 0)
+            filteredSource.defCnt = undefined;
+        if (filteredSource.localOccCnt != undefined && filteredSource.overFlowCnt != undefined)
+            filteredSource.incDec = filteredSource.localOccCnt + filteredSource.overFlowCnt;
+        if (!!filteredSource.incDec) {
+            if (filteredSource.overFlowCnt === undefined && !!filteredSource.localOccCnt)
+                filteredSource.overFlowCnt = filteredSource.incDec - filteredSource.localOccCnt;
+            else if (filteredSource.localOccCnt === undefined && !!filteredSource.overFlowCnt)
+                filteredSource.localOccCnt = filteredSource.incDec - filteredSource.overFlowCnt;
+        }
+        return filteredSource;
     });
-    return filteredData;
+    return filteredSources;
 }
 exports.filter_infection = filter_infection;
 //# sourceMappingURL=filter-data.js.map

@@ -1,4 +1,3 @@
-import { RegionInfo } from "../types/data-type";
 export const regionInfo = [
   {
     regionKor: "전국",
