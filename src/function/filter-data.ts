@@ -30,8 +30,9 @@ export function filter_infection(sources: Infection.Source[]) {
     if (!!filteredSource.incDec) {
       if (!filteredSource.overFlowCnt && !!filteredSource.localOccCnt)
         filteredSource.overFlowCnt = filteredSource.incDec - filteredSource.localOccCnt;
-      else if (!filteredSource.localOccCnt && !!filteredSource.overFlowCnt)
+      else {
         filteredSource.localOccCnt = filteredSource.incDec - filteredSource.overFlowCnt;
+      }
     } else {
       if (filteredSource.localOccCnt != undefined && filteredSource.overFlowCnt != undefined)
         filteredSource.incDec = filteredSource.localOccCnt + filteredSource.overFlowCnt;
