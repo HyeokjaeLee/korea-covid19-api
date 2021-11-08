@@ -31,6 +31,8 @@ function filter_infection(sources) {
             filteredSource.deathCnt = undefined;
         if (filteredSource.defCnt === 0)
             filteredSource.defCnt = undefined;
+        if (filteredSource.isolClearCnt === 0)
+            filteredSource.isolClearCnt = undefined;
         if (filteredSource.localOccCnt != undefined && filteredSource.overFlowCnt != undefined)
             filteredSource.incDec = filteredSource.localOccCnt + filteredSource.overFlowCnt;
         if (!!filteredSource.incDec) {
