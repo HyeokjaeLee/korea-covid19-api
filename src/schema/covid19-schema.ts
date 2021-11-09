@@ -37,14 +37,14 @@ export const covid19Schema = `
     date: String
     confirmed: Confirmed
     quarantine: Quarantine
-    recovered: BasicStructure
-    dead: BasicStructure
+    recovered: Detail
+    dead: Detail
     vaccinated: Vaccinated
     per100kConfirmed: Float
     immunityRatio: Float
   }
 
-  type BasicStructure {
+  type Detail {
     total: Int
     new: Int
     accumlated: Int
@@ -67,7 +67,7 @@ export const covid19Schema = `
   }
   
   type Vaccinated   {
-    first: BasicStructure
-    second: BasicStructure
+    first: Detail
+    second: Detail
   }
 `;
