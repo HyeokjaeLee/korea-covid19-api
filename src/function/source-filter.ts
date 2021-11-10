@@ -36,7 +36,11 @@ export namespace Filter {
     });
   }
 }
-
+/**
+ * 특정 키의 값들을 한배열에 모아서 각각의 키에 대한 값들을 오름차순으로 가지는 객체를 생성
+ * @param sourceArr
+ * @returns 각각의 키에 대한 값들을 오름차순으로 가지고 있는 객체
+ */
 function create_numCollection(sourceArr: Source.Infection[]) {
   const numCollection = {
     incDec: new Array<number>(),
