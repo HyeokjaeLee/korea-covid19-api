@@ -68,15 +68,15 @@ declare namespace Source {
 
 declare namespace Region {
   interface Default {
-    regionEng: string;
-    regionKor: string;
-    regionKorFull?: string;
+    nameEng: string;
+    nameKor: string;
+    nameKorFull?: string;
     population: number | undefined;
   }
 }
 
 interface Args {
-  region: string | undefined;
+  name: string | undefined;
   startDate: number | undefined;
   endDate: number | undefined;
   onlyLastDate: boolean | undefined;
