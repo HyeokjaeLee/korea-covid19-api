@@ -74,3 +74,10 @@ declare namespace Region {
     population: number | undefined;
   }
 }
+
+interface Args {
+  region: string | undefined;
+  startDate: number | undefined;
+  endDate: number | undefined;
+  onlyLastDate: boolean | undefined;
+}
