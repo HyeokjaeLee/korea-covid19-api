@@ -42,17 +42,17 @@ function create_regionData() {
         console.log(`update-start (${new Date()})`);
         const sourceData = yield Promise.all([get.distancing(), get.infection(), get.vaccination()]), distancingArr = sourceData[0], infectionArr = sourceData[1], vaccinationArr = sourceData[2];
         const RegionArr = region_info_1.regionInfos.map((regionInfo) => {
-            const distancingLevel = find_distancingLevel(regionInfo.regionKor, distancingArr);
-            const _infectionArr = source_filter_1.Filter.infection(find_infection(regionInfo.regionEng, infectionArr));
-            const _vaccinationArr = find_vaccination(regionInfo.regionKorFull, vaccinationArr);
+            const distancingLevel = find_distancingLevel(regionInfo.nameKor, distancingArr);
+            const _infectionArr = source_filter_1.Filter.infection(find_infection(regionInfo.nameEng, infectionArr));
+            const _vaccinationArr = find_vaccination(regionInfo.nameKorFull, vaccinationArr);
             const requiredData = {
                 infectionArr: _infectionArr,
                 vaccinationArr: _vaccinationArr,
                 population: regionInfo.population,
             };
             const covid19Data = create_covid19Data(requiredData);
-            const result = Object.assign(Object.assign({}, regionInfo), { distancingLevel: distancingLevel, covid19Data: covid19Data });
-            delete result.regionKorFull;
+            const result = Object.assign(Object.assign({}, regionInfo), { distancingLevel: distancingLevel, covid19: covid19Data });
+            delete result.nameKorFull;
             return result;
         });
         console.log(`update-end (${new Date()})`);
@@ -62,31 +62,31 @@ function create_regionData() {
 exports.create_regionData = create_regionData;
 /**
  * 지역에 맞는 거리두기 단계 찾기
- * @param regionKor
+ * @param nameKor
  * @param distancingArr 전체 거리두기 데이터
  * @returns 해당 지역의 거리두기 단계
  */
-function find_distancingLevel(regionKor, distancingArr) {
+function find_distancingLevel(nameKor, distancingArr) {
     var _a;
-    return (_a = distancingArr.find((distancing) => distancing.region === regionKor)) === null || _a === void 0 ? void 0 : _a.distancingLevel;
+    return (_a = distancingArr.find((distancing) => distancing.region === nameKor)) === null || _a === void 0 ? void 0 : _a.distancingLevel;
 }
 /**
  * 지역에 맞는 감염 데이터 찾기
- * @param regionEng
+ * @param nameEng
  * @param infectionArr 전체 감염 데이터
  * @returns 해당 지역의 감염 데이터
  */
-function find_infection(regionEng, infectionArr) {
-    return infectionArr.filter((infection) => infection.gubunEn.replace("-", "") === regionEng);
+function find_infection(nameEng, infectionArr) {
+    return infectionArr.filter((infection) => infection.gubunEn.replace("-", "") === nameEng);
 }
 /**
  * 지역에 맞는 예방접종 데이터 찾기
- * @param regionKorFull
+ * @param nameKorFull
  * @param vaccinationArr 전체 예방접종 데이터
  * @returns 해당 지역의 예방접종 데이터
  */
-function find_vaccination(regionKorFull, vaccinationArr) {
-    return vaccinationArr.filter((vaccination) => vaccination.sido === regionKorFull);
+function find_vaccination(nameKorFull, vaccinationArr) {
+    return vaccinationArr.filter((vaccination) => vaccination.sido === nameKorFull);
 }
 /**
  * 한 지역의 COVID19 정보를 생성
@@ -99,24 +99,24 @@ function create_covid19Data(requiredData) {
     return infectionArr.slice(1).map((infection, index) => {
         const date = (0, convert_date_1.date2string)((0, convert_date_1.kor2Date)(infection.stdDay));
         const vaccination = vaccinationArr.find((vaccination) => (0, convert_date_1.date2string)(new Date(vaccination.baseDate)) === date);
-        const immunityRatio = !(vaccination === null || vaccination === void 0 ? void 0 : vaccination.totalSecondCnt) || !population || !infection.isolClearCnt
+        const immunityRatio = (vaccination === null || vaccination === void 0 ? void 0 : vaccination.totalSecondCnt) === undefined || !population || !infection.isolClearCnt
             ? undefined
             : Math.round(((vaccination.totalSecondCnt + infection.isolClearCnt) / population) * 1000) /
                 1000;
         const aDayAgoInfectionArr = infectionArr[index];
         return {
             date: date,
+            ratePer100k: typeof infection.qurRate === "number" ? infection.qurRate : undefined,
+            immunityRatio: immunityRatio,
+            quarantine: infection.isolIngCnt,
             confirmed: {
                 total: infection.defCnt,
-                accumlated: aDayAgoInfectionArr.defCnt,
-            },
-            quarantine: {
-                total: infection.isolIngCnt,
                 new: {
                     total: infection.incDec,
                     domestic: infection.localOccCnt,
                     overseas: infection.overFlowCnt,
                 },
+                accumlated: aDayAgoInfectionArr.defCnt,
             },
             recovered: {
                 total: infection.isolClearCnt,
@@ -140,8 +140,6 @@ function create_covid19Data(requiredData) {
                     accumlated: vaccination === null || vaccination === void 0 ? void 0 : vaccination.accumulatedSecondCnt,
                 },
             },
-            per100kConfirmed: infection.qurRate != "-" ? infection.qurRate : undefined,
-            immunityRatio: immunityRatio,
         };
     });
 }

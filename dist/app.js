@@ -49,24 +49,24 @@ function app() {
             regionData = yield (0, create_data_1.create_regionData)();
         }), ONE_HOURE);
         const root = {
-            regionalDataList: (args) => {
-                const { region, startDate, endDate, onlyLastDate } = args;
-                const isEmptyArgs = !startDate && !endDate && !region && !onlyLastDate;
+            region: (args) => {
+                const { name, startDate, endDate, onlyLastDate } = args;
+                const isEmptyArgs = !startDate && !endDate && !name && !onlyLastDate;
                 if (isEmptyArgs)
                     return regionData;
                 else {
-                    const _regionData = !region
+                    const _regionData = !name
                         ? (0, fast_copy_1.default)(regionData)
-                        : [(0, fast_copy_1.default)(regionData.find((data) => data.regionEng === region))];
+                        : [(0, fast_copy_1.default)(regionData.find((data) => data.nameEng === name))];
                     const _startDate = !startDate ? 0 : startDate;
                     const _endDate = !endDate ? convertDate.date2num(new Date()) : endDate;
                     _regionData.forEach((region) => {
-                        let filteredData = region.covid19Data.filter((_covid19) => {
+                        let filteredData = region.covid19.filter((_covid19) => {
                             const date = convertDate.string2num(_covid19.date);
                             return _startDate <= date && date <= _endDate;
                         });
                         onlyLastDate && (filteredData = filteredData.slice(-1));
-                        region.covid19Data = filteredData;
+                        region.covid19 = filteredData;
                     });
                     return _regionData;
                 }
