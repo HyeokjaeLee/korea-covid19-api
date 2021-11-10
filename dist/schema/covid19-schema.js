@@ -40,14 +40,14 @@ exports.covid19Schema = `
     date: String
     confirmed: Confirmed
     quarantine: Quarantine
-    recovered: BasicStructure
-    dead: BasicStructure
+    recovered: Detail
+    dead: Detail
     vaccinated: Vaccinated
     per100kConfirmed: Float
     immunityRatio: Float
   }
 
-  type BasicStructure {
+  type Detail {
     total: Int
     new: Int
     accumlated: Int
@@ -70,8 +70,8 @@ exports.covid19Schema = `
   }
   
   type Vaccinated   {
-    first: BasicStructure
-    second: BasicStructure
+    first: Detail
+    second: Detail
   }
 `;
 //# sourceMappingURL=covid19-schema.js.map
