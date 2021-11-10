@@ -1,14 +1,25 @@
-![header](https://capsule-render.vercel.app/api?type=rect&color=gradient&height=100&section=header&text=COVID-19%20API&fontSize=30&fontAlign=50&fontAlignY=50)
+![header](https://capsule-render.vercel.app/api?type=rect&color=gradient&height=100&section=header&text=COVID-19%20API&fontSize=40&fontAlign=50&fontAlignY=55)
 
-![VERSION](https://img.shields.io/badge/version-1.6.2-C76C30?style=flat-square)&nbsp;&nbsp;&nbsp;![GRAPHQL](https://img.shields.io/badge/GraphQL-E434AA?style=flat-square&logo=graphql&logoColor=white) ![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![JAVASCRIPT](https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=black) ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white) ![EXPRESS](https://img.shields.io/badge/Express-4C4C4C?style=flat-square&logo=Express&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
+![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white)&nbsp;&nbsp;&nbsp;![EXPRESS](https://img.shields.io/badge/Express-4C4C4C?style=flat-square&logo=Express&logoColor=white) ![GRAPHQL](https://img.shields.io/badge/GraphQL-E434AA?style=flat-square&logo=graphql&logoColor=white) ![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white)![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
 
-> 대한민국 코로나 감염, 예방접종, 사회적 거리두기 현황등 종합적인 정보 제공
 
-## :bookmark: Request
+| ⚠️ Use Heroku to deploy |
+| ----------------------- |
+| 해당 API는 Toy Projects를 위한 API로 Heroku 서버가 Sleep 상태일 경우 첫 요청시 **1분** 가량 소요되며 외부 정보를 불러오기 전까지 **로컬 파일의 데이터**를 제공합니다. |
 
-**<U>:warning: Heroku 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요됩니다.</U>**
+## 📝 About
 
-- ### **요청 URL:** https://korea-covid19-api.herokuapp.com/
+아래 정보들을 기반으로 일부 이상치를 제거한 한국 COVID-19 정보를 제공합니다.
+- [보건복지부 코로나19 시·도발생 현황](https://www.data.go.kr/index.do)
+- [코로나19 예방접종 통계 데이터 조회 서비스](https://www.data.go.kr/index.do)
+- [지역별 거리 두기 단계 현황](http://ncov.mohw.go.kr/regSocdisBoardView.do)
+
+## ⬆️ API Request
+
+### Endpoint
+
+[`https://korea-covid19-api.herokuapp.com/`]
+
 - ### **요청 형식:**
   ```query
   query{
@@ -184,8 +195,68 @@
   }
   ```
 
-## :books: Usage Data Source
+### URL Params
 
-- [공공데이터활용지원센터\_보건복지부 코로나19 시·도발생 현황](https://www.data.go.kr/index.do)
-- [공공데이터활용지원센터\_코로나19 예방접종 통계 데이터 조회 서비스](https://www.data.go.kr/index.do)
-- [코로나바이러스감염증-19(COVID-19)\_지역별 거리 두기 단계 현황](http://ncov.mohw.go.kr/regSocdisBoardView.do)
+| Name       | Required | Type | Description |
+|:----------:|:--------:|:----:| ----------- |
+| `platform` | Y | string | 요청할 웹툰의 플랫폼 입니다.<br/>요청 가능한 `platform`은 다음과 같습니다.<ul><li>`all` 모든 플랫폼</li><li>`naver` 네이버웹툰</li><li>`kakao` 카카오웹툰</li><li>`kakao-page` 카카오페이지</li></ul> |
+| `type` | N | string | 요청할 웹툰의 타입입니다.<br/>미입력시 모든 타입의 웹툰 정보를 요청합니다.<br/>요청 가능한 `type`은 다음과 같습니다.<ul><li>`week` 연재중</li><li>`finished` 완결</li></ul> |
+
+
+### Request variable
+| Name | Required | Type | Description |
+|:----:|:--------:|:----:| ----------- |
+| `day` | N | string | 요청할 웹툰의 요일입니다.<br/>`type`이 `week`인 경우에만 가능합니다.<br/>미입력시 모든 요일의 웹툰 정보를 요청합니다.</br>요청 가능한 `day`는 다음과 같습니다.<ul><li>`mon` 월 week=0</li><li>`tue` 화 week=1</li><li>`wed` 수 week=2</li><li>`thu` 목 week=3</li><li>`fri` 금 week=4</li><li>`sat` 토 week=5</li><li>`sun` 일 week=6</li></ul> |
+
+### Request sample (Javascript)
+```javascript
+(async () => {
+  const res = await fetch("https://korea-webtoon-api.herokuapp.com/naver/week?day=mon", {
+      method: "GET",
+    }),
+    json = await res.json();
+  console.log(json);
+  return json;
+})();
+```
+## ⬇️ API Response
+
+### Key
+
+| name | type | Description |
+|:----:|:----:| ----------- |
+| title | string | 제목 |
+| author | string | 작가 |
+| img | string | Thumbnail img URL |
+| service | string | 서비스 플랫폼 |
+| week | integer  | 요일 번호 0 ~ 6 (월 ~ 일)<br/>완결 7 |
+| additional | object | 추가적인 정보 |
+| new | boolean | 신규 |
+| rest | boolean | 휴재 |
+| up | boolean | 새로운 회차가 업로드 |
+| adult | boolean | 19세 이상  |
+
+### Response sample
+```JSON
+ {
+    "title": "참교육",
+    "author": "채용택,한가람",
+    "url": "https://m.comic.naver.com/webtoon/list?titleId=758037&week=mon",
+    "img": "https://image-comic.pstatic.net/webtoon/758037/thumbnail/thumbnail_IMAG19_67290a02-fe7f-448d-aed9-6ec88e558088.jpg",
+    "service": "naver",
+    "week": 0,
+    "additional": {
+      "new": false,
+      "adult": false,
+      "rest": true,
+      "up": false
+    }
+ }
+```
+
+### Error
+
+| statusCode | message | error |
+|:----------:|:-------:|:-----:|
+| 400 | Invalid day value | Not Found |
+| 404 | Cannot GET {path} | Not Found |
