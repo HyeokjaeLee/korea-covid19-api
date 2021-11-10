@@ -5,10 +5,10 @@ import { covid19Schema } from "./schema/covid19-schema";
 import * as convertDate from "./function/convert-date";
 import cors from "cors";
 import clone from "fast-copy"; //Deep copy 성능이 좋다
-import { update } from "./function/classify-data";
+import { create_regionData } from "./function/classify-data";
 
 async function app() {
-  let regionData = await update();
+  let regionData = await create_regionData();
   const LOCAL_PORT = 8000;
   const exp = express(),
     port = process.env.PORT || LOCAL_PORT,
@@ -16,7 +16,7 @@ async function app() {
 
   const ONE_HOURE = 1000 * 60 * 60;
   setInterval(async () => {
-    regionData = await update();
+    regionData = await create_regionData();
   }, ONE_HOURE);
 
   const root = {

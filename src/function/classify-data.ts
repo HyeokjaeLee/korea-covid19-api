@@ -2,7 +2,13 @@ import * as get from "./get-external-data";
 import { regionInfos } from "../data/region-info";
 import { date2string } from "./convert-date";
 import { Filter } from "./source-filter";
-export async function update() {
+
+/**
+ * 전 지역의 COVID19 정보를 포함한 지역 데이터 생성
+ * @returns COVID19데이터를 포함한 지역 데이터
+ */
+export async function create_regionData() {
+  console.log(`update-start (${new Date()})`);
   const sourceData = await Promise.all([get.distancing(), get.infection(), get.vaccination()]),
     distancingArr = sourceData[0],
     infectionArr = sourceData[1],
@@ -26,7 +32,7 @@ export async function update() {
     delete result.regionKorFull;
     return result;
   });
-
+  console.log(`update-end (${new Date()})`);
   return RegionArr;
 }
 
