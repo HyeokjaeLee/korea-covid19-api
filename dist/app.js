@@ -38,52 +38,38 @@ const covid19_schema_1 = require("./schema/covid19-schema");
 const convertDate = __importStar(require("./function/convert-date"));
 const cors_1 = __importDefault(require("cors"));
 const fast_copy_1 = __importDefault(require("fast-copy")); //Deep copy 성능이 좋다
-const classify_data_1 = require("./function/classify-data");
+const create_data_1 = require("./function/create-data");
 function app() {
     return __awaiter(this, void 0, void 0, function* () {
-        const exp = (0, express_1.default)(), port = process.env.PORT || 8080;
-        let regionData = yield (0, classify_data_1.update)();
-        const schema = (0, graphql_1.buildSchema)(covid19_schema_1.covid19Schema);
-        /**10분마다 데이터 업데이트*/
+        let regionData = yield (0, create_data_1.create_regionData)();
+        const LOCAL_PORT = 8000;
+        const exp = (0, express_1.default)(), port = process.env.PORT || LOCAL_PORT, schema = (0, graphql_1.buildSchema)(covid19_schema_1.covid19Schema);
+        const ONE_HOURE = 1000 * 60 * 60;
         setInterval(() => __awaiter(this, void 0, void 0, function* () {
-            regionData = yield (0, classify_data_1.update)();
-        }), 600000);
+            regionData = yield (0, create_data_1.create_regionData)();
+        }), ONE_HOURE);
         const root = {
             regionalDataList: (args) => {
-                let { region, startDate, endDate, onlyLastDate } = args;
-                /**요청 조건이 없는 경우를 제외하곤 Deep copy 후 연산*/
-                let regionalDataList;
-                /**args로 들어온 요청데이터에 따른 결과 반환*/
-                {
-                    if (!region && !startDate && !endDate && !onlyLastDate) {
-                        regionalDataList = regionData;
-                    }
-                    else if (!!region) {
-                        regionalDataList = [
-                            //강제 타입 지정(enum에 지역 리스트 추가해둠)
-                            (0, fast_copy_1.default)(regionData.find((data) => data.regionEng === region)),
-                        ];
-                    }
-                    else {
-                        regionalDataList = (0, fast_copy_1.default)(regionData);
-                    }
-                    if (!!startDate || !!endDate) {
-                        startDate = startDate ? startDate : 0;
-                        endDate = endDate ? endDate : convertDate.date2num(new Date());
-                        regionalDataList.forEach((regionalData) => {
-                            regionalData.covid19Data = regionalData.covid19Data.filter((data) => {
-                                const numDate = convertDate.string2num(data.date);
-                                return numDate >= startDate && numDate <= endDate;
-                            });
+                const { region, startDate, endDate, onlyLastDate } = args;
+                const isEmptyArgs = !startDate && !endDate && !region && !onlyLastDate;
+                if (isEmptyArgs)
+                    return regionData;
+                else {
+                    const _regionData = !region
+                        ? (0, fast_copy_1.default)(regionData)
+                        : [(0, fast_copy_1.default)(regionData.find((data) => data.regionEng === region))];
+                    const _startDate = !startDate ? 0 : startDate;
+                    const _endDate = !endDate ? convertDate.date2num(new Date()) : endDate;
+                    _regionData.forEach((region) => {
+                        let filteredData = region.covid19Data.filter((_covid19) => {
+                            const date = convertDate.string2num(_covid19.date);
+                            return _startDate <= date && date <= _endDate;
                         });
-                    }
-                    if (onlyLastDate) {
-                        regionalDataList.forEach((regionalData) => {
-                            regionalData.covid19Data = regionalData.covid19Data.slice(-1);
-                        });
-                    }
+                        onlyLastDate && (filteredData = filteredData.slice(-1));
+                        region.covid19Data = filteredData;
+                    });
+                    return _regionData;
                 }
-                return regionalDataList;
             },
         };
         exp.listen(port, () => {

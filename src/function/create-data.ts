@@ -1,8 +1,14 @@
 import * as get from "./get-external-data";
 import { regionInfos } from "../data/region-info";
-import { date2string } from "./convert-date";
+import { date2string, kor2Date } from "./convert-date";
 import { Filter } from "./source-filter";
-export async function update() {
+
+/**
+ * 전 지역의 COVID19 정보를 포함한 지역 데이터 생성
+ * @returns COVID19데이터를 포함한 지역 데이터
+ */
+export async function create_regionData() {
+  console.log(`update-start (${new Date()})`);
   const sourceData = await Promise.all([get.distancing(), get.infection(), get.vaccination()]),
     distancingArr = sourceData[0],
     infectionArr = sourceData[1],
@@ -26,22 +32,42 @@ export async function update() {
     delete result.regionKorFull;
     return result;
   });
-
+  console.log(`update-end (${new Date()})`);
   return RegionArr;
 }
 
-function find_distancingLevel(region: string, distancingArr: Source.Distancing[]) {
-  return distancingArr.find((distancing) => distancing.region === region)?.distancingLevel;
+/**
+ * 지역에 맞는 거리두기 단계 찾기
+ * @param regionKor
+ * @param distancingArr 전체 거리두기 데이터
+ * @returns 해당 지역의 거리두기 단계
+ */
+function find_distancingLevel(regionKor: string, distancingArr: Source.Distancing[]) {
+  return distancingArr.find((distancing) => distancing.region === regionKor)?.distancingLevel;
 }
-
+/**
+ * 지역에 맞는 감염 데이터 찾기
+ * @param regionEng
+ * @param infectionArr 전체 감염 데이터
+ * @returns 해당 지역의 감염 데이터
+ */
 function find_infection(regionEng: string, infectionArr: Source.Infection[]) {
   return infectionArr.filter((infection) => infection.gubunEn.replace("-", "") === regionEng);
 }
-
+/**
+ * 지역에 맞는 예방접종 데이터 찾기
+ * @param regionKorFull
+ * @param vaccinationArr 전체 예방접종 데이터
+ * @returns 해당 지역의 예방접종 데이터
+ */
 function find_vaccination(regionKorFull: string, vaccinationArr: Source.Vaccination[]) {
   return vaccinationArr.filter((vaccination) => vaccination.sido === regionKorFull);
 }
-
+/**
+ * 한 지역의 COVID19 정보를 생성
+ * @param requiredData 한 지역의 감염 데이터, 예방접종 데이터, 인구수
+ * @returns Covid19 정보
+ */
 function create_covid19Data(requiredData: {
   infectionArr: Filtered.Infection[];
   vaccinationArr: Filtered.Vaccination[];
@@ -51,7 +77,7 @@ function create_covid19Data(requiredData: {
   const minus = (num1: number | undefined, num2: number | undefined) =>
     !!num1 && !!num2 ? num1 - num2 : undefined;
   return infectionArr.slice(1).map((infection, index) => {
-    const date = date2string(new Date(infection.createDt));
+    const date = date2string(kor2Date(infection.stdDay));
     const vaccination = vaccinationArr.find(
       (vaccination) => date2string(new Date(vaccination.baseDate)) === date
     );

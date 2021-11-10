@@ -19,12 +19,17 @@ export function date2string(date: Date) {
 export const string2num = (stringDate: string) => Number(stringDate.replace(/-/g, ""));
 
 /**
- *
+ * Date타입을 6자리 숫자로 변환
  * @param date
  * @returns yyyymmdd
  */
 export const date2num = (date: Date) => string2num(date2string(date));
 
+/**
+ * 한글 날짜 형식을 Date 타입으로 변환
+ * @param korDate 2021년 01월 01일 00시
+ * @returns date
+ */
 export function kor2Date(korDate: string) {
   const replacedKorDate = korDate.replace(/(:?년 |월 |일 .*)/g, "-");
   const date = replacedKorDate.substring(0, replacedKorDate.length - 1);
