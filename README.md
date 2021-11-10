@@ -16,158 +16,158 @@
 
 ## ⬆️ API Request
 
-### Endpoint
+- ### Endpoint
 
-`https://korea-covid19-api.herokuapp.com/`
+  `https://korea-covid19-api.herokuapp.com/`
 
-### [GraphiQL](https://korea-covid19-api.herokuapp.com/)
+- ### [GraphiQL](https://korea-covid19-api.herokuapp.com/)
 
-GraphiQL이 제공하는 GUI로 Query 요청에 대한 응답을 미리 확인해 볼 수 있습니다.
+  GraphiQL이 제공하는 GUI로 Query 요청에 대한 응답을 미리 확인해 볼 수 있습니다.
 
-![GraphiQL](https://user-images.githubusercontent.com/71566740/141089831-8eecd9da-7fca-4777-9802-0bc94b2a1774.png)
+  ![GraphiQL](https://user-images.githubusercontent.com/71566740/141089831-8eecd9da-7fca-4777-9802-0bc94b2a1774.png)
 
-### [Schema](https://github.com/HyeokjaeLee/korea-covid19-api/blob/main/src/schema/covid19-schema.ts)
+- ### [Schema](https://github.com/HyeokjaeLee/korea-covid19-api/blob/main/src/schema/covid19-schema.ts)
 
-| Field | Type | Description |
-|:-----:|:----:| ----------- |
-| regionalDataList | array | 지역 데이터를 지역별 하위 Object를 가지는 Array<br/>**Arguments(optional)**<ul><li>Region: 지역명 `Seoul`</li><li>startDate: 요청 시작일 `20210719`</li><li>startDate: 요청 종료일 `20211011`</li><li>onlyLastDate: 마지막 날짜만 요청 `true`</li></ul> |
-| nameKor | string | 지역명(영어) |
-| nameEng | string | 지역명(한국어) |
-| population | int | 인구 |
-| distancingLevel | int | 거리두기 단계 |
-| covid19 | array | COVID-19 데이터를 날짜별 하위 Object로 가지는 Array |
-| date | string | 기준일 `yyyy-mm-dd` |
-| ratePer100k | float | 10만명당 발생률 |
-| immunityRatio | float | 면역 비율 |
-| quarantine | int | 격리 중 |
-| confirmed | object | 확진 |
-| recovered | object | 격리해제 |
-| dead | object | 사망 |
-| vaccinated | object | 백신 접종 |
-| first | object | 1차 접종 |
-| second | object | 2차 접종 |
-| total | int | 상위 필드의 전체|
-| new | int or object | 상위 필드의 신규 유입|
-| accumlated | int | 상위 필드 누적 (전일 total) |
-| domestic | int | 국내 확진 (confirmed.new 하위 필드) |
-| overseas | int | 해외 유입 확진 (confirmed.new 하위 필드) |
+  | Field | Type | Description |
+  |:-----:|:----:| ----------- |
+  | regionalDataList | array | 지역 데이터를 지역별 하위 Object를 가지는 Array<br/>**Arguments(optional)**<ul><li>Region: 지역명 `Seoul`</li><li>startDate: 요청 시작일 `20210719`</li><li>startDate: 요청 종료일 `20211011`</li><li>onlyLastDate: 마지막 날짜만 요청 `true`</li></ul> |
+  | nameKor | string | 지역명(영어) |
+  | nameEng | string | 지역명(한국어) |
+  | population | int | 인구 |
+  | distancingLevel | int | 거리두기 단계 |
+  | covid19 | array | COVID-19 데이터를 날짜별 하위 Object로 가지는 Array |
+  | date | string | 기준일 `yyyy-mm-dd` |
+  | ratePer100k | float | 10만명당 발생률 |
+  | immunityRatio | float | 면역 비율 |
+  | quarantine | int | 격리 중 |
+  | confirmed | object | 확진 |
+  | recovered | object | 격리해제 |
+  | dead | object | 사망 |
+  | vaccinated | object | 백신 접종 |
+  | first | object | 1차 접종 |
+  | second | object | 2차 접종 |
+  | total | int | 상위 필드의 전체|
+  | new | int or object | 상위 필드의 신규 유입|
+  | accumlated | int | 상위 필드 누적 (전일 total) |
+  | domestic | int | 국내 확진 (confirmed.new 하위 필드) |
+  | overseas | int | 해외 유입 확진 (confirmed.new 하위 필드) |
 
-### Query sample
+- ### Query sample
 
-```
-query{
-  region(name:Seoul,startDate:20210110 endDate:20211011) {
-    nameKor
-    nameEng
-    population
-    distancingLevel
-    covid19 {
-      date
-      quarantine
-      ratePer100k
-      immunityRatio
-      confirmed{
-        total
-        new{
+  ```
+  query{
+    region(name:Seoul,startDate:20210110 endDate:20211011) {
+      nameKor
+      nameEng
+      population
+      distancingLevel
+      covid19 {
+        date
+        quarantine
+        ratePer100k
+        immunityRatio
+        confirmed{
           total
-          domestic
-          overseas
+          new{
+            total
+            domestic
+            overseas
+          }
+          accumlated
         }
-        accumlated
-      }
-      recovered{
-        total
-        new
-        accumlated
-      }
-      dead{
-        total
-        new
-        accumlated
-      }
-      vaccinated{
-      	first{
+        recovered{
           total
           new
           accumlated
         }
-        second{
+        dead{
           total
           new
           accumlated
         }
-      }
-      
-    }
-  }
-}
-```
-
-### Request sample (Javascript)
-```javascript
-const query = `query{
-  region(name:Seoul,startDate:20211010 endDate:20211011) {
-    nameKor
-    population
-    distancingLevel
-    covid19 {
-      date
-      quarantine
-      confirmed{
-        new{
-          overseas
+        vaccinated{
+          first{
+            total
+            new
+            accumlated
+          }
+          second{
+            total
+            new
+            accumlated
+          }
         }
-        accumlated
+        
       }
     }
   }
-}
-`;
-(async () => {
-  const res = await fetch("https://korea-covid19-api.herokuapp.com/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query }),
-    }),
-    json = await res.json(),
-    data = json.data;
-  console.log(data);
-  return data;
-})();
-```
+  ```
+
+- ### Request sample (Javascript)
+  ```javascript
+  const query = `query{
+    region(name:Seoul,startDate:20211010 endDate:20211011) {
+      nameKor
+      population
+      distancingLevel
+      covid19 {
+        date
+        quarantine
+        confirmed{
+          new{
+            overseas
+          }
+          accumlated
+        }
+      }
+    }
+  }
+  `;
+  (async () => {
+    const res = await fetch("https://korea-covid19-api.herokuapp.com/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      }),
+      json = await res.json(),
+      data = json.data;
+    console.log(data);
+    return data;
+  })();
+  ```
 
 ## ⬇️ API Response
 
-### Response sample
+- ### Response sample
 
-```json
-"region": [
-  {
-    "nameKor": "서울",
-    "population": 9602000,
-    "distancingLevel": 4,
-    "covid19": [
-      {
-        "date": "2021-10-10",
-        "quarantine": 12508,
-        "confirmed": {
-          "new": {
-            "overseas": 4
-          },
-          "accumlated": 107036
+  ```json
+  "region": [
+    {
+      "nameKor": "서울",
+      "population": 9602000,
+      "distancingLevel": 4,
+      "covid19": [
+        {
+          "date": "2021-10-10",
+          "quarantine": 12508,
+          "confirmed": {
+            "new": {
+              "overseas": 4
+            },
+            "accumlated": 107036
+          }
+        },
+        {
+          "date": "2021-10-11",
+          "quarantine": 12507,
+          "confirmed": {
+            "new": {
+              "overseas": 2
+            },
+            "accumlated": 107619
+          }
         }
-      },
-      {
-        "date": "2021-10-11",
-        "quarantine": 12507,
-        "confirmed": {
-          "new": {
-            "overseas": 2
-          },
-          "accumlated": 107619
-        }
-      }
-    ]
-  }
-]
-```
+      ]
+    }
+  ]
+  ```
