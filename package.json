@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/HyeokjaeLee/korea-covid19-api#readme",
   "dependencies": {
+    "ansi-regex": ">=5.0.1",
     "axios": "^0.24.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
