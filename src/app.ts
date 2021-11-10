@@ -20,23 +20,23 @@ async function app() {
   }, ONE_HOURE);
 
   const root = {
-    regionalDataList: (args: Args) => {
-      const { region, startDate, endDate, onlyLastDate } = args;
-      const isEmptyArgs = !startDate && !endDate && !region && !onlyLastDate;
+    region: (args: Args) => {
+      const { name, startDate, endDate, onlyLastDate } = args;
+      const isEmptyArgs = !startDate && !endDate && !name && !onlyLastDate;
       if (isEmptyArgs) return regionData;
       else {
-        const _regionData = !region
+        const _regionData = !name
           ? clone(regionData)
-          : ([clone(regionData.find((data) => data.regionEng === region))] as typeof regionData);
+          : ([clone(regionData.find((data) => data.nameEng === name))] as typeof regionData);
         const _startDate = !startDate ? 0 : startDate;
         const _endDate = !endDate ? convertDate.date2num(new Date()) : endDate;
         _regionData.forEach((region) => {
-          let filteredData = region.covid19Data.filter((_covid19) => {
+          let filteredData = region.covid19.filter((_covid19) => {
             const date = convertDate.string2num(_covid19.date);
             return _startDate <= date && date <= _endDate;
           });
           onlyLastDate && (filteredData = filteredData.slice(-1));
-          region.covid19Data = filteredData;
+          region.covid19 = filteredData;
         });
         return _regionData;
       }

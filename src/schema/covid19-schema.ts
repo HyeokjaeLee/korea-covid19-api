@@ -1,5 +1,9 @@
 export const covid19Schema = `
-  enum Region {
+  type Query {
+    region(name: Name, startDate: Int, endDate: Int, onlyLastDate: Boolean): [Region]
+  }
+
+  enum Name {
     Seoul
     Total
     Gyeonggido
@@ -21,27 +25,23 @@ export const covid19Schema = `
     Lazaretto
   }
 
-  type Query {
-    regionalDataList(region: Region, startDate: Int, endDate: Int, onlyLastDate: Boolean): [RegionalData]
-  }
-
-  type RegionalData {
-    regionEng: String
-    regionKor: String
+  type Region {
+    nameEng: String
+    nameKor: String
     population: Int
     distancingLevel: Float
-    covid19Data: [covid19Data]
+    covid19: [Covid19]
   }
 
-  type covid19Data {
+  type Covid19 {
     date: String
+    ratePer100k: Float
+    immunityRatio: Float
+    quarantine: Int
     confirmed: Confirmed
-    quarantine: Quarantine
     recovered: Detail
     dead: Detail
     vaccinated: Vaccinated
-    per100kConfirmed: Float
-    immunityRatio: Float
   }
 
   type Detail {
@@ -52,15 +52,11 @@ export const covid19Schema = `
 
   type Confirmed {
     total: Int
+    new: NewConfirmed
     accumlated: Int
   }
 
-  type Quarantine {
-    total: Int
-    new: QuarantineNew
-  }
-
-  type QuarantineNew {
+  type NewConfirmed {
     total: Int
     domestic: Int
     overseas: Int
