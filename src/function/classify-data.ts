@@ -30,18 +30,38 @@ export async function update() {
   return RegionArr;
 }
 
-function find_distancingLevel(region: string, distancingArr: Source.Distancing[]) {
-  return distancingArr.find((distancing) => distancing.region === region)?.distancingLevel;
+/**
+ * 지역에 맞는 거리두기 단계 찾기
+ * @param regionKor
+ * @param distancingArr 전체 거리두기 데이터
+ * @returns 해당 지역의 거리두기 단계
+ */
+function find_distancingLevel(regionKor: string, distancingArr: Source.Distancing[]) {
+  return distancingArr.find((distancing) => distancing.region === regionKor)?.distancingLevel;
 }
-
+/**
+ * 지역에 맞는 감염 데이터 찾기
+ * @param regionEng
+ * @param infectionArr 전체 감염 데이터
+ * @returns 해당 지역의 감염 데이터
+ */
 function find_infection(regionEng: string, infectionArr: Source.Infection[]) {
   return infectionArr.filter((infection) => infection.gubunEn.replace("-", "") === regionEng);
 }
-
+/**
+ * 지역에 맞는 예방접종 데이터 찾기
+ * @param regionKorFull
+ * @param vaccinationArr 전체 예방접종 데이터
+ * @returns 해당 지역의 예방접종 데이터
+ */
 function find_vaccination(regionKorFull: string, vaccinationArr: Source.Vaccination[]) {
   return vaccinationArr.filter((vaccination) => vaccination.sido === regionKorFull);
 }
-
+/**
+ * 한 지역의 COVID19 정보를 생성
+ * @param requiredData 한 지역의 감염 데이터, 예방접종 데이터, 인구수
+ * @returns Covid19 정보
+ */
 function create_covid19Data(requiredData: {
   infectionArr: Filtered.Infection[];
   vaccinationArr: Filtered.Vaccination[];
