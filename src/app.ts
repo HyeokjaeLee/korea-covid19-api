@@ -5,7 +5,7 @@ import { covid19Schema } from "./schema/covid19-schema";
 import * as convertDate from "./function/convert-date";
 import cors from "cors";
 import clone from "fast-copy"; //Deep copy 성능이 좋다
-import { create_regionData } from "./function/classify-data";
+import { create_regionData } from "./function/create-data";
 
 async function app() {
   let regionData = await create_regionData();
