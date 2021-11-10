@@ -18,245 +18,156 @@
 
 ### Endpoint
 
-[`https://korea-covid19-api.herokuapp.com/`]
+`https://korea-covid19-api.herokuapp.com/`
 
-- ### **요청 형식:**
-  ```query
-  query{
-    regionalDataList(region: {Region} startDate: {Date}: onlyLastDate: {boolean}){
-      원하는 데이터 종류...
-    }
-  }
-  ```
-  - #### **Region:** 요청할 지역
-    > 미입력시 모든 지역을 요청합니다.
-    - Lazaretto
-    - Jeju
-    - Gyeongsangnamdo
-    - Gyeongsangbukdo
-    - Jeollanamdo
-    - Jeollabukdo
-    - Chungcheongnamdo
-    - Chungcheongbukdo
-    - Gangwondo
-    - Gyeonggido
-    - Sejong
-    - Gwangju
-    - Busan
-    - Ulsan
-    - Incheon
-    - Daejeon
-    - Daegu
-    - Seoul
-    - Total
-  - #### **Date:** 요청할 날짜의 시작일과 종료일
-    > 미입력시 각각 startDate=2020-04-09, endDate=오늘 입니다.
-    - 형식: {Year}{Month}{Day}
-    - 예시: 20210209
-  - #### **onlyLastDate :** 마지막 데이터만 요청
-    > 미입력 default 값은 false 입니다.
-    - 형식: true, false
+### [GraphiQL](https://korea-covid19-api.herokuapp.com/)
 
-## :memo: Data List
+GraphiQL이 제공하는 GUI로 Query 요청에 대한 응답을 미리 확인해 볼 수 있습니다.
 
-- ### 상위 Object Key
-  - regionEng: 영문 지역명
-  - regionKor: 한글 지역명
-  - population: 대략적인 지역 인구
-  - distancingLevel: 현재 사회적 거리두기 단계
-  - covid19DataList: 날짜별 COVID19 데이터
-- ### covid19DataList Object Key
-  - date: 날짜
-  - confirmed: 확진자
-  - quarantine: 격리자
-  - recovered: 회복자(격리해제)
-  - dead: 사망자
-  - vaccinated: 예방접종
-  - per100kConfirmed: 10만명 당 확진자
-- ### 공통 하위 Object Key
-  - total: 전체(신규+누적)
-  - new: 신규(당일)
-  - accumlated: 누적(전일)
-- ### new quarantine(신규 격리자) Object Key
-  - domestic: 국내 감염
-  - overseas: 해외 감염
-- ### vaccinated Object Key
-  - first: 1차 접종
-  - second: 2차 접종
+![GraphiQL](https://user-images.githubusercontent.com/71566740/141089831-8eecd9da-7fca-4777-9802-0bc94b2a1774.png)
 
-## :mag: Example
+### [Schema](https://github.com/HyeokjaeLee/korea-covid19-api/blob/main/src/schema/covid19-schema.ts)
 
-- ### Example used
-  - [COVID-19 Dashboard](https://github.com/HyeokjaeLee/covid19-dashboard)
-- ### Screenshot
-  ![screencapture-localhost-8080-1626721706457](https://user-images.githubusercontent.com/71566740/126214047-90ee5473-294d-4766-9d92-bab8d2e2741c.png)
-- ### Request query
-  ```
-  query{
-    regionalDataList(region:Seoul startDate:20210719){
-      regionEng
-      regionKor
-      population
-      distancingLevel
-      covid19DataList{
-        date
-        confirmed{
+| Field | Type | Description |
+|:-----:|:----:| ----------- |
+| regionalDataList | array | 지역 데이터를 지역별 하위 Object를 가지는 Array<br/>**Arguments(optional)**<ul><li>Region: 지역명 `Seoul`</li><li>startDate: 요청 시작일 `20210719`</li><li>startDate: 요청 종료일 `20211011`</li><li>onlyLastDate: 마지막 날짜만 요청 `true`</li></ul> |
+| nameKor | string | 지역명(영어) |
+| nameEng | string | 지역명(한국어) |
+| population | int | 인구 |
+| distancingLevel | int | 거리두기 단계 |
+| covid19 | array | COVID-19 데이터를 날짜별 하위 Object로 가지는 Array |
+| date | string | 기준일 `yyyy-mm-dd` |
+| ratePer100k | float | 10만명당 발생률 |
+| immunityRatio | float | 면역 비율 |
+| quarantine | int | 격리 중 |
+| confirmed | object | 확진 |
+| recovered | object | 격리해제 |
+| dead | object | 사망 |
+| vaccinated | object | 백신 접종 |
+| first | object | 1차 접종 |
+| second | object | 2차 접종 |
+| total | int | 상위 필드의 전체|
+| new | int or object | 상위 필드의 신규 유입|
+| accumlated | int | 상위 필드 누적 (전일 total) |
+| domestic | int | 국내 확진 (confirmed.new 하위 필드) |
+| overseas | int | 해외 유입 확진 (confirmed.new 하위 필드) |
+
+### Query sample
+
+```
+query{
+  region(name:Seoul,startDate:20210110 endDate:20211011) {
+    nameKor
+    nameEng
+    population
+    distancingLevel
+    covid19 {
+      date
+      quarantine
+      ratePer100k
+      immunityRatio
+      confirmed{
+        total
+        new{
           total
-          accumlated
+          domestic
+          overseas
         }
-        quarantine{
-          total
-          new{
-            total
-            domestic
-            overseas
-          }
-        }
-        recovered{
-          total
-          new
-          accumlated
-        }
-        dead{
-          total
-          new
-          accumlated
-        }
-        vaccinated{
-          first{
-            total
-            new
-            accumlated
-          }
-          second{
-            total
-            new
-            accumlated
-          }
-        }
-        per100kConfirmed
+        accumlated
       }
-    }
-  }
-  ```
-- ### Response json
-  ```
-  {
-    "data": {
-      "regionalDataList": [
-        {
-          "regionEng": "Seoul",
-          "regionKor": "서울",
-          "population": 9602000,
-          "distancingLevel": 4,
-          "covid19DataList": [
-            {
-              "date": "2021-07-19",
-              "confirmed": {
-                "total": 58645,
-                "accumlated": 58226
-              },
-              "quarantine": {
-                "total": 7061,
-                "new": {
-                  "total": 419,
-                  "domestic": 413,
-                  "overseas": 6
-                }
-              },
-              "recovered": {
-                "total": 51058,
-                "new": 187,
-                "accumlated": 50871
-              },
-              "dead": {
-                "total": 527,
-                "new": 0,
-                "accumlated": 527
-              },
-              "vaccinated": {
-                "first": {
-                  "total": 2974141,
-                  "new": 46,
-                  "accumlated": 2974095
-                },
-                "second": {
-                  "total": 1216767,
-                  "new": 151,
-                  "accumlated": 1216616
-                }
-              },
-              "per100kConfirmed": 606.57
-            }
-          ]
+      recovered{
+        total
+        new
+        accumlated
+      }
+      dead{
+        total
+        new
+        accumlated
+      }
+      vaccinated{
+      	first{
+          total
+          new
+          accumlated
         }
-      ]
+        second{
+          total
+          new
+          accumlated
+        }
+      }
+      
     }
   }
-  ```
-
-### URL Params
-
-| Name       | Required | Type | Description |
-|:----------:|:--------:|:----:| ----------- |
-| `platform` | Y | string | 요청할 웹툰의 플랫폼 입니다.<br/>요청 가능한 `platform`은 다음과 같습니다.<ul><li>`all` 모든 플랫폼</li><li>`naver` 네이버웹툰</li><li>`kakao` 카카오웹툰</li><li>`kakao-page` 카카오페이지</li></ul> |
-| `type` | N | string | 요청할 웹툰의 타입입니다.<br/>미입력시 모든 타입의 웹툰 정보를 요청합니다.<br/>요청 가능한 `type`은 다음과 같습니다.<ul><li>`week` 연재중</li><li>`finished` 완결</li></ul> |
-
-
-### Request variable
-| Name | Required | Type | Description |
-|:----:|:--------:|:----:| ----------- |
-| `day` | N | string | 요청할 웹툰의 요일입니다.<br/>`type`이 `week`인 경우에만 가능합니다.<br/>미입력시 모든 요일의 웹툰 정보를 요청합니다.</br>요청 가능한 `day`는 다음과 같습니다.<ul><li>`mon` 월 week=0</li><li>`tue` 화 week=1</li><li>`wed` 수 week=2</li><li>`thu` 목 week=3</li><li>`fri` 금 week=4</li><li>`sat` 토 week=5</li><li>`sun` 일 week=6</li></ul> |
+}
+```
 
 ### Request sample (Javascript)
 ```javascript
+const query = `query{
+  region(name:Seoul,startDate:20211010 endDate:20211011) {
+    nameKor
+    population
+    distancingLevel
+    covid19 {
+      date
+      quarantine
+      confirmed{
+        new{
+          overseas
+        }
+        accumlated
+      }
+    }
+  }
+}
+`;
 (async () => {
-  const res = await fetch("https://korea-webtoon-api.herokuapp.com/naver/week?day=mon", {
-      method: "GET",
+  const res = await fetch("https://korea-covid19-api.herokuapp.com/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
     }),
-    json = await res.json();
-  console.log(json);
-  return json;
+    json = await res.json(),
+    data = json.data;
+  console.log(data);
+  return data;
 })();
 ```
+
 ## ⬇️ API Response
 
-### Key
-
-| name | type | Description |
-|:----:|:----:| ----------- |
-| title | string | 제목 |
-| author | string | 작가 |
-| img | string | Thumbnail img URL |
-| service | string | 서비스 플랫폼 |
-| week | integer  | 요일 번호 0 ~ 6 (월 ~ 일)<br/>완결 7 |
-| additional | object | 추가적인 정보 |
-| new | boolean | 신규 |
-| rest | boolean | 휴재 |
-| up | boolean | 새로운 회차가 업로드 |
-| adult | boolean | 19세 이상  |
-
 ### Response sample
-```JSON
- {
-    "title": "참교육",
-    "author": "채용택,한가람",
-    "url": "https://m.comic.naver.com/webtoon/list?titleId=758037&week=mon",
-    "img": "https://image-comic.pstatic.net/webtoon/758037/thumbnail/thumbnail_IMAG19_67290a02-fe7f-448d-aed9-6ec88e558088.jpg",
-    "service": "naver",
-    "week": 0,
-    "additional": {
-      "new": false,
-      "adult": false,
-      "rest": true,
-      "up": false
-    }
- }
+
+```json
+"region": [
+  {
+    "nameKor": "서울",
+    "population": 9602000,
+    "distancingLevel": 4,
+    "covid19": [
+      {
+        "date": "2021-10-10",
+        "quarantine": 12508,
+        "confirmed": {
+          "new": {
+            "overseas": 4
+          },
+          "accumlated": 107036
+        }
+      },
+      {
+        "date": "2021-10-11",
+        "quarantine": 12507,
+        "confirmed": {
+          "new": {
+            "overseas": 2
+          },
+          "accumlated": 107619
+        }
+      }
+    ]
+  }
+]
 ```
-
-### Error
-
-| statusCode | message | error |
-|:----------:|:-------:|:-----:|
-| 400 | Invalid day value | Not Found |
-| 404 | Cannot GET {path} | Not Found |
