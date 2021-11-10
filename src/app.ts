@@ -8,53 +8,38 @@ import clone from "fast-copy"; //Deep copy 성능이 좋다
 import { update } from "./function/classify-data";
 
 async function app() {
-  const exp = express(),
-    port = process.env.PORT || 8080;
-
   let regionData = await update();
-  const schema = buildSchema(covid19Schema);
+  const LOCAL_PORT = 8000;
+  const exp = express(),
+    port = process.env.PORT || LOCAL_PORT,
+    schema = buildSchema(covid19Schema);
 
-  /**10분마다 데이터 업데이트*/
+  const ONE_HOURE = 1000 * 60 * 60;
   setInterval(async () => {
     regionData = await update();
-  }, 600000);
+  }, ONE_HOURE);
 
   const root = {
-    regionalDataList: (args: any) => {
-      let { region, startDate, endDate, onlyLastDate } = args;
-      /**요청 조건이 없는 경우를 제외하곤 Deep copy 후 연산*/
-      let regionalDataList;
-      /**args로 들어온 요청데이터에 따른 결과 반환*/
-      {
-        if (!region && !startDate && !endDate && !onlyLastDate) {
-          regionalDataList = regionData;
-        } else if (!!region) {
-          regionalDataList = [
-            //강제 타입 지정(enum에 지역 리스트 추가해둠)
-            clone(regionData.find((data) => data.regionEng === region)),
-          ];
-        } else {
-          regionalDataList = clone(regionData);
-        }
-
-        if (!!startDate || !!endDate) {
-          startDate = startDate! ? startDate : 0;
-          endDate = endDate! ? endDate : convertDate.date2num(new Date());
-          regionalDataList.forEach((regionalData) => {
-            regionalData!.covid19Data = regionalData!.covid19Data.filter((data) => {
-              const numDate = convertDate.string2num(data.date);
-              return numDate >= startDate && numDate <= endDate;
-            });
+    regionalDataList: (args: Args) => {
+      const { region, startDate, endDate, onlyLastDate } = args;
+      const isEmptyArgs = !startDate && !endDate && !region && !onlyLastDate;
+      if (isEmptyArgs) return regionData;
+      else {
+        const _regionData = !region
+          ? clone(regionData)
+          : ([clone(regionData.find((data) => data.regionEng === region))] as typeof regionData);
+        const _startDate = !startDate ? 0 : startDate;
+        const _endDate = !endDate ? convertDate.date2num(new Date()) : endDate;
+        _regionData.forEach((region) => {
+          let filteredData = region.covid19Data.filter((_covid19) => {
+            const date = convertDate.string2num(_covid19.date);
+            return _startDate <= date && date <= _endDate;
           });
-        }
-
-        if (onlyLastDate) {
-          regionalDataList.forEach((regionalData) => {
-            regionalData!.covid19Data = regionalData!.covid19Data.slice(-1);
-          });
-        }
+          onlyLastDate && (filteredData = filteredData.slice(-1));
+          region.covid19Data = filteredData;
+        });
+        return _regionData;
       }
-      return regionalDataList;
     },
   };
   exp.listen(port, () => {
@@ -70,5 +55,4 @@ async function app() {
     })
   );
 }
-
 app();
