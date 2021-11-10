@@ -1,6 +1,6 @@
 import * as get from "./get-external-data";
 import { regionInfos } from "../data/region-info";
-import { date2string } from "./convert-date";
+import { date2string, kor2Date } from "./convert-date";
 import { Filter } from "./source-filter";
 
 /**
@@ -77,7 +77,7 @@ function create_covid19Data(requiredData: {
   const minus = (num1: number | undefined, num2: number | undefined) =>
     !!num1 && !!num2 ? num1 - num2 : undefined;
   return infectionArr.slice(1).map((infection, index) => {
-    const date = date2string(new Date(infection.createDt));
+    const date = date2string(kor2Date(infection.stdDay));
     const vaccination = vaccinationArr.find(
       (vaccination) => date2string(new Date(vaccination.baseDate)) === date
     );
