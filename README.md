@@ -2,17 +2,20 @@
 
 ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white)&nbsp;&nbsp;&nbsp;![EXPRESS](https://img.shields.io/badge/Express-4C4C4C?style=flat-square&logo=Express&logoColor=white) ![GRAPHQL](https://img.shields.io/badge/GraphQL-E434AA?style=flat-square&logo=graphql&logoColor=white) ![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
 
-
-| ⚠️ Use Heroku to deploy |
-| ----------------------- |
-| 해당 API는 Toy Projects를 위한 API로 Heroku 서버가 Sleep 상태일 경우 첫 요청시 **1분** 가량 소요됩니다. |
-
 ## 📝 About
 
 아래 정보들을 기반으로 일부 이상치를 제거한 한국 COVID-19 정보를 제공합니다.
 - [보건복지부 코로나19 시·도발생 현황](https://www.data.go.kr/index.do)
 - [코로나19 예방접종 통계 데이터 조회 서비스](https://www.data.go.kr/index.do)
 - [지역별 거리 두기 단계 현황](http://ncov.mohw.go.kr/regSocdisBoardView.do)
+
+## ⚠️ Notice
+
+**해당 API는 Toy Projects를 위한 API로 Heroku 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요됩니다.**
+
+공공 데이터 포털에서 제공하는 값들 중 일부 이상치가 있습니다. 
+
+해당 이상치 중 다른 값들로 계산이 가능한 값들은 해당 API 제공되지만 불가능한 값들은 제외 처리되었습니다.
 
 ## ⬆️ API Request
 
