@@ -2,14 +2,14 @@
 
 ![NODE](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white)&nbsp;&nbsp;&nbsp;![EXPRESS](https://img.shields.io/badge/Express-4C4C4C?style=flat-square&logo=Express&logoColor=white) ![GRAPHQL](https://img.shields.io/badge/GraphQL-E434AA?style=flat-square&logo=graphql&logoColor=white) ![TYPESCRIPT](https://img.shields.io/badge/Typescript-3178c6?style=flat-square&logo=typescript&logoColor=white) ![HEROKU](https://img.shields.io/badge/Heroku-430098?style=flat-square&logo=Heroku&logoColor=white)
 
-## 📝 About
+## About
 
 아래 정보들을 기반으로 일부 이상치를 제거한 한국 COVID-19 정보를 제공합니다.
 - [보건복지부 코로나19 시·도발생 현황](https://www.data.go.kr/index.do)
 - [코로나19 예방접종 통계 데이터 조회 서비스](https://www.data.go.kr/index.do)
 - [지역별 거리 두기 단계 현황](http://ncov.mohw.go.kr/regSocdisBoardView.do)
 
-## ⚠️ Notice
+### ⚠️ Notice
 
 **해당 API는 Toy Projects를 위한 API로 Heroku 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요됩니다.**
 
@@ -17,19 +17,19 @@
 
 해당 이상치 중 다른 값들로 계산이 가능한 값들은 해당 API 제공되지만 불가능한 값들은 제외되었습니다.
 
-## ⬆️ API Request
+## API Request
 
-- ### Endpoint
+### 📌 Endpoint
 
   `https://korea-covid19-api.herokuapp.com/`
 
-- ### [GraphiQL](https://korea-covid19-api.herokuapp.com/)
+### 🧪 [GraphiQL](https://korea-covid19-api.herokuapp.com/)
 
   GraphiQL이 제공하는 GUI로 Query 요청에 대한 응답을 미리 확인해 볼 수 있습니다.
 
   ![GraphiQL](https://user-images.githubusercontent.com/71566740/141089831-8eecd9da-7fca-4777-9802-0bc94b2a1774.png)
 
-- ### [Schema](https://github.com/HyeokjaeLee/korea-covid19-api/blob/main/src/schema/covid19-schema.ts)
+### 🧾 [Schema](https://github.com/HyeokjaeLee/korea-covid19-api/blob/main/src/schema/covid19-schema.ts)
 
   | Field | Type | Description |
   |:-----:|:----:| ----------- |
@@ -55,7 +55,7 @@
   | domestic | int | 국내 확진 (confirmed.new 하위 필드) |
   | overseas | int | 해외 유입 확진 (confirmed.new 하위 필드) |
 
-- ### Query sample
+### 🔍 Query sample
 
   ```
   query{
@@ -106,7 +106,7 @@
   }
   ```
 
-- ### Request sample (Javascript)
+### 🔍 Request sample (Javascript)
   ```javascript
   const query = `query{
     region(name:Seoul,startDate:20211010 endDate:20211011) {
@@ -139,9 +139,9 @@
   })();
   ```
 
-## ⬇️ API Response
+## API Response
 
-- ### Response sample
+### 🔍 Response sample
 
   ```json
   "region": [
@@ -175,6 +175,6 @@
   ]
   ```
 
-## ✨ Demo Projects
+## Demo Projects
 
-- 📊 [COVID-19 Dashboard](https://github.com/HyeokjaeLee/covid19-dashboard)
+### 📊 [COVID-19 Dashboard](https://github.com/HyeokjaeLee/covid19-dashboard)
