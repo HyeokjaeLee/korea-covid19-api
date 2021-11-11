@@ -171,3 +171,7 @@
     }
   ]
   ```
+
+## ✨ Demo Projects
+
+- 📊 [COVID-19 Dashboard](https://github.com/HyeokjaeLee/covid19-dashboard)
