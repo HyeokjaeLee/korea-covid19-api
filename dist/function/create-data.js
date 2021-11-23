@@ -27,12 +27,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create_regionData = void 0;
 const get = __importStar(require("./get-external-data"));
-const region_info_1 = require("../data/region-info");
 const convert_date_1 = require("./convert-date");
 const source_filter_1 = require("./source-filter");
+const fs_1 = __importDefault(require("fs"));
 /**
  * 전 지역의 COVID19 정보를 포함한 지역 데이터 생성
  * @returns COVID19데이터를 포함한 지역 데이터
@@ -41,7 +44,8 @@ function create_regionData() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(`update-start (${new Date()})`);
         const sourceData = yield Promise.all([get.distancing(), get.infection(), get.vaccination()]), distancingArr = sourceData[0], infectionArr = sourceData[1], vaccinationArr = sourceData[2];
-        const RegionArr = region_info_1.regionInfos.map((regionInfo) => {
+        const regionInfos = JSON.parse(fs_1.default.readFileSync("./data/region-info.json", "utf8"));
+        const RegionArr = regionInfos.map((regionInfo) => {
             const distancingLevel = find_distancingLevel(regionInfo.nameKor, distancingArr);
             const _infectionArr = source_filter_1.Filter.infection(find_infection(regionInfo.nameEng, infectionArr));
             const _vaccinationArr = find_vaccination(regionInfo.nameKorFull, vaccinationArr);
