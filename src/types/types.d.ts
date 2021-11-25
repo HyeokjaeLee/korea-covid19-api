@@ -73,6 +73,13 @@ declare namespace Region {
     nameKorFull?: string;
     population: number | undefined;
   }
+  interface Final {
+    distancingLevel: number | undefined;
+    covid19: Covid19[];
+    nameEng: string;
+    nameKor: string;
+    population: number | undefined;
+  }
 }
 
 interface Args {
@@ -80,4 +87,32 @@ interface Args {
   startDate: number | undefined;
   endDate: number | undefined;
   onlyLastDate: boolean | undefined;
+}
+
+interface Covid19 {
+  date: string;
+  ratePer100k: number | undefined;
+  immunityRatio: number | undefined;
+  quarantine: number | undefined;
+  confirmed: {
+    total: number | undefined;
+    new: {
+      total: number | undefined;
+      domestic: number | undefined;
+      overseas: number | undefined;
+    };
+    accumlated: number | undefined;
+  };
+  recovered: Detail;
+  dead: Detail;
+  vaccinated: {
+    first: Detail;
+    second: Detail;
+  };
+}
+
+interface Detail {
+  total: number | undefined;
+  new: number | undefined;
+  accumlated: number | undefined;
 }

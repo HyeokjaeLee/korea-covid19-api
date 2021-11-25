@@ -6,7 +6,7 @@ import fs from "fs";
  * 전 지역의 COVID19 정보를 포함한 지역 데이터 생성
  * @returns COVID19데이터를 포함한 지역 데이터
  */
-export async function create_regionData() {
+export default async function create_regionData(): Promise<Region.Final[]> {
   console.log(`update-start (${new Date()})`);
   const sourceData = await Promise.all([get.distancing(), get.infection(), get.vaccination()]),
     distancingArr = sourceData[0],
@@ -73,7 +73,7 @@ function create_covid19Data(requiredData: {
   infectionArr: Filtered.Infection[];
   vaccinationArr: Filtered.Vaccination[];
   population: number | undefined;
-}) {
+}): Covid19[] {
   const { infectionArr, vaccinationArr, population } = requiredData;
   const minus = (num1: number | undefined, num2: number | undefined) =>
     !!num1 && !!num2 ? num1 - num2 : undefined;

@@ -5,19 +5,22 @@ import { covid19Schema } from "./schema/covid19-schema";
 import * as convertDate from "./function/convert-date";
 import cors from "cors";
 import clone from "fast-copy"; //Deep copy 성능이 좋다
-import { create_regionData } from "./function/create-data";
-
+import create_regionData from "./function/create-data";
+import fs from "fs";
 async function app() {
-  let regionData = await create_regionData();
+  let regionData: Region.Final[] = JSON.parse(fs.readFileSync("./data/20211125.json", "utf8"));
+
   const LOCAL_PORT = 8000;
   const exp = express(),
     port = process.env.PORT || LOCAL_PORT,
     schema = buildSchema(covid19Schema);
-
-  const ONE_HOURE = 1000 * 60 * 60;
-  setInterval(async () => {
+  (async () => {
+    const ONE_HOURE = 1000 * 60 * 60;
     regionData = await create_regionData();
-  }, ONE_HOURE);
+    setInterval(async () => {
+      regionData = await create_regionData();
+    }, ONE_HOURE);
+  })();
 
   const root = {
     region: (args: Args) => {
@@ -55,4 +58,5 @@ async function app() {
     })
   );
 }
+
 app();
