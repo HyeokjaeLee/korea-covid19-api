@@ -36,6 +36,7 @@ export const covid19Schema = `
     date: String
     ratePer100k: Float
     immunityRatio: Float
+    quarantine: Int
     confirmed: Confirmed
     recovered: Detail
     dead: Detail

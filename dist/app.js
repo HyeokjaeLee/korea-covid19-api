@@ -42,12 +42,13 @@ const create_data_1 = __importDefault(require("./function/create-data"));
 const fs_1 = __importDefault(require("fs"));
 function app() {
     return __awaiter(this, void 0, void 0, function* () {
-        let regionData = JSON.parse(fs_1.default.readFileSync("./data/20211126.json", "utf8"));
+        let regionData = JSON.parse(fs_1.default.readFileSync("./data/covid19-data.json", "utf8"));
         const LOCAL_PORT = 8000;
         const exp = (0, express_1.default)(), port = process.env.PORT || LOCAL_PORT, schema = (0, graphql_1.buildSchema)(covid19_schema_1.covid19Schema);
         (() => __awaiter(this, void 0, void 0, function* () {
             const ONE_HOURE = 1000 * 60 * 60;
             regionData = yield (0, create_data_1.default)();
+            fs_1.default.writeFileSync("./data/covid19-data.json", JSON.stringify(regionData));
             setInterval(() => __awaiter(this, void 0, void 0, function* () {
                 regionData = yield (0, create_data_1.default)();
             }), ONE_HOURE);

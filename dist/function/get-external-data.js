@@ -21,8 +21,8 @@ const convert_date_1 = require("./convert-date");
  */
 function infection() {
     return __awaiter(this, void 0, void 0, function* () {
-        const SERVICE_KEY = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D", FROM = 20200409, TO = (0, convert_date_1.date2num)(new Date()), URL = `http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=${SERVICE_KEY}&startCreateDt=${FROM}&endCreateDt=${TO}`;
-        const sourceData = yield axios_1.default.get(URL);
+        const service_key = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D", from = 20200409, to = (0, convert_date_1.date2num)(new Date()), url = `http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=${service_key}&startCreateDt=${from}&endCreateDt=${to}`;
+        const sourceData = yield axios_1.default.get(url);
         const data = sourceData.data.response.body.items.item;
         data.reverse(); //데이터를 역순으로 받아옴
         return data;
@@ -35,7 +35,7 @@ exports.infection = infection;
  */
 function vaccination() {
     return __awaiter(this, void 0, void 0, function* () {
-        const APIcreatedDate = new Date("2021-3-11"), today = new Date(), REGION_COUNT = 18, dateDiff = Math.ceil((today.getTime() - APIcreatedDate.getTime()) / 86400000), approximateObjectCount = (dateDiff + 1) * REGION_COUNT, SERVICE_KEY = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D", url = `https://api.odcloud.kr/api/15077756/v1/vaccine-stat?perPage=${approximateObjectCount}&serviceKey=${SERVICE_KEY}`;
+        const APIcreatedDate = new Date("2021-3-11"), today = new Date(), regionCount = 18, dateDiff = Math.ceil((today.getTime() - APIcreatedDate.getTime()) / 86400000), approximateObjectCount = (dateDiff + 1) * regionCount, serviceKey = "LqdHrACABsYGuZOSxYS0G0hMAhheDZCNIPVR1zWxT5SxXvh3XmI9hUUjuzCgmq13GYhdyYgebB94yUVCB59bAg%3D%3D", url = `https://api.odcloud.kr/api/15077756/v1/vaccine-stat?perPage=${approximateObjectCount}&serviceKey=${serviceKey}`;
         const sourceData = yield axios_1.default.get(url);
         return sourceData.data.data;
     });

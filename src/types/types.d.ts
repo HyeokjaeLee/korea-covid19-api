@@ -48,6 +48,7 @@ declare namespace Source {
     defCnt: number;
     incDec: number;
     isolClearCnt: number;
+    isolIngCnt: number;
     localOccCnt: number;
     overFlowCnt: number;
   }
@@ -56,6 +57,10 @@ declare namespace Source {
     accumulatedSecondCnt: number;
     totalFirstCnt: number;
     totalSecondCnt: number;
+  }
+  interface Distancing {
+    region: string;
+    distancingLevel: number;
   }
 }
 
@@ -85,6 +90,7 @@ interface Covid19 {
   date: string;
   ratePer100k: number | undefined;
   immunityRatio: number | undefined;
+  quarantine: number | undefined;
   confirmed: {
     total: number | undefined;
     new: {

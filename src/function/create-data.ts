@@ -35,6 +35,15 @@ export default async function create_regionData(): Promise<Region.Final[]> {
 }
 
 /**
+ * 지역에 맞는 거리두기 단계 찾기
+ * @param nameKor
+ * @param distancingArr 전체 거리두기 데이터
+ * @returns 해당 지역의 거리두기 단계
+ */
+function find_distancingLevel(nameKor: string, distancingArr: Source.Distancing[]) {
+  return distancingArr.find((distancing) => distancing.region === nameKor)?.distancingLevel;
+}
+/**
  * 지역에 맞는 감염 데이터 찾기
  * @param nameEng
  * @param infectionArr 전체 감염 데이터
@@ -80,6 +89,7 @@ function create_covid19Data(requiredData: {
       date: date,
       ratePer100k: typeof infection.qurRate === "number" ? infection.qurRate : undefined,
       immunityRatio: immunityRatio,
+      quarantine: minus(minus(infection.defCnt, infection.isolClearCnt), infection.deathCnt),
       confirmed: {
         total: infection.defCnt,
         new: {
