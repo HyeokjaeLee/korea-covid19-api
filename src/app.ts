@@ -8,8 +8,7 @@ import clone from "fast-copy"; //Deep copy 성능이 좋다
 import create_regionData from "./function/create-data";
 import fs from "fs";
 async function app() {
-  let regionData: Region.Final[] = JSON.parse(fs.readFileSync("./data/20211125.json", "utf8"));
-
+  let regionData: Region.Final[] = JSON.parse(fs.readFileSync("./data/20211126.json", "utf8"));
   const LOCAL_PORT = 8000;
   const exp = express(),
     port = process.env.PORT || LOCAL_PORT,

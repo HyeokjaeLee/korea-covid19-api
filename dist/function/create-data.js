@@ -31,7 +31,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create_regionData = void 0;
 const get = __importStar(require("./get-external-data"));
 const convert_date_1 = require("./convert-date");
 const source_filter_1 = require("./source-filter");
@@ -43,10 +42,9 @@ const fs_1 = __importDefault(require("fs"));
 function create_regionData() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(`update-start (${new Date()})`);
-        const sourceData = yield Promise.all([get.distancing(), get.infection(), get.vaccination()]), distancingArr = sourceData[0], infectionArr = sourceData[1], vaccinationArr = sourceData[2];
+        const sourceData = yield Promise.all([get.infection(), get.vaccination()]), infectionArr = sourceData[0], vaccinationArr = sourceData[1];
         const regionInfos = JSON.parse(fs_1.default.readFileSync("./data/region-info.json", "utf8"));
         const RegionArr = regionInfos.map((regionInfo) => {
-            const distancingLevel = find_distancingLevel(regionInfo.nameKor, distancingArr);
             const _infectionArr = source_filter_1.Filter.infection(find_infection(regionInfo.nameEng, infectionArr));
             const _vaccinationArr = find_vaccination(regionInfo.nameKorFull, vaccinationArr);
             const requiredData = {
@@ -55,7 +53,7 @@ function create_regionData() {
                 population: regionInfo.population,
             };
             const covid19Data = create_covid19Data(requiredData);
-            const result = Object.assign(Object.assign({}, regionInfo), { distancingLevel: distancingLevel, covid19: covid19Data });
+            const result = Object.assign(Object.assign({}, regionInfo), { covid19: covid19Data });
             delete result.nameKorFull;
             return result;
         });
@@ -63,17 +61,7 @@ function create_regionData() {
         return RegionArr;
     });
 }
-exports.create_regionData = create_regionData;
-/**
- * 지역에 맞는 거리두기 단계 찾기
- * @param nameKor
- * @param distancingArr 전체 거리두기 데이터
- * @returns 해당 지역의 거리두기 단계
- */
-function find_distancingLevel(nameKor, distancingArr) {
-    var _a;
-    return (_a = distancingArr.find((distancing) => distancing.region === nameKor)) === null || _a === void 0 ? void 0 : _a.distancingLevel;
-}
+exports.default = create_regionData;
 /**
  * 지역에 맞는 감염 데이터 찾기
  * @param nameEng
@@ -112,7 +100,6 @@ function create_covid19Data(requiredData) {
             date: date,
             ratePer100k: typeof infection.qurRate === "number" ? infection.qurRate : undefined,
             immunityRatio: immunityRatio,
-            quarantine: infection.isolIngCnt,
             confirmed: {
                 total: infection.defCnt,
                 new: {

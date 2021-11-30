@@ -32,7 +32,6 @@ exports.covid19Schema = `
     nameEng: String
     nameKor: String
     population: Int
-    distancingLevel: Float
     covid19: [Covid19]
   }
 
@@ -40,7 +39,6 @@ exports.covid19Schema = `
     date: String
     ratePer100k: Float
     immunityRatio: Float
-    quarantine: Int
     confirmed: Confirmed
     recovered: Detail
     dead: Detail

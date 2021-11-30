@@ -38,16 +38,20 @@ const covid19_schema_1 = require("./schema/covid19-schema");
 const convertDate = __importStar(require("./function/convert-date"));
 const cors_1 = __importDefault(require("cors"));
 const fast_copy_1 = __importDefault(require("fast-copy")); //Deep copy 성능이 좋다
-const create_data_1 = require("./function/create-data");
+const create_data_1 = __importDefault(require("./function/create-data"));
+const fs_1 = __importDefault(require("fs"));
 function app() {
     return __awaiter(this, void 0, void 0, function* () {
-        let regionData = yield (0, create_data_1.create_regionData)();
+        let regionData = JSON.parse(fs_1.default.readFileSync("./data/20211126.json", "utf8"));
         const LOCAL_PORT = 8000;
         const exp = (0, express_1.default)(), port = process.env.PORT || LOCAL_PORT, schema = (0, graphql_1.buildSchema)(covid19_schema_1.covid19Schema);
-        const ONE_HOURE = 1000 * 60 * 60;
-        setInterval(() => __awaiter(this, void 0, void 0, function* () {
-            regionData = yield (0, create_data_1.create_regionData)();
-        }), ONE_HOURE);
+        (() => __awaiter(this, void 0, void 0, function* () {
+            const ONE_HOURE = 1000 * 60 * 60;
+            regionData = yield (0, create_data_1.default)();
+            setInterval(() => __awaiter(this, void 0, void 0, function* () {
+                regionData = yield (0, create_data_1.default)();
+            }), ONE_HOURE);
+        }))();
         const root = {
             region: (args) => {
                 const { name, startDate, endDate, onlyLastDate } = args;

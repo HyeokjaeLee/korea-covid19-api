@@ -16,8 +16,6 @@ declare namespace Filtered {
     incDec: number | undefined;
     /**격리 해제 수*/
     isolClearCnt: number | undefined;
-    /**격리중 환자수*/
-    isolIngCnt: number | undefined;
     /**지역발생 수 */
     localOccCnt: number | undefined;
     /**해왜유입 수 */
@@ -50,7 +48,6 @@ declare namespace Source {
     defCnt: number;
     incDec: number;
     isolClearCnt: number;
-    isolIngCnt: number;
     localOccCnt: number;
     overFlowCnt: number;
   }
@@ -59,10 +56,6 @@ declare namespace Source {
     accumulatedSecondCnt: number;
     totalFirstCnt: number;
     totalSecondCnt: number;
-  }
-  interface Distancing {
-    region: string;
-    distancingLevel: number;
   }
 }
 
@@ -74,7 +67,6 @@ declare namespace Region {
     population: number | undefined;
   }
   interface Final {
-    distancingLevel: number | undefined;
     covid19: Covid19[];
     nameEng: string;
     nameKor: string;
@@ -93,7 +85,6 @@ interface Covid19 {
   date: string;
   ratePer100k: number | undefined;
   immunityRatio: number | undefined;
-  quarantine: number | undefined;
   confirmed: {
     total: number | undefined;
     new: {
