@@ -20,6 +20,7 @@
 해당 이상치 중 다른 값들로 계산이 가능한 값들은 해당 API 제공되지만 불가능한 값들은 제외되었습니다.
 
 - 2021.11.30 이후 단계적 일상회복 시행에 따라 거리두기 단계(distancingLevel), 격리 중 환자 수(quarantine) 항목이 제외됩니다.
+- 이전 데이터는 [해당 경로](https://github.com/HyeokjaeLee/korea-covid19-api/blob/main/data/20211126.json)에서 JSON 형태로 확인할 수 있습니다.
 
 ## API Request
 
@@ -41,12 +42,10 @@
   | nameKor | string | 지역명(영어) |
   | nameEng | string | 지역명(한국어) |
   | population | int | 인구 |
-  | ~~distancingLevel~~ | int | 거리두기 단계 |
   | covid19 | array | COVID-19 데이터를 날짜별 하위 Object로 가지는 Array |
   | date | string | 기준일 `yyyy-mm-dd` |
   | ratePer100k | float | 10만명당 발생률 |
   | immunityRatio | float | 면역 비율 |
-  | ~~quarantine~~ | int | 격리 중 |
   | confirmed | object | 확진 |
   | recovered | object | 격리해제 |
   | dead | object | 사망 |
