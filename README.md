@@ -7,7 +7,7 @@
 아래 정보들을 기반으로 일부 이상치를 제거한 한국 COVID-19 정보를 제공합니다.
 - [보건복지부 코로나19 시·도발생 현황](https://www.data.go.kr/index.do)
 - [코로나19 예방접종 통계 데이터 조회 서비스](https://www.data.go.kr/index.do)
-- [지역별 거리 두기 단계 현황](http://ncov.mohw.go.kr/regSocdisBoardView.do)
+- ~~[지역별 거리 두기 단계 현황](http://ncov.mohw.go.kr/regSocdisBoardView.do)~~
 
 ### ⚠️ Notice
 
@@ -18,6 +18,8 @@
 <br/>공공 데이터 포털에서 제공하는 값들 중 일부 이상치가 있습니다. 
 
 해당 이상치 중 다른 값들로 계산이 가능한 값들은 해당 API 제공되지만 불가능한 값들은 제외되었습니다.
+
+- 2021.11.30 이후 단계적 일상회복 시행에 따라 거리두기 단계(distancingLevel), 격리 중 환자 수(quarantine) 항목이 제외됩니다.
 
 ## API Request
 
@@ -39,12 +41,12 @@
   | nameKor | string | 지역명(영어) |
   | nameEng | string | 지역명(한국어) |
   | population | int | 인구 |
-  | distancingLevel | int | 거리두기 단계 |
+  | ~~distancingLevel~~ | int | 거리두기 단계 |
   | covid19 | array | COVID-19 데이터를 날짜별 하위 Object로 가지는 Array |
   | date | string | 기준일 `yyyy-mm-dd` |
   | ratePer100k | float | 10만명당 발생률 |
   | immunityRatio | float | 면역 비율 |
-  | quarantine | int | 격리 중 |
+  | ~~quarantine~~ | int | 격리 중 |
   | confirmed | object | 확진 |
   | recovered | object | 격리해제 |
   | dead | object | 사망 |
@@ -65,10 +67,8 @@
       nameKor
       nameEng
       population
-      distancingLevel
       covid19 {
         date
-        quarantine
         ratePer100k
         immunityRatio
         confirmed{
@@ -114,10 +114,8 @@
     region(name:Seoul,startDate:20211010 endDate:20211011) {
       nameKor
       population
-      distancingLevel
       covid19 {
         date
-        quarantine
         confirmed{
           new{
             overseas
@@ -150,11 +148,9 @@
     {
       "nameKor": "서울",
       "population": 9602000,
-      "distancingLevel": 4,
       "covid19": [
         {
           "date": "2021-10-10",
-          "quarantine": 12508,
           "confirmed": {
             "new": {
               "overseas": 4
@@ -164,7 +160,6 @@
         },
         {
           "date": "2021-10-11",
-          "quarantine": 12507,
           "confirmed": {
             "new": {
               "overseas": 2

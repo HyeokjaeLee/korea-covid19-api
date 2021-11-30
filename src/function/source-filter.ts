@@ -44,7 +44,6 @@ export namespace Filter {
 function create_numCollection(sourceArr: Source.Infection[]) {
   const numCollection = {
     incDec: new Array<number>(),
-    isolIngCnt: new Array<number>(),
     localOccCnt: new Array<number>(),
     overFlowCnt: new Array<number>(),
   };

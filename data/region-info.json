@@ -1,0 +1,117 @@
+[
+  {
+    "nameKor": "전국",
+    "nameKorFull": "전국",
+    "nameEng": "Total",
+    "population": 51781000
+  },
+  {
+    "nameKor": "서울",
+    "nameKorFull": "서울특별시",
+    "nameEng": "Seoul",
+    "population": 9602000
+  },
+  {
+    "nameKor": "경기",
+    "nameKorFull": "경기도",
+    "nameEng": "Gyeonggido",
+    "population": 13405000
+  },
+  {
+    "nameKor": "대구",
+    "nameKorFull": "대구광역시",
+    "nameEng": "Daegu",
+    "population": 2753000
+  },
+  {
+    "nameKor": "인천",
+    "nameKorFull": "인천광역시",
+    "nameEng": "Incheon",
+    "population": 2951000
+  },
+
+  {
+    "nameKor": "부산",
+    "nameKorFull": "부산광역시",
+    "nameEng": "Busan",
+    "population": 3344000
+  },
+  {
+    "nameKor": "울산",
+    "nameKorFull": "울산광역시",
+    "nameEng": "Ulsan",
+    "population": 1140000
+  },
+  {
+    "nameKor": "대전",
+    "nameKorFull": "대전광역시",
+    "nameEng": "Daejeon",
+    "population": 1500000
+  },
+  {
+    "nameKor": "광주",
+    "nameKorFull": "광주광역시",
+    "nameEng": "Gwangju",
+    "population": 1488000
+  },
+  {
+    "nameKor": "세종",
+    "nameKorFull": "세종특별자치시",
+    "nameEng": "Sejong",
+    "population": 349000
+  },
+  {
+    "nameKor": "충남",
+    "nameKorFull": "충청남도",
+    "nameEng": "Chungcheongnamdo",
+    "population": 2204000
+  },
+  {
+    "nameKor": "충북",
+    "nameKorFull": "충청북도",
+    "nameEng": "Chungcheongbukdo",
+    "population": 1632000
+  },
+  {
+    "nameKor": "경남",
+    "nameKorFull": "경상남도",
+    "nameEng": "Gyeongsangnamdo",
+    "population": 3350000
+  },
+  {
+    "nameKor": "경북",
+    "nameKorFull": "경상북도",
+    "nameEng": "Gyeongsangbukdo",
+    "population": 2655000
+  },
+  {
+    "nameKor": "전남",
+    "nameKorFull": "전라남도",
+    "nameEng": "Jeollanamdo",
+    "population": 1764000
+  },
+  {
+    "nameKor": "전북",
+    "nameKorFull": "전라북도",
+    "nameEng": "Jeollabukdo",
+    "population": 1792000
+  },
+  {
+    "nameKor": "강원",
+    "nameKorFull": "강원도",
+    "nameEng": "Gangwondo",
+    "population": 1515000
+  },
+  {
+    "nameKor": "제주",
+    "nameKorFull": "제주특별자치도",
+    "nameEng": "Jeju",
+    "population": 670000
+  },
+  {
+    "nameKor": "검역",
+    "nameKorFull": "검역",
+    "nameEng": "Lazaretto",
+    "population": null
+  }
+]

@@ -1,21 +1,20 @@
 import * as get from "./get-external-data";
-import { regionInfos } from "../data/region-info";
 import { date2string, kor2Date } from "./convert-date";
 import { Filter } from "./source-filter";
-
+import fs from "fs";
 /**
  * 전 지역의 COVID19 정보를 포함한 지역 데이터 생성
  * @returns COVID19데이터를 포함한 지역 데이터
  */
-export async function create_regionData() {
+export default async function create_regionData(): Promise<Region.Final[]> {
   console.log(`update-start (${new Date()})`);
-  const sourceData = await Promise.all([get.distancing(), get.infection(), get.vaccination()]),
-    distancingArr = sourceData[0],
-    infectionArr = sourceData[1],
-    vaccinationArr = sourceData[2];
-
+  const sourceData = await Promise.all([get.infection(), get.vaccination()]),
+    infectionArr = sourceData[0],
+    vaccinationArr = sourceData[1];
+  const regionInfos: Region.Default[] = JSON.parse(
+    fs.readFileSync("./data/region-info.json", "utf8")
+  );
   const RegionArr = regionInfos.map((regionInfo: Region.Default) => {
-    const distancingLevel = find_distancingLevel(regionInfo.nameKor, distancingArr);
     const _infectionArr = Filter.infection(find_infection(regionInfo.nameEng, infectionArr));
     const _vaccinationArr = find_vaccination(regionInfo.nameKorFull!, vaccinationArr);
     const requiredData = {
@@ -26,7 +25,6 @@ export async function create_regionData() {
     const covid19Data = create_covid19Data(requiredData);
     const result = {
       ...regionInfo,
-      distancingLevel: distancingLevel,
       covid19: covid19Data,
     };
     delete result.nameKorFull;
@@ -36,15 +34,6 @@ export async function create_regionData() {
   return RegionArr;
 }
 
-/**
- * 지역에 맞는 거리두기 단계 찾기
- * @param nameKor
- * @param distancingArr 전체 거리두기 데이터
- * @returns 해당 지역의 거리두기 단계
- */
-function find_distancingLevel(nameKor: string, distancingArr: Source.Distancing[]) {
-  return distancingArr.find((distancing) => distancing.region === nameKor)?.distancingLevel;
-}
 /**
  * 지역에 맞는 감염 데이터 찾기
  * @param nameEng
@@ -72,7 +61,7 @@ function create_covid19Data(requiredData: {
   infectionArr: Filtered.Infection[];
   vaccinationArr: Filtered.Vaccination[];
   population: number | undefined;
-}) {
+}): Covid19[] {
   const { infectionArr, vaccinationArr, population } = requiredData;
   const minus = (num1: number | undefined, num2: number | undefined) =>
     !!num1 && !!num2 ? num1 - num2 : undefined;
@@ -91,7 +80,6 @@ function create_covid19Data(requiredData: {
       date: date,
       ratePer100k: typeof infection.qurRate === "number" ? infection.qurRate : undefined,
       immunityRatio: immunityRatio,
-      quarantine: infection.isolIngCnt,
       confirmed: {
         total: infection.defCnt,
         new: {

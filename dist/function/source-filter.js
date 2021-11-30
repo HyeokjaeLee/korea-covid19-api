@@ -44,7 +44,6 @@ var Filter;
 function create_numCollection(sourceArr) {
     const numCollection = {
         incDec: new Array(),
-        isolIngCnt: new Array(),
         localOccCnt: new Array(),
         overFlowCnt: new Array(),
     };
