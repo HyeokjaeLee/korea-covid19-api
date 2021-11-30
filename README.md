@@ -15,12 +15,13 @@
 
 **Heroku 서버가 Sleep 상태일 경우 첫 요청시 1분 가량 소요됩니다.**
 
+외부 정보를 불러오기 전까지 로컬 파일의 데이터를 제공합니다.
+
 <br/>공공 데이터 포털에서 제공하는 값들 중 일부 이상치가 있습니다. 
 
 해당 이상치 중 다른 값들로 계산이 가능한 값들은 해당 API 제공되지만 불가능한 값들은 제외되었습니다.
 
-- 2021.11.30 이후 단계적 일상회복 시행에 따라 거리두기 단계(distancingLevel), 격리 중 환자 수(quarantine) 항목이 제외됩니다.
-- 이전 데이터는 [해당 경로](https://github.com/HyeokjaeLee/korea-covid19-api/blob/main/data/20211126.json)에서 JSON 형태로 확인할 수 있습니다.
+- 2021.11.30 이후 단계적 일상회복 시행에 따라 거리두기 단계(distancingLevel) 항목이 제외됩니다.
 
 ## API Request
 
@@ -46,6 +47,7 @@
   | date | string | 기준일 `yyyy-mm-dd` |
   | ratePer100k | float | 10만명당 발생률 |
   | immunityRatio | float | 면역 비율 |
+  | quarantine | int | 격리 중 |
   | confirmed | object | 확진 |
   | recovered | object | 격리해제 |
   | dead | object | 사망 |
@@ -68,6 +70,7 @@
       population
       covid19 {
         date
+        quarantine
         ratePer100k
         immunityRatio
         confirmed{
@@ -115,6 +118,7 @@
       population
       covid19 {
         date
+        quarantine
         confirmed{
           new{
             overseas
@@ -150,6 +154,7 @@
       "covid19": [
         {
           "date": "2021-10-10",
+          "quarantine": 12508,
           "confirmed": {
             "new": {
               "overseas": 4
@@ -159,6 +164,7 @@
         },
         {
           "date": "2021-10-11",
+          "quarantine": 12507,
           "confirmed": {
             "new": {
               "overseas": 2
